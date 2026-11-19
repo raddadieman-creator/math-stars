@@ -104,7 +104,7 @@ body{background:#f6f7fb!important;background-image:none!important}
 .card,.card-3d{border-radius:16px!important;border:1px solid rgba(43,36,87,.10)!important;box-shadow:0 1px 2px rgba(43,36,87,.05),0 6px 16px -10px rgba(43,36,87,.18)!important;transform:none!important;transition:border-color .2s,box-shadow .2s!important}
 .tilt:hover,.card-3d.tilt:hover{transform:none!important;border-color:rgba(43,36,87,.28)!important;box-shadow:0 2px 4px rgba(43,36,87,.06),0 10px 24px -12px rgba(43,36,87,.25)!important}
 .btn-star,.btn-aqua,.btn-rose,.btn-ghost{box-shadow:none!important;background-image:none!important;border-radius:12px!important;transition:background-color .15s,border-color .15s!important}
-.btn-star{background-color:#f5b82e!important;color:#262a4a!important}.btn-star:hover{background-color:#e9a91a!important}
+.btn-star{background-color:#0284c7!important;color:#fff!important}.btn-star:hover{background-color:#0369a1!important}.btn-star:disabled{background-color:#93c5e8!important}
 .btn-aqua{background-color:#14b8a6!important;color:#fff!important}.btn-aqua:hover{background-color:#0f9f90!important}
 .btn-rose{background-color:#e8466c!important;color:#fff!important}
 .btn-ghost{background-color:#fff!important;border:1px solid rgba(43,36,87,.18)!important}.btn-ghost:hover{background-color:#f3f4f9!important}
@@ -123,3 +123,36 @@ body{background:#f6f7fb!important;background-image:none!important}
   .mada-panel { left: 8px !important; right: 8px; width: auto !important; bottom: 150px !important; height: min(520px, calc(100vh - 190px)) !important; }
   .h-section { font-size: 1.35rem; }
 }
+
+/* ===== هوية مشرقة على نمط منصة «مُختبري»: خطا Alexandria وReadex Pro، أزرق سماوي وبرتقالي شمسي ===== */
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/alexandria-arabic-600-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/alexandria-latin-600-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/alexandria-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/alexandria-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/alexandria-arabic-800-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'Alexandria';font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/alexandria-latin-800-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Readex Pro';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/readex-pro-arabic-400-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'Readex Pro';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/readex-pro-latin-400-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Readex Pro';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/readex-pro-arabic-500-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'Readex Pro';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/readex-pro-latin-500-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Readex Pro';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/readex-pro-arabic-700-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'Readex Pro';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/readex-pro-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+:root{--sky:#0284c7;--sky-d:#0369a1;--sky-l:#e0f2fe;--sun:#f59e0b;--line:#e6e9f2}
+body{font-family:'Readex Pro',system-ui,sans-serif!important;background:#fff!important;background-image:radial-gradient(1100px 380px at 50% -140px,rgba(251,191,36,.20),transparent 70%),radial-gradient(900px 360px at 88% -120px,rgba(56,189,248,.18),transparent 70%)!important;background-repeat:no-repeat!important;color:#1e2340}
+h1,h2,h3,.h-sec,.font-black,.font-extrabold,header a span{font-family:'Alexandria','Readex Pro',sans-serif!important}
+header{background:rgba(255,255,255,.92)!important}
+.card,.card-3d{border-color:var(--line)!important;border-radius:18px!important}
+.panel{border-color:var(--line)!important}
+.chip{border-color:var(--line)!important}
+.btn-star{background-color:var(--sky)!important;color:#fff!important}.btn-star:hover{background-color:var(--sky-d)!important}
+.btn-star:disabled{background-color:#93c5e8!important}
+.bg-ink.text-white.rounded-xl{background:var(--sky)!important}
+.student-tabbar a.bg-star-300\/40{background:var(--sky-l)!important;color:var(--sky-d)!important}
+.text-star-600{color:#d97706!important}
+.opt-ok{box-shadow:0 0 0 4px rgba(20,184,166,.16)!important}
+.opt-no{animation:shake .45s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.ring-wrap{display:flex;align-items:center;gap:14px}
+.confetti{position:fixed;top:-12px;width:9px;height:14px;border-radius:2px;z-index:80;pointer-events:none;animation:fall 2.4s cubic-bezier(.25,.6,.4,1) forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.9}}
