@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { Shell } from '@/components/Shell';
 import { Suha } from '@/components/Suha';
-import { getLeaderboard, getPublicStats, getSettings } from '@/lib/data';
+import { getPublicStats, getSettings } from '@/lib/data';
 import { isConfigured } from '@/lib/env';
 import { GAMES } from '@/lib/games';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [s, stats, board] = await Promise.all([getSettings(), getPublicStats(), getLeaderboard()]);
+  const [s, stats] = await Promise.all([getSettings(), getPublicStats()]);
   return (
     <Shell school={s.school_name}>
       {!isConfigured() && (
@@ -101,16 +101,8 @@ export default async function Home() {
       {/* لوحة التميز والمؤشرات */}
       <section className="mt-14 grid gap-6 md:grid-cols-2">
         <div className="card-3d p-6">
-          <h2 className="text-xl font-extrabold">لوحة نجوم التميز</h2>
-          {board.length ? (
-            <ol className="mt-4 space-y-2">
-              {board.map((b, i) => (
-                <li key={i} className="flex items-center justify-between rounded-xl bg-ink/5 px-4 py-2">
-                  <span className="font-bold">{i + 1}. {b.nickname}</span><span className="text-star-600">★ {b.stars}</span>
-                </li>
-              ))}
-            </ol>
-          ) : <p className="mt-4 muted">لا توجد نتائج بعد.</p>}
+          <h2 className="text-xl font-extrabold">لوحة التميز</h2>
+          <p className="mt-4 muted">تظهر لوحة التميز للطالبات بعد الدخول، وتعرض زميلات الفصل نفسه فقط. لا تُعرض نتائج فردية في الصفحة العامة.</p>
         </div>
         <div className="card-3d p-6">
           <h2 className="text-xl font-extrabold">مؤشرات عامة</h2>
