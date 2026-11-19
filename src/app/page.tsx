@@ -1,20 +1,14 @@
 import Link from 'next/link';
 import { Shell } from '@/components/Shell';
 import { Suha } from '@/components/Suha';
-import { getDomains, getLeaderboard, getPublicStats, getSettings } from '@/lib/data';
+import { getLeaderboard, getPublicStats, getSettings } from '@/lib/data';
 import { isConfigured } from '@/lib/env';
 import { GAMES } from '@/lib/games';
 
 export const dynamic = 'force-dynamic';
 
-const COGNITIVE = [
-  { name: 'المعرفة', en: 'Knowing', pct: 35, desc: 'استرجاع الحقائق والمفاهيم والإجراءات والتعرف عليها.' },
-  { name: 'التطبيق', en: 'Applying', pct: 40, desc: 'توظيف المعرفة والإجراءات في حل مسائل مألوفة.' },
-  { name: 'الاستدلال', en: 'Reasoning', pct: 25, desc: 'التحليل والتعميم والتبرير وحل المسائل غير المألوفة.' },
-];
-
 export default async function Home() {
-  const [s, domains, stats, board] = await Promise.all([getSettings(), getDomains(), getPublicStats(), getLeaderboard()]);
+  const [s, stats, board] = await Promise.all([getSettings(), getPublicStats(), getLeaderboard()]);
   return (
     <Shell school={s.school_name}>
       {!isConfigured() && (
@@ -41,15 +35,15 @@ export default async function Home() {
             </span>
           </h1>
           <p className="mt-4 max-w-xl text-lg muted">
-            تدريب تفاعلي على مهارات الرياضيات وفق إطار دراسة TIMSS 2027.
+            تدريب تفاعلي على مهارات الرياضيات.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/student/login" className="btn-star">دخول الطالبة</Link>
             <Link href="/teacher/login" className="btn-ghost">دخول المعلمة</Link>
           </div>
         </div>
-        <div className="card-3d tilt mx-auto flex w-full max-w-sm justify-center p-8">
-          <Suha size={190} className="floaty" />
+        <div className="card-3d mx-auto flex w-full max-w-sm justify-center px-8 pb-8 pt-14">
+          <Suha size={170} mood="idle" named />
         </div>
       </section>
 
@@ -69,43 +63,6 @@ export default async function Home() {
           {s.goals.length > 0 && <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-rose-600">الأهداف</h2><ul className="mt-2 list-disc space-y-1 pr-5 leading-7">{s.goals.map((g) => <li key={g}>{g}</li>)}</ul></div>}
         </section>
       )}
-
-      {/* TIMSS */}
-      <section className="mt-14">
-        <h2 className="h-section">دراسة TIMSS 2027</h2>
-        <p className="mt-3 max-w-3xl leading-8 muted">
-          {s.timss_intro ??
-            'دراسة دولية تشرف عليها الرابطة الدولية لتقييم التحصيل التربوي (IEA)، وتُجرى كل أربع سنوات منذ عام 1995 لقياس تحصيل طلاب الصفين الرابع والثامن في الرياضيات والعلوم. ويقابل الصف الثامن في المملكة الصف الثاني المتوسط، وهو الصف الذي تستهدفه هذه المنصة.'}
-        </p>
-        <h3 className="mt-6 text-lg font-bold">مجالات المحتوى للصف الثامن ونسبها المستهدفة</h3>
-        <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {domains.map((d) => (
-            <div key={d.id} className="card-3d tilt p-5">
-              <div className="flex items-baseline justify-between"><p className="text-lg font-extrabold">{d.name_ar}</p><span className="text-2xl font-black text-star-600">{d.target_percent}%</span></div>
-              <p className="text-xs text-ink/50">{d.name_en}</p>
-              <ul className="mt-3 space-y-1 text-sm">
-                {[...d.topic_areas].sort((a, b) => a.sort_order - b.sort_order).map((t) => (
-                  <li key={t.id} className="flex justify-between gap-2"><span>{t.name_ar}</span><span className="text-ink/50">{t.target_percent}%</span></li>
-                ))}
-              </ul>
-            </div>
-          ))}
-          {!domains.length && <p className="muted">تظهر المجالات بعد ربط قاعدة البيانات.</p>}
-        </div>
-        <h3 className="mt-8 text-lg font-bold">المجالات المعرفية</h3>
-        <div className="mt-3 grid gap-4 md:grid-cols-3">
-          {COGNITIVE.map((c) => (
-            <div key={c.en} className="card-3d p-5">
-              <div className="flex items-baseline justify-between"><p className="text-lg font-extrabold">{c.name}</p><span className="text-2xl font-black text-aqua-600">{c.pct}%</span></div>
-              <p className="mt-2 text-sm muted">{c.desc}</p>
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 text-xs text-ink/45">
-          المصدر: TIMSS 2027 Assessment Frameworks — IEA / TIMSS &amp; PIRLS International Study Center،{' '}
-          <a className="underline" href="https://timss2027.org/frameworks" target="_blank" rel="noreferrer">timss2027.org/frameworks</a>
-        </p>
-      </section>
 
       {/* رحلة التعلم */}
       <section className="mt-14">

@@ -25,7 +25,7 @@ export default function StudentLogin() {
   return (
     <Shell>
       <div className="mx-auto max-w-md text-center">
-        <Suha size={110} mood="cheer" className="floaty mx-auto" />
+        <Suha size={100} mood="idle" named className="mx-auto" />
         <h1 className="mt-2 text-3xl font-black">مرحبًا بكِ</h1>
         <p className="mt-1 muted">اكتبي رمز الدخول المكوّن من ستة أرقام</p>
         <div className="mt-6 flex justify-center gap-2" dir="ltr" aria-live="polite">

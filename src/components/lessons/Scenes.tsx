@@ -13,7 +13,7 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
     case 'title':
       return (
         <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
-          <motion.div initial={{ scale: 0.4, rotate: -20, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ duration: d ? 0.8 : 0 }}><Suha size={120} mood="cheer" /></motion.div>
+          <motion.div initial={{ scale: 0.4, rotate: -20, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ duration: d ? 0.8 : 0 }}><Suha size={110} mood="idle" /></motion.div>
           <motion.h2 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: d * 0.6 }} className="text-4xl font-black md:text-5xl">{scene.title}</motion.h2>
           {scene.data.subtitle && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: d * 1.2 }} className="text-xl text-star-600">{scene.data.subtitle}</motion.p>}
         </div>

@@ -23,7 +23,7 @@ export default async function StudentHome() {
   return (
     <Shell right={<LogoutStudent />}>
       <section className="grid items-center gap-6 md:grid-cols-[auto_1fr_auto]">
-        <Suha size={96} mood="cheer" className="floaty" />
+        <Suha size={80} mood="idle" />
         <div>
           <h1 className="text-3xl font-black">أهلًا {first}</h1>
         </div>

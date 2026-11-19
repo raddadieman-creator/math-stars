@@ -165,7 +165,7 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
             )}
             {fb.kind === 'reveal' && (
               <div className="card-3d border-rose-400/40 p-6">
-                <div className="flex gap-4"><Suha size={64} mood="think" /><div>
+                <div className="flex gap-4"><Suha size={64} mood="reveal" /><div>
                   <p className="text-lg font-bold">لنرَ الحل معًا خطوة بخطوة</p>
                   <p className="mt-1">الإجابة الصحيحة: <b className="text-star-600" dir="auto">{fb.correctText}</b></p>
                 </div></div>
