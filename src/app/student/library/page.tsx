@@ -49,6 +49,7 @@ export default async function Library() {
                     </Link>
                   ))}
                 </div>
+                <div className="mt-2 flex flex-wrap gap-2">{list.map((m) => <Link key={m.key} href={`/student/explain/${m.key}`} className="chip px-3 py-1 text-xs text-aqua-600">▶ الشرح المتحرك · {m.title.split(' · ')[1] ?? m.title}</Link>)}</div>
               </div>
             ) : null;
           })}
