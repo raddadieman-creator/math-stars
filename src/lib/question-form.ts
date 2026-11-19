@@ -23,13 +23,13 @@ export function buildQuestionPayload(f: QuestionFormInput) {
     case 'image_mcq': {
       options = lines.map((text, i) => ({ id: String.fromCharCode(97 + i), text }));
       const idx = LETTERS.indexOf(f.correct.trim());
-      if (idx < 0 || idx >= options.length) throw new Error('حددي الخيار الصحيح بحرف من الخيارات المكتوبة');
+      if (idx < 0 || idx >= options.length) throw new Error('الخيار الصحيح غير محدد');
       correct = options[idx].id;
-      if (options.length < 2) throw new Error('أدخلي خيارين على الأقل');
+      if (options.length < 2) throw new Error('يلزم خياران على الأقل');
       break;
     }
     case 'true_false':
-      if (!['true', 'false'].includes(f.correct)) throw new Error('حددي صواب أو خطأ');
+      if (!['true', 'false'].includes(f.correct)) throw new Error('الإجابة (صواب أو خطأ) غير محددة');
       correct = f.correct === 'true';
       break;
     case 'numeric': {
@@ -39,14 +39,14 @@ export function buildQuestionPayload(f: QuestionFormInput) {
       break;
     }
     case 'ordering':
-      if (lines.length < 2) throw new Error('أدخلي عنصرين على الأقل بالترتيب الصحيح');
+      if (lines.length < 2) throw new Error('يلزم عنصران على الأقل بالترتيب الصحيح');
       options = lines.map((text, i) => ({ id: `o${i + 1}`, text }));
       correct = options.map((o) => o.id);
       break;
     case 'matching':
     case 'drag_drop': {
       const pairs = lines.map((l) => l.split('=').map((x) => x.trim()));
-      if (pairs.length < 2 || pairs.some((p) => p.length !== 2 || !p[0] || !p[1])) throw new Error('اكتبي كل زوج في سطر بصيغة: العنصر = ما يطابقه');
+      if (pairs.length < 2 || pairs.some((p) => p.length !== 2 || !p[0] || !p[1])) throw new Error('كل زوج في سطر بصيغة: العنصر = ما يطابقه');
       const left = pairs.map((p, i) => ({ id: `l${i + 1}`, text: p[0] }));
       const right = pairs.map((p, i) => ({ id: `r:${i + 1}`, text: p[1] }));
       options = [...left, ...right];

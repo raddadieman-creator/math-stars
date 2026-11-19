@@ -48,7 +48,7 @@ export default async function Questions({ searchParams }: { searchParams: Promis
             <div className="flex flex-wrap gap-2"><Link href={`/teacher/questions/${x.id}`} className="chip px-3 py-2">مراجعة وتعديل</Link><StatusButtons id={x.id} status={x.status} /></div>
           </div>
         ))}
-        {!questions?.length && <p className="panel muted">لا توجد أسئلة مطابقة. أضيفي سؤالًا أو غيّري التصفية.</p>}
+        {!questions?.length && <p className="panel muted">لا توجد أسئلة مطابقة.</p>}
       </div>
 
       <form action={addSkill} className="panel grid gap-3 md:grid-cols-4">

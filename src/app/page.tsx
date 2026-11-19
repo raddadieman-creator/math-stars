@@ -13,7 +13,7 @@ export default async function Home() {
     <Shell school={s.school_name}>
       {!isConfigured() && (
         <div className="mb-6 rounded-2xl border border-star-400/40 bg-star-400/10 p-4 text-sm">
-          المنصة غير متصلة بقاعدة البيانات بعد. راجعي صفحة <Link className="underline" href="/setup">الإعداد</Link>.
+          المنصة غير متصلة بقاعدة البيانات بعد. التفاصيل في صفحة <Link className="underline" href="/setup">الإعداد</Link>.
         </div>
       )}
 
@@ -38,12 +38,12 @@ export default async function Home() {
             تدريب تفاعلي على مهارات الرياضيات.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
-            <Link href="/student/login" className="btn-star">دخول الطالبة</Link>
-            <Link href="/teacher/login" className="btn-ghost">دخول المعلمة</Link>
+            <Link href="/student/login" className="btn-star">دخول الطالب</Link>
+            <Link href="/teacher/login" className="btn-ghost">دخول المعلم</Link>
           </div>
         </div>
-        <div className="card-3d mx-auto flex w-full max-w-sm justify-center px-8 pb-8 pt-14">
-          <Suha size={170} mood="idle" named />
+        <div className="card-3d mx-auto flex w-full max-w-md justify-center px-8 pb-8 pt-14">
+          <Suha size={150} mood="idle" named />
         </div>
       </section>
 
@@ -117,7 +117,7 @@ export default async function Home() {
           {stats ? (
             <dl className="mt-4 grid grid-cols-2 gap-3">
               {[
-                ['طالبات شاركن', stats.participants], ['أسئلة أُجيب عنها', stats.answered_items],
+                ['طلاب شاركوا', stats.participants], ['أسئلة أُجيب عنها', stats.answered_items],
                 ['مهارات أُتقنت', stats.mastered_skills], ['أسئلة منشورة', stats.published_questions],
               ].map(([k, v]) => (
                 <div key={String(k)} className="rounded-xl bg-ink/5 p-3"><dt className="text-xs muted">{k}</dt><dd className="text-2xl font-black">{v}</dd></div>

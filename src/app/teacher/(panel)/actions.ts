@@ -60,7 +60,7 @@ export async function saveRules(f: FormData) {
   revalidatePath('/teacher/settings');
 }
 
-// ---------- الفصول والطالبات ----------
+// ---------- الفصول والطلاب ----------
 export async function createClass(f: FormData) {
   const { sb } = await requireStaff();
   const { data, error } = await sb.from('classes').insert({ name: str(f, 'name'), academic_year: str(f, 'year') }).select('id').single();
@@ -85,7 +85,7 @@ export async function addStudent(f: FormData): Promise<{ code?: string; error?: 
     if (!error) { revalidatePath('/teacher/students'); return { code }; }
     if (!error.message.includes('duplicate')) return { error: error.message };
   }
-  return { error: 'تعذر توليد رمز فريد، أعيدي المحاولة' };
+  return { error: 'تعذر توليد رمز فريد' };
 }
 
 export async function resetCode(studentId: string): Promise<{ code?: string; error?: string }> {

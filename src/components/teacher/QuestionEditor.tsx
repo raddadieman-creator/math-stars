@@ -11,7 +11,7 @@ const OPTION_HELP: Record<QType, string> = {
   image_mcq: 'خيار في كل سطر، مع رابط الصورة في حقل الوسائط.',
   true_false: 'لا حاجة إلى خيارات.',
   numeric: 'لا حاجة إلى خيارات.',
-  ordering: 'اكتبي العناصر بالترتيب الصحيح، وستُعرض للطالبة مخلوطة.',
+  ordering: 'العناصر بالترتيب الصحيح، وتُعرض للطالب مخلوطة.',
   matching: 'كل زوج في سطر: العنصر = ما يطابقه',
   drag_drop: 'كل زوج في سطر: العنصر = موضعه الصحيح',
 };
@@ -49,7 +49,7 @@ export function QuestionEditor({ skills, initial }: { skills: { id: string; code
         <div className="md:col-span-2"><label className="label">النشاط العلاجي المناسب</label><input name="remedial" defaultValue={initial?.remedial_activity ?? ''} className="field" /></div>
       </div>
       <div className="panel flex flex-wrap items-end justify-between gap-3">
-        <div><label className="label">الحالة</label><select name="status" defaultValue={initial?.status ?? 'draft'} className="field"><option value="draft">مسودة</option><option value="review">قيد المراجعة</option><option value="published">منشور (يظهر للطالبات)</option></select></div>
+        <div><label className="label">الحالة</label><select name="status" defaultValue={initial?.status ?? 'draft'} className="field"><option value="draft">مسودة</option><option value="review">قيد المراجعة</option><option value="published">منشور (يظهر للطلاب)</option></select></div>
         {state?.error && <p className="text-rose-600" role="alert">{state.error}</p>}
         <button disabled={pending} className="btn-star">حفظ</button>
       </div>

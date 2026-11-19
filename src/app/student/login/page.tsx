@@ -26,8 +26,8 @@ export default function StudentLogin() {
     <Shell>
       <div className="mx-auto max-w-md text-center">
         <Suha size={100} mood="idle" named className="mx-auto" />
-        <h1 className="mt-2 text-3xl font-black">مرحبًا بكِ</h1>
-        <p className="mt-1 muted">اكتبي رمز الدخول المكوّن من ستة أرقام</p>
+        <h1 className="mt-2 text-3xl font-black">مرحبًا بك</h1>
+        <p className="mt-1 muted">رمز الدخول (ستة أرقام)</p>
         <div className="mt-6 flex justify-center gap-2" dir="ltr" aria-live="polite">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className={`flex h-14 w-11 items-center justify-center rounded-xl border text-2xl font-black ${code[i] ? 'border-star-400 bg-star-400/15' : 'border-ink/15 bg-ink/5'}`}>

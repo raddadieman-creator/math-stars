@@ -77,7 +77,7 @@ export interface ClassIndicators {
   enrolled: number;
   participants: number;
   participationPct: number | null;
-  avgFirstTryPct: number | null; // متوسط نسب الطالبات (كل طالبة بوزن واحد)
+  avgFirstTryPct: number | null; // متوسط نسب الطلاب (كل طالب بوزن واحد)
   masteryDistribution: Record<MasteryStatus, number>;
   needsSupportStudents: number;
   advancedStudents: number;

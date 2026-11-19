@@ -23,7 +23,7 @@ export interface Question {
   remedial_activity?: string | null;
 }
 
-/** ما يصل إلى متصفح الطالبة: دون الإجابة أو الحل */
+/** ما يصل إلى متصفح الطالب: دون الإجابة أو الحل */
 export type PublicQuestion = Pick<Question, 'id' | 'qtype' | 'prompt' | 'media_url' | 'options' | 'difficulty'>;
 
 export interface AdaptiveRules {
@@ -83,3 +83,5 @@ export const QTYPE_AR: Record<QType, string> = {
   drag_drop: 'سحب وإفلات',
   image_mcq: 'سؤال مصور',
 };
+
+export const qCount = (n: number) => (n === 1 ? 'سؤال واحد' : n === 2 ? 'سؤالان' : n <= 10 ? `${n} أسئلة` : `${n} سؤالًا`);

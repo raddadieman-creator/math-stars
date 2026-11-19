@@ -10,7 +10,7 @@ export function err(message: string, status = 400) {
 export async function withStudent<T>(fn: (sid: string) => Promise<T>) {
   if (!isConfigured()) return err('المنصة غير متصلة بقاعدة البيانات', 503);
   const s = await getStudentSession();
-  if (!s) return err('انتهت الجلسة، سجّلي الدخول مجددًا', 401);
+  if (!s) return err('انتهت الجلسة، ويلزم تسجيل الدخول مجددًا', 401);
   try {
     return NextResponse.json(await fn(s.sid));
   } catch (e) {

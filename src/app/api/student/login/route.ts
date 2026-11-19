@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   const db = supabaseAdmin();
   const since = new Date(Date.now() - WINDOW_MIN * 60000).toISOString();
   const { count } = await db.from('student_login_failures').select('id', { count: 'exact', head: true }).eq('ip', ip).gte('created_at', since);
-  if ((count ?? 0) >= MAX_FAILS) return err('محاولات كثيرة. انتظري قليلًا ثم حاولي مرة أخرى، أو اطلبي المساعدة من معلمتك.', 429);
+  if ((count ?? 0) >= MAX_FAILS) return err('تجاوزت المحاولات الحد المسموح. يتاح الدخول بعد ربع ساعة.', 429);
 
   const body = await req.json().catch(() => ({}));
   const code = String(body.code ?? '');
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const { data: st } = await db.from('students').select('id, class_id, is_active').eq('login_code_hash', hashLoginCode(code, process.env.STUDENT_CODE_PEPPER ?? '')).maybeSingle();
   if (!st || !st.is_active) {
     await db.from('student_login_failures').insert({ ip });
-    return err('الرمز غير صحيح. تأكدي منه مع معلمتك.', 401);
+    return err('الرمز غير صحيح.', 401);
   }
   await createStudentSession({ sid: st.id, cid: st.class_id });
   return NextResponse.json({ ok: true });

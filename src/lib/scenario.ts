@@ -7,7 +7,7 @@ import { z } from 'zod';
 const base = {
   id: z.string().min(1),
   title: z.string().min(1).max(120),
-  caption: z.string().max(600).default(''),          // النص الظاهر أسفل المشهد (ويُقرأ بصوت المعلمة إن سُجل)
+  caption: z.string().max(600).default(''),          // النص الظاهر أسفل المشهد (ويُقرأ بصوت المعلم إن سُجل)
   duration: z.number().min(3).max(90).default(8),     // بالثواني إذا لم يوجد تسجيل صوتي
   audio_path: z.string().nullable().optional(),
 };

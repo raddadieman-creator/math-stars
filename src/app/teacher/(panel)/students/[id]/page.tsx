@@ -13,12 +13,13 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
   const { sb } = await requireStaff();
   const settings = await getSettings();
   const { data: st } = await sb.from('students').select('id, full_name, nickname, classes(name)').eq('id', id).single();
-  if (!st) return <p className="panel">لا تملكين صلاحية عرض هذه الطالبة أو أنها غير موجودة.</p>;
-  const [{ data: outs }, { data: mastery }, { data: errs }, { data: stars }, names] = await Promise.all([
+  if (!st) return <p className="panel">لا توجد صلاحية لعرض هذا الطالب، أو أنه غير موجود.</p>;
+  const [{ data: outs }, { data: mastery }, { data: errs }, { data: stars }, { data: modelAtts }, names] = await Promise.all([
     sb.from('item_outcomes').select('student_id, skill_id, session_id, tries, outcome, total_time_ms, created_at').eq('student_id', id).order('created_at'),
     sb.from('skill_mastery').select('skill_id, status, level, items_seen, recent_outcomes').eq('student_id', id),
     sb.from('attempts').select('error_type').eq('student_id', id).eq('is_correct', false),
     sb.from('star_ledger').select('amount').eq('student_id', id),
+    sb.from('assessment_attempts').select('score, max_score, by_cognitive, submitted_at, assessments(title, kind)').eq('student_id', id).not('submitted_at', 'is', null).order('submitted_at', { ascending: false }).limit(20),
     skillNames(sb),
   ]);
   const rows = (outs ?? []) as OutcomeRow[];
@@ -32,7 +33,7 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div><Link href="/teacher" className="text-sm muted">← لوحة المتابعة</Link><h1 className="text-3xl font-black">{st.full_name}</h1><p className="muted">{cls?.name} · الاسم المستعار: {st.nickname} · ★ {(stars ?? []).reduce((a, s) => a + s.amount, 0)}</p></div>
-        <PrintButton label="طباعة تقرير الطالبة" />
+        <PrintButton label="طباعة تقرير الطالب" />
       </div>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {[
@@ -42,7 +43,7 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
           ['الزمن (دقيقة)', ind.totalMinutes], ['مرات إعادة التدريب', ind.retrainCount],
         ].map(([k, v]) => <div key={String(k)} className="panel"><p className="text-xs muted">{k}</p><p className="mt-1 text-2xl font-black">{v}</p></div>)}
       </div>
-      <div className="panel"><h2 className="text-lg font-extrabold">التطور الأسبوعي</h2>{start ? <WeeklyChart data={weeklySeries(rows, start, settings.program_weeks)} /> : <p className="muted">حددي تاريخ بداية البرنامج من الإعدادات.</p>}</div>
+      <div className="panel"><h2 className="text-lg font-extrabold">التطور الأسبوعي</h2>{start ? <WeeklyChart data={weeklySeries(rows, start, settings.program_weeks)} /> : <p className="muted">يظهر بعد تحديد تاريخ بداية البرنامج في الإعدادات.</p>}</div>
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="panel overflow-x-auto">
           <h2 className="mb-3 text-lg font-extrabold">الإتقان في كل مهارة</h2>
@@ -56,6 +57,23 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
           <h2 className="text-lg font-extrabold">أنواع الأخطاء المتكررة</h2>
           {errCounts.size ? <SimpleBars color="#f0569a" data={[...errCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8).map(([name, value]) => ({ name, value }))} /> : <p className="mt-2 muted">لا توجد أخطاء مسجلة.</p>}
         </div>
+      </div>
+      <div className="panel overflow-x-auto">
+        <h2 className="mb-3 text-lg font-extrabold">نتائج مكتبة النماذج</h2>
+        {modelAtts?.length ? (
+          <table className="w-full text-sm"><thead className="text-ink/60"><tr><th className="text-start">النموذج</th><th>الدرجة</th><th>المعرفة</th><th>التطبيق</th><th>الاستدلال</th><th>التاريخ</th></tr></thead>
+            <tbody>{modelAtts.filter((a) => (a.assessments as unknown as { kind: string })?.kind === 'model').map((a, k) => {
+              const bc = (a.by_cognitive ?? {}) as Record<string, [number, number]>;
+              return (
+                <tr key={k} className="border-t border-ink/5 text-center">
+                  <td className="py-2 text-start">{(a.assessments as unknown as { title: string })?.title}</td>
+                  <td><b>{a.score} من {a.max_score}</b></td>
+                  {['المعرفة', 'التطبيق', 'الاستدلال'].map((c) => <td key={c}>{bc[c] ? `${bc[c][0]} من ${bc[c][1]}` : '—'}</td>)}
+                  <td>{new Date(a.submitted_at as string).toLocaleDateString('ar-SA')}</td>
+                </tr>
+              );
+            })}</tbody></table>
+        ) : <p className="muted">لا توجد محاولات.</p>}
       </div>
     </div>
   );

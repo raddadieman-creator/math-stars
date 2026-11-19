@@ -47,7 +47,7 @@ function toPublic(q: Question): PublicQuestion {
 
 /**
  * اختيار السؤال التالي:
- * - من المهارة نفسها وبمستوى الصعوبة الحالي للطالبة
+ * - من المهارة نفسها وبمستوى الصعوبة الحالي للطالب
  * - لم يظهر في هذه الجلسة، مع تفضيل ما لم تره مؤخرًا
  * - عند طلب "سؤال مشابه" يُفضَّل المستوى نفسه للسؤال الذي كُشف حله
  */
@@ -67,7 +67,7 @@ export async function nextQuestion(studentId: string, sessionId: string, similar
     .order('created_at', { ascending: false }).limit(30);
   const recent = new Set((recentRows ?? []).map((r) => r.question_id));
 
-  const { data: pool } = await db.from('questions').select('*').eq('skill_id', session.skill_id).eq('status', 'published');
+  const { data: pool } = await db.from('questions').select('*').eq('skill_id', session.skill_id).eq('status', 'published').eq('bank', 'practice');
   const candidates = ((pool ?? []) as Question[]).filter((q) => !seenHere.has(q.id) && q.id !== similarTo);
   if (!candidates.length) return { done: true as const, seen: seenHere.size };
 
@@ -99,7 +99,7 @@ export async function submitAnswer(studentId: string, sessionId: string, questio
   });
 
   if (action.kind === 'hint') {
-    return { kind: 'hint' as const, message: retryMessage(tryNo + q.prompt.length), hint: q.hint ?? 'أعيدي قراءة السؤال وحددي المطلوب أولًا.', triesLeft: action.triesLeft };
+    return { kind: 'hint' as const, message: retryMessage(tryNo + q.prompt.length), hint: q.hint ?? 'تحديد المطلوب في السؤال هو الخطوة الأولى.', triesLeft: action.triesLeft };
   }
 
   const outcome: Outcome = action.outcome;

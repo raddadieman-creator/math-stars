@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
-// تحديث جلسة المعلمة في Supabase على مسارات لوحة المعلمة
+// تحديث جلسة المعلم في Supabase على مسارات لوحة المعلم
 export async function middleware(request: NextRequest) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

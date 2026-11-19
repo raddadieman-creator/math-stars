@@ -12,7 +12,7 @@ export default async function Lessons() {
     <div className="space-y-6">
       <h1 className="text-3xl font-black">الدروس المرئية</h1>
       <div className="panel leading-8">
-        <p>ارفعي صورة صفحة من الكتاب أو ملف PDF، وراجعي النص المستخرج، ثم ابني مشاهد الدرس من القوالب وسجّلي التعليق بصوتك، واعتمدي الدرس قبل نشره.</p>
+        <p>رفع صفحة الكتاب صورةً أو PDF، ثم مراجعة النص المستخرج، وبناء المشاهد من القوالب، وتسجيل التعليق الصوتي، واعتماد الدرس قبل نشره.</p>
         <p className="text-sm muted">المشاهد رسوم متحركة برمجية تُعرض داخل المنصة، وليست فيديو مولدًا بالذكاء الاصطناعي.</p>
       </div>
       <form action={createLesson} className="panel flex flex-wrap items-end gap-3">

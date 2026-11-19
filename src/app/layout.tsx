@@ -4,7 +4,7 @@ import { Prefs } from '@/components/Prefs';
 
 export const metadata: Metadata = {
   title: 'نجوم الرياضيات | Math Stars',
-  description: 'منصة تدريب تفاعلية في الرياضيات لطالبات الصف الثاني المتوسط',
+  description: 'منصة تدريب تفاعلية في الرياضيات لطلاب الصف الثاني المتوسط',
 };
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#fbf8ff' };
 

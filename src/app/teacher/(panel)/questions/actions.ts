@@ -39,7 +39,7 @@ export async function addSkill(f: FormData) {
   const { sb } = await requireStaff();
   const topicId = s(f, 'topic_id');
   const { data: topic } = await sb.from('topic_areas').select('domain_id').eq('id', topicId).single();
-  if (!topic) throw new Error('اختاري مجال الموضوع');
+  if (!topic) throw new Error('مجال الموضوع مطلوب');
   const { error } = await sb.from('skills').insert({ domain_id: topic.domain_id, topic_id: topicId, code: s(f, 'code'), name_ar: s(f, 'name_ar'), description: s(f, 'description') || null });
   if (error) throw new Error(error.message);
   revalidatePath('/teacher/questions');

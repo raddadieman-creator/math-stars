@@ -38,9 +38,14 @@ export default async function StudentHome() {
         </div>
       </section>
 
+      <Link href="/student/library" className="card-3d tilt mt-8 flex flex-wrap items-center justify-between gap-4 p-6">
+        <div><b className="text-2xl">مكتبة نماذج الاختبارات</b><p className="mt-1 muted">نماذج على نمط TIMSS وأسئلة رسمية مقتبسة، مع مراجعة الحل بعد التسليم</p></div>
+        <span className="btn-star">فتح المكتبة</span>
+      </Link>
+
       <section className="mt-8">
         <h2 className="h-section">المهارات</h2>
-        {!h.skills.length && <p className="mt-3 muted">لم تُنشر أسئلة بعد. ستظهر المهارات هنا عندما تنشرها معلمتك.</p>}
+        {!h.skills.length && <p className="mt-3 muted">لم تُنشر أسئلة بعد. ستظهر المهارات هنا عندما تنشرها معلمك.</p>}
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {h.skills.map((s) => (
             <div key={s.id} className="card-3d tilt flex flex-col p-5">
@@ -50,7 +55,7 @@ export default async function StudentHome() {
                 <span className={`chip ${STATUS_STYLE[s.status]}`}>{STATUS_AR[s.status]}</span>
                 <span className="chip">المستوى {s.level} من 3</span>
               </div>
-              <Link href={`/student/practice/${s.id}`} className="btn-aqua mt-4">{s.seen ? 'أكملي التدريب' : 'ابدئي التدريب'}</Link>
+              <Link href={`/student/practice/${s.id}`} className="btn-aqua mt-4">{s.seen ? 'متابعة التدريب' : 'بدء التدريب'}</Link>
             </div>
           ))}
         </div>

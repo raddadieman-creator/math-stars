@@ -18,7 +18,7 @@ export default async function Settings() {
         <h2 className="text-lg font-extrabold md:col-span-2">بيانات المدرسة والمنصة</h2>
         <div><label className="label">اسم المدرسة</label><input name="school_name" defaultValue={s.school_name ?? ''} className="field" /></div>
         <div><label className="label">اسم المديرة</label><input name="principal_name" defaultValue={s.principal_name ?? ''} className="field" /></div>
-        <div><label className="label">أسماء المعلمات (اسم في كل سطر)</label><textarea name="teacher_names" rows={2} defaultValue={s.teacher_names.join('\n')} className="field" /></div>
+        <div><label className="label">أسماء المعلمين (اسم في كل سطر)</label><textarea name="teacher_names" rows={2} defaultValue={s.teacher_names.join('\n')} className="field" /></div>
         <div className="grid grid-cols-2 gap-3">
           <div><label className="label">مدة البرنامج (أسابيع)</label><input name="program_weeks" type="number" min={1} max={52} defaultValue={s.program_weeks} className="field" /></div>
           <div><label className="label">تاريخ البداية</label><input name="program_start_date" type="date" defaultValue={s.program_start_date ?? ''} className="field" /></div>

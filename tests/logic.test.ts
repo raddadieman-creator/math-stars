@@ -165,3 +165,40 @@ describe('سيناريو الدرس', () => {
     expect(sanitizeScenario('نص').scenario.scenes).toEqual([]);
   });
 });
+
+import { parseCSV, rowsToQuestions, IMPORT_COLUMNS, IMPORT_EXAMPLE } from '../src/lib/import-rows';
+import models from '../src/lib/library-models.json';
+describe('استيراد الأسئلة', () => {
+  it('يحلل CSV بالاقتباس والفواصل', () => {
+    const rows = parseCSV('أ,"ب، ج","د ""هـ"""\n\n1,2,3\r\n');
+    expect(rows).toEqual([['أ', 'ب، ج', 'د "هـ"'], ['1', '2', '3']]);
+  });
+  it('يقبل المثال ويتجاوز صف العناوين', () => {
+    const { ok, errors } = rowsToQuestions([[...IMPORT_COLUMNS], ...IMPORT_EXAMPLE]);
+    expect(errors).toEqual([]);
+    expect(ok).toHaveLength(3);
+    expect(ok[0].payload.correct_answer.value).toBe('b');
+    expect(ok[1].payload.correct_answer.value).toBe(7);
+    expect(ok[2].payload.correct_answer.value).toBe(false);
+    expect(ok[0].cognitive).toBe('knowing');
+  });
+  it('يقبل نص الخيار إجابةً ويرفض الأسطر الناقصة', () => {
+    const { ok, errors } = rowsToQuestions([
+      ['س؟', 'اختيار من متعدد', '1|2|3', '3', 'تطبيق'],
+      ['', 'عددي', '', '4'],
+      ['س؟', 'غريب', '', '4'],
+    ]);
+    expect(ok[0].payload.correct_answer.value).toBe('c');
+    expect(errors.map((e) => e.line)).toEqual([2, 3]);
+  });
+});
+describe('محتوى المكتبة', () => {
+  it('كل إجابة صحيحة موجودة ضمن خياراتها وكل سؤال له خطوات حل', () => {
+    for (const m of models as { items: { t: string; o?: string[]; a: unknown; steps: string[] }[] }[]) {
+      for (const it of m.items) {
+        if (it.t === 'mcq') expect((it.a as number) < it.o!.length).toBe(true);
+        expect(it.steps.length).toBeGreaterThan(0);
+      }
+    }
+  });
+});

@@ -19,7 +19,7 @@ export default async function Overview({ searchParams }: { searchParams: Promise
   const settings = await getSettings();
   const { data: classes } = await sb.from('classes').select('id, name').order('name');
   if (!classes?.length) {
-    return <div className="panel"><h1 className="text-2xl font-black">لوحة المتابعة</h1><p className="mt-2 muted">لا توجد فصول مرتبطة بحسابك بعد. تنشئ الإدارة الفصول وتربطها بالمعلمات من صفحة «الطالبات والفصول».</p></div>;
+    return <div className="panel"><h1 className="text-2xl font-black">لوحة المتابعة</h1><p className="mt-2 muted">لا توجد فصول مرتبطة بالحساب بعد. تنشئ الإدارة الفصول وتربطها بالمعلمين من صفحة «الطلاب والفصول».</p></div>;
   }
   const classId = sp.class && classes.some((c) => c.id === sp.class) ? sp.class : classes[0].id;
   const [{ students, outcomes, mastery }, names] = await Promise.all([classData(sb, classId), skillNames(sb)]);
@@ -39,20 +39,20 @@ export default async function Overview({ searchParams }: { searchParams: Promise
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Kpi label="الطالبات المشاركات" value={`${ci.participants} من ${ci.enrolled}`} hint={ci.participationPct !== null ? `نسبة المشاركة ${ci.participationPct}%` : undefined} />
-        <Kpi label="متوسط الصحيحة من المحاولة الأولى" value={ci.avgFirstTryPct !== null ? `${ci.avgFirstTryPct}%` : null} hint="متوسط نسب الطالبات" />
-        <Kpi label="طالبات يحتجن إلى دعم" value={ci.needsSupportStudents} hint="في مهارة واحدة على الأقل" />
-        <Kpi label="طالبات متقدمات" value={ci.advancedStudents} hint="أتقنّ مهارتين فأكثر دون حاجة إلى دعم" />
+        <Kpi label="الطلاب المشاركون" value={`${ci.participants} من ${ci.enrolled}`} hint={ci.participationPct !== null ? `نسبة المشاركة ${ci.participationPct}%` : undefined} />
+        <Kpi label="متوسط الصحيحة من المحاولة الأولى" value={ci.avgFirstTryPct !== null ? `${ci.avgFirstTryPct}%` : null} hint="متوسط نسب الطلاب" />
+        <Kpi label="طلاب يحتاجون إلى دعم" value={ci.needsSupportStudents} hint="في مهارة واحدة على الأقل" />
+        <Kpi label="طلاب متقدمون" value={ci.advancedStudents} hint="أتقنوا مهارتين فأكثر دون حاجة إلى دعم" />
       </div>
 
       <div className="panel">
         <h2 className="text-lg font-extrabold">التطور عبر أسابيع البرنامج</h2>
-        {start ? <WeeklyChart data={weekly} /> : <p className="mt-2 muted">حددي تاريخ بداية البرنامج من الإعدادات لعرض التطور الأسبوعي.</p>}
+        {start ? <WeeklyChart data={weekly} /> : <p className="mt-2 muted">يظهر التطور الأسبوعي بعد تحديد تاريخ بداية البرنامج في الإعدادات.</p>}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="panel">
-          <h2 className="text-lg font-extrabold">توزيع مستويات الإتقان (طالبة × مهارة)</h2>
+          <h2 className="text-lg font-extrabold">توزيع مستويات الإتقان (طالب × مهارة)</h2>
           <SimpleBars color="#6aa8ff" data={(Object.keys(ci.masteryDistribution) as (keyof typeof STATUS_AR)[]).filter((k) => k !== 'not_started').map((k) => ({ name: STATUS_AR[k], value: ci.masteryDistribution[k] }))} />
         </div>
         <div className="panel">
@@ -63,10 +63,10 @@ export default async function Overview({ searchParams }: { searchParams: Promise
       </div>
 
       <div className="panel overflow-x-auto">
-        <h2 className="mb-3 text-lg font-extrabold">الطالبات</h2>
+        <h2 className="mb-3 text-lg font-extrabold">الطلاب</h2>
         <table className="w-full min-w-[640px] text-sm">
           <thead className="text-ink/60"><tr className="border-b border-ink/10 text-start">
-            <th className="py-2 text-start">الطالبة</th><th>الجلسات</th><th>الأسئلة</th><th>من المحاولة الأولى</th><th>بعد مساعدة</th><th>إعادة التدريب</th><th>الحالة</th>
+            <th className="py-2 text-start">الطالب</th><th>الجلسات</th><th>الأسئلة</th><th>من المحاولة الأولى</th><th>بعد مساعدة</th><th>إعادة التدريب</th><th>الحالة</th>
           </tr></thead>
           <tbody>
             {students.map((s) => {

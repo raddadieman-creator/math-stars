@@ -99,16 +99,16 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
     return (
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card-3d mx-auto max-w-xl p-8 text-center">
         <Suha size={110} mood="cheer" className="mx-auto" />
-        <h2 className="mt-3 text-3xl font-black">أنهيتِ الجلسة</h2>
+        <h2 className="mt-3 text-3xl font-black">أنهيت الجلسة</h2>
         <div className="mt-6 grid grid-cols-3 gap-3">
           <div className="rounded-xl bg-ink/5 p-3"><p className="text-xs muted">من المحاولة الأولى</p><p className="text-2xl font-black text-aqua-600">{summary.independent}</p></div>
           <div className="rounded-xl bg-ink/5 p-3"><p className="text-xs muted">بعد تلميح</p><p className="text-2xl font-black text-sky2-600">{summary.withHint}</p></div>
-          <div className="rounded-xl bg-ink/5 p-3"><p className="text-xs muted">تعلمتِ من الحل</p><p className="text-2xl font-black text-rose-600">{summary.revealed}</p></div>
+          <div className="rounded-xl bg-ink/5 p-3"><p className="text-xs muted">تعلمت من الحل</p><p className="text-2xl font-black text-rose-600">{summary.revealed}</p></div>
         </div>
         <p className="mt-5 text-lg">نجوم هذه الجلسة: <b className="text-star-600">★ {stars + summary.bonusStars}</b></p>
-        {summary.newBadges.length > 0 && <p className="mt-2 text-star-600">حصلتِ على وسام جديد! تجدينه في صفحتكِ.</p>}
+        {summary.newBadges.length > 0 && <p className="mt-2 text-star-600">حصلت على وسام جديد! تجدينه في صفحتك.</p>}
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <button onClick={() => location.reload()} className="btn-star">تدربي مرة أخرى</button>
+          <button onClick={() => location.reload()} className="btn-star">تدريب جديد</button>
           <Link href="/student" className="btn-ghost">صفحتي</Link>
         </div>
       </motion.div>
@@ -180,7 +180,7 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
                 {stepShown >= fb.steps.length && fb.explanation && <p className="mt-3 muted">{fb.explanation}</p>}
                 {stepShown >= fb.steps.length && fb.remedial && <p className="mt-3 rounded-xl bg-ink/5 p-3 text-sm">نشاط مقترح: {fb.remedial}</p>}
                 <div className="mt-5 flex flex-wrap gap-3">
-                  <button onClick={() => next(true)} className="btn-rose">جرّبي سؤالًا مشابهًا</button>
+                  <button onClick={() => next(true)} className="btn-rose">سؤال مشابه</button>
                   <button onClick={() => next()} className="btn-ghost">التالي</button>
                 </div>
               </div>

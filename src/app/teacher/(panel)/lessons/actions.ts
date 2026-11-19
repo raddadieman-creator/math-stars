@@ -20,7 +20,7 @@ export async function saveLesson(input: { id: string; title: string; skill_id: s
   };
   if (input.source_file_path !== undefined) patch.source_file_path = input.source_file_path;
   if (input.scenario_source) patch.scenario_source = input.scenario_source;
-  // أي تعديل على درس منشور يعيده إلى المراجعة حتى تعتمده المعلمة من جديد
+  // أي تعديل على درس منشور يعيده إلى المراجعة حتى تعتمده المعلم من جديد
   const { data: cur } = await sb.from('lessons').select('status').eq('id', input.id).single();
   if (cur?.status === 'published') patch.status = 'review';
   const { error } = await sb.from('lessons').update(patch).eq('id', input.id);

@@ -5,7 +5,7 @@ import { err } from '@/lib/api';
 
 export const maxDuration = 60;
 
-const PROMPT = `أنت مصمم تعليمي لمادة الرياضيات لطالبات الصف الثاني المتوسط (الصف الثامن) في المملكة العربية السعودية.
+const PROMPT = `أنت مصمم تعليمي لمادة الرياضيات لطلاب الصف الثاني المتوسط (الصف الثامن) في المملكة العربية السعودية.
 اقرأ صفحة الكتاب المرفقة (أو نصها)، واستخرج المفهوم الرياضي وأمثلته كما وردت، دون إضافة معلومات غير موجودة في الصفحة.
 ثم أعد سيناريو درس مرئي قصير (5 إلى 9 مشاهد) بالعربية الفصحى الواضحة، مناسبًا لعمر 13–14 سنة، دون أسلوب طفولي.
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     const mime = file.type || (l.source_file_path.endsWith('.pdf') ? 'application/pdf' : 'image/png');
     parts.push({ inline_data: { mime_type: mime, data: Buffer.from(await file.arrayBuffer()).toString('base64') } });
   }
-  if (l.extracted_text) parts.push({ text: `النص المستخرج من الصفحة بعد مراجعة المعلمة:\n${l.extracted_text}` });
+  if (l.extracted_text) parts.push({ text: `النص المستخرج من الصفحة بعد مراجعة المعلم:\n${l.extracted_text}` });
 
   const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
@@ -47,13 +47,13 @@ export async function POST(req: NextRequest) {
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
     body: JSON.stringify({ contents: [{ role: 'user', parts }], generationConfig: { responseMimeType: 'application/json', temperature: 0.4 } }),
   });
-  if (r.status === 429) return err('تجاوز حد الاستخدام المجاني مؤقتًا. حاولي بعد قليل، أو أعدّي المشاهد يدويًا.', 429);
+  if (r.status === 429) return err('تجاوز حد الاستخدام المجاني مؤقتًا. يمكن المحاولة لاحقًا أو إعداد المشاهد يدويًا.', 429);
   if (!r.ok) return err(`تعذر الاتصال بخدمة الذكاء الاصطناعي (${r.status})`, 502);
   const j = await r.json();
   const text: string = j?.candidates?.[0]?.content?.parts?.map((p: { text?: string }) => p.text ?? '').join('') ?? '';
   let raw: unknown;
-  try { raw = JSON.parse(text); } catch { return err('وصلت استجابة غير صالحة. أعيدي المحاولة.', 502); }
+  try { raw = JSON.parse(text); } catch { return err('وصلت استجابة غير صالحة.', 502); }
   const { scenario, dropped } = sanitizeScenario(raw);
-  if (!scenario.scenes.length) return err('لم تتضمن الاستجابة مشاهد صالحة. أعيدي المحاولة أو أعدّي المشاهد يدويًا.', 502);
+  if (!scenario.scenes.length) return err('لم تتضمن الاستجابة مشاهد صالحة.', 502);
   return NextResponse.json({ scenario, dropped, summary: typeof (raw as { summary?: unknown }).summary === 'string' ? (raw as { summary: string }).summary : '' });
 }

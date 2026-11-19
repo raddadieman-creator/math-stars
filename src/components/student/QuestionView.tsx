@@ -42,7 +42,7 @@ export function QuestionView({ q, disabled, onChange }: { q: PublicQuestion; dis
   }
   if (q.qtype === 'numeric') {
     return (
-      <input inputMode="decimal" dir="ltr" disabled={disabled} placeholder="اكتبي الإجابة"
+      <input inputMode="decimal" dir="ltr" disabled={disabled} placeholder="الإجابة"
         className="field max-w-xs text-center text-3xl font-black" value={(val as string) ?? ''}
         onChange={(e) => setVal(e.target.value.trim() === '' ? null : e.target.value)} />
     );
@@ -80,7 +80,7 @@ export function QuestionView({ q, disabled, onChange }: { q: PublicQuestion; dis
             onChange={(e) => {
               setVal({ ...pairs, [l.id]: e.target.value });
             }}>
-            <option value="">اختاري...</option>
+            <option value="">—</option>
             {rights.map((r) => <option key={r.id} value={r.id}>{r.text}</option>)}
           </select>
         </div>

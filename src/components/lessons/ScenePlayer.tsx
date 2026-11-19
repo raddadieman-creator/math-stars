@@ -7,7 +7,7 @@ import { usePrefs } from '../Prefs';
 
 /**
  * مشغل الدرس: يعرض المشاهد بالتتابع. إن وُجد تسجيل صوتي للمشهد ينتقل عند انتهائه،
- * وإلا بعد مدة المشهد. مشهد السؤال يتوقف حتى تجيب الطالبة.
+ * وإلا بعد مدة المشهد. مشهد السؤال يتوقف حتى تجيب الطالب.
  */
 export function ScenePlayer({ scenario, audioUrls = {} }: { scenario: Scenario; audioUrls?: Record<string, string> }) {
   const { calm } = usePrefs();

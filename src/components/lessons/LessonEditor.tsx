@@ -51,7 +51,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
         const page = await doc.getPage(Math.min(Math.max(1, pdfPage), doc.numPages));
         const content = await page.getTextContent();
         text = content.items.map((it) => ('str' in it ? it.str : '')).join(' ').replace(/\s+/g, ' ').trim();
-        if (!text) text = '(لم يُعثر على نص قابل للنسخ في هذه الصفحة؛ قد تكون صورة ممسوحة. جربي رفعها صورةً.)';
+        if (!text) text = '(لا يوجد نص قابل للنسخ في هذه الصفحة؛ قد تكون صورة ممسوحة، ويمكن رفعها صورةً.)';
       } else if (file.type.startsWith('image/')) {
         setBusy('قراءة النص من الصورة (OCR) — قد يستغرق دقيقة...');
         const { createWorker } = await import('tesseract.js');
@@ -61,7 +61,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
         text = r.data.text.trim();
       }
       set('extracted_text', text);
-      setMsg({ t: 'ok', m: 'تم الرفع والاستخراج. راجعي النص وصححيه قبل المتابعة.' });
+      setMsg({ t: 'ok', m: 'تم الرفع والاستخراج. النص جاهز للمراجعة والتصحيح.' });
     } catch (e) {
       setMsg({ t: 'err', m: 'تعذر الرفع أو الاستخراج: ' + (e as Error).message });
     }
@@ -77,7 +77,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
     setBusy('');
     if (!r.ok) { setMsg({ t: 'err', m: j.error }); return; }
     setL((x) => ({ ...x, scenario: j.scenario, concept_summary: x.concept_summary || j.summary || '', scenario_source: 'ai_draft' }));
-    setMsg({ t: 'ok', m: `وصلت مسودة من ${j.scenario.scenes.length} مشاهد${j.dropped ? ` (استُبعد ${j.dropped} مشهد غير صالح)` : ''}. راجعيها وعدّليها، ثم احفظي.` });
+    setMsg({ t: 'ok', m: `وصلت مسودة من ${j.scenario.scenes.length} مشاهد${j.dropped ? ` (استُبعد ${j.dropped} مشهد غير صالح)` : ''}. المسودة جاهزة للمراجعة والتعديل ثم الحفظ.` });
   }
 
   async function doSave(silent = false) {
@@ -93,7 +93,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <input value={l.title} onChange={(e) => set('title', e.target.value)} className="field max-w-xl text-2xl font-black" aria-label="عنوان الدرس" />
-        <span className="chip">{l.status === 'published' ? 'منشور للطالبات' : l.status === 'review' ? 'عُدّل بعد النشر — يحتاج إلى اعتماد' : 'مسودة'}</span>
+        <span className="chip">{l.status === 'published' ? 'منشور للطلاب' : l.status === 'review' ? 'عُدّل بعد النشر — يحتاج إلى اعتماد' : 'مسودة'}</span>
       </div>
 
       {/* 1. المصدر */}
@@ -106,7 +106,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
         </div>
         {l.source_file_path && <p className="text-xs muted">الملف محفوظ في التخزين الخاص للمنصة.</p>}
         <div><label className="label">النص المستخرج (للمراجعة والتصحيح)</label><textarea rows={6} value={l.extracted_text} onChange={(e) => set('extracted_text', e.target.value)} className="field" dir="auto" /></div>
-        <div><label className="label">ملخص المفهوم كما تعتمده المعلمة</label><textarea rows={3} value={l.concept_summary} onChange={(e) => set('concept_summary', e.target.value)} className="field" /></div>
+        <div><label className="label">ملخص المفهوم كما تعتمده المعلم</label><textarea rows={3} value={l.concept_summary} onChange={(e) => set('concept_summary', e.target.value)} className="field" /></div>
         <div><label className="label">المهارة المرتبطة (للانتقال إلى التدريب)</label>
           <select value={l.skill_id ?? ''} onChange={(e) => set('skill_id', e.target.value || null)} className="field max-w-md"><option value="">—</option>{skills.map((s) => <option key={s.id} value={s.id}>{s.code} — {s.name_ar}</option>)}</select></div>
       </section>
@@ -131,7 +131,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
 
       {/* 3. المعاينة */}
       <section className="space-y-3">
-        <h2 className="text-lg font-extrabold">3. المعاينة (كما ستراها الطالبة)</h2>
+        <h2 className="text-lg font-extrabold">3. المعاينة (كما ستراها الطالب)</h2>
         <ScenePlayer key={l.scenario.scenes.map((s) => s.id).join()} scenario={l.scenario} audioUrls={audioUrls} />
       </section>
 
@@ -140,7 +140,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
         <div className="flex flex-wrap gap-2">
           <button disabled={pending || !!busy} onClick={() => start(async () => { await doSave(); })} className="btn-ghost">حفظ</button>
           {l.status !== 'published'
-            ? <button disabled={pending || !!busy} onClick={() => start(async () => { const r = await doSave(true); if ('error' in r && r.error) return; const p = await setLessonStatus(l.id, 'published'); if (p.error) setMsg({ t: 'err', m: p.error }); else { set('status', 'published'); setMsg({ t: 'ok', m: 'اعتُمد الدرس ونُشر للطالبات.' }); } })} className="btn-star">اعتماد ونشر</button>
+            ? <button disabled={pending || !!busy} onClick={() => start(async () => { const r = await doSave(true); if ('error' in r && r.error) return; const p = await setLessonStatus(l.id, 'published'); if (p.error) setMsg({ t: 'err', m: p.error }); else { set('status', 'published'); setMsg({ t: 'ok', m: 'اعتُمد الدرس ونُشر للطلاب.' }); } })} className="btn-star">اعتماد ونشر</button>
             : <button disabled={pending} onClick={() => start(async () => { await setLessonStatus(l.id, 'draft'); set('status', 'draft'); })} className="btn-ghost">إلغاء النشر</button>}
         </div>
       </div>
@@ -192,7 +192,7 @@ function SceneEditor({ scene, index, lessonId, onChange, onMove, onDelete }: { s
   );
 }
 
-/** تسجيل التعليق بصوت المعلمة من المتصفح، ثم رفعه إلى التخزين الخاص */
+/** تسجيل التعليق بصوت المعلم من المتصفح، ثم رفعه إلى التخزين الخاص */
 function Recorder({ lessonId, scene, onSaved }: { lessonId: string; scene: Scene; onSaved: (path: string | null) => void }) {
   const [rec, setRec] = useState<MediaRecorder | null>(null);
   const [status, setStatus] = useState('');
@@ -212,7 +212,7 @@ function Recorder({ lessonId, scene, onSaved }: { lessonId: string; scene: Scene
         const ext = (mr.mimeType || 'audio/webm').includes('mp4') ? 'm4a' : 'webm';
         const path = `lessons/${lessonId}/${scene.id}-${Date.now()}.${ext}`;
         const { error } = await supabaseBrowser().storage.from('content').upload(path, blob, { contentType: blob.type });
-        if (error) setStatus('تعذر الرفع: ' + error.message); else { onSaved(path); setStatus('حُفظ التسجيل — احفظي الدرس لتثبيته.'); }
+        if (error) setStatus('تعذر الرفع: ' + error.message); else { onSaved(path); setStatus('حُفظ التسجيل، ويثبت بعد حفظ الدرس.'); }
       };
       mr.start(); setRec(mr); setStatus('جارٍ التسجيل...');
     } catch { setStatus('لم يُسمح باستخدام الميكروفون.'); }
