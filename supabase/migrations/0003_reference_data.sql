@@ -29,7 +29,9 @@ update school_settings set
   school_name = 'المتوسطة السابعة والخمسون',
   principal_name = 'ريم الجهني',
   teacher_names = array['صالحة الأسمري', 'أمل القرني'],
-  program_weeks = 20
+  program_weeks = 20,
+  vision = 'تحقيق تعليم شامل للجميع يعزز القيم ويربطنا في مدار المنافسة العالمية، وتمكين للأفراد والمجتمعات من اكتساب مهارات ذات جودة عالية.',
+  mission = 'تقديم تعليم عالي جودة شاملة لكوادر مؤهلة، معززة للقيم، ملتزمة بالمجتمع ضمن بيئة آمنة ومحفزة للإبداع، تسهم في بناء مجتمع ودؤسنبافنيين في صناعة وطن رائد عالميا.'
 where id = 1;
 
 insert into badges (code, name_ar, kind, description, icon) values

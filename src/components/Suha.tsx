@@ -1,25 +1,39 @@
-/** «سُها» — الشخصية المرشدة: نجمة صغيرة (السُّها نجم خافت في الدب الأكبر كان يُختبر به حدة البصر) */
+/** «سُها» — روبوت مرافق بشاشة وجه مضيئة وهوائي ينتهي بنجمة (SVG داخلي ثابت) */
+function suhaSVG(size: number, mood: string): string {
+  const id = 's' + size + mood;
+  const eyes = mood === 'think'
+    ? `<circle cx="48" cy="54" r="4.2" fill="#5ef0dc"/><circle cx="72" cy="54" r="4.2" fill="#5ef0dc"/><path d="M48 46.5 l6 -2" stroke="#5ef0dc" stroke-width="2.4" stroke-linecap="round"/>`
+    : mood === 'cheer'
+    ? `<path d="M43 57 l5 -6 l5 6" fill="none" stroke="#5ef0dc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M67 57 l5 -6 l5 6" fill="none" stroke="#5ef0dc" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`
+    : `<path d="M43 57 q5 -7 10 0" fill="none" stroke="#5ef0dc" stroke-width="4" stroke-linecap="round"/><path d="M67 57 q5 -7 10 0" fill="none" stroke="#5ef0dc" stroke-width="4" stroke-linecap="round"/>`;
+  const mouth = mood === 'think'
+    ? `<path d="M55 67 h10" stroke="#5ef0dc" stroke-width="2.6" stroke-linecap="round"/>`
+    : `<path d="M53 65 q7 ${mood === 'cheer' ? 7 : 5} 14 0" fill="none" stroke="#5ef0dc" stroke-width="2.6" stroke-linecap="round"/>`;
+  const sparkles = mood === 'cheer'
+    ? `<path d="M104 30 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#ffd04d"/><path d="M14 40 l1.4 3.6 l3.6 1.4 l-3.6 1.4 l-1.4 3.6 l-1.4 -3.6 l-3.6 -1.4 l3.6 -1.4 z" fill="#ff86b5"/>`
+    : mood === 'think' ? `<circle cx="100" cy="24" r="2.6" fill="#b8a9ff"/><circle cx="107" cy="16" r="3.4" fill="#b8a9ff"/>` : '';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 120 120" role="img" aria-label="سُها">
+  <defs>
+    <linearGradient id="${id}h" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e3dbff"/></linearGradient>
+    <linearGradient id="${id}v" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2e2672"/><stop offset="1" stop-color="#17123f"/></linearGradient>
+    <radialGradient id="${id}g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#3fdcc8" stop-opacity=".35"/><stop offset="1" stop-color="#3fdcc8" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="60" cy="113" rx="20" ry="3.5" fill="#2b2457" opacity=".12"/>
+  <circle cx="60" cy="56" r="44" fill="url(#${id}g)"/>
+  <path d="M60 26 V15" stroke="#b8a9ff" stroke-width="3" stroke-linecap="round"/>
+  <path d="M60 3 l2.6 6.4 l6.4 2.6 l-6.4 2.6 l-2.6 6.4 l-2.6 -6.4 l-6.4 -2.6 l6.4 -2.6 z" fill="#f6b81a"/>
+  <rect x="44" y="84" width="32" height="20" rx="10" fill="url(#${id}h)" stroke="#d6ccff"/>
+  <circle cx="60" cy="94" r="3.4" fill="#f6b81a"/>
+  <rect x="19" y="47" width="9" height="18" rx="4.5" fill="#c9bcff"/><rect x="92" y="47" width="9" height="18" rx="4.5" fill="#c9bcff"/>
+  <rect x="24" y="24" width="72" height="62" rx="27" fill="url(#${id}h)" stroke="#d6ccff" stroke-width="1.5"/>
+  <rect x="32" y="36" width="56" height="40" rx="18" fill="url(#${id}v)"/>
+  <path d="M38 44 q8 -6 22 -6" stroke="#ffffff" stroke-opacity=".25" stroke-width="3" fill="none" stroke-linecap="round"/>
+  ${eyes}${mouth}
+  <ellipse cx="40" cy="65" rx="3.6" ry="2.2" fill="#ff86b5" opacity=".75"/><ellipse cx="80" cy="65" rx="3.6" ry="2.2" fill="#ff86b5" opacity=".75"/>
+  ${sparkles}</svg>`;
+}
+
+
 export function Suha({ size = 120, mood = 'happy', className = '' }: { size?: number; mood?: 'happy' | 'think' | 'cheer'; className?: string }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 120 120" className={className} role="img" aria-label="سُها المرشدة">
-      <defs>
-        <radialGradient id="sg" cx="45%" cy="35%" r="70%">
-          <stop offset="0" stopColor="#fff6c9" /><stop offset=".55" stopColor="#ffd04d" /><stop offset="1" stopColor="#f0a21a" />
-        </radialGradient>
-        <filter id="sglow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
-      </defs>
-      <path filter="url(#sglow)" fill="url(#sg)" stroke="#c97c00" strokeWidth="2" strokeLinejoin="round"
-        d="M60 8 L74 40 L108 44 L82 66 L90 100 L60 83 L30 100 L38 66 L12 44 L46 40 Z" />
-      {/* نظارة صغيرة توحي بالتفكير الرياضي */}
-      <g fill="none" stroke="#3b2a00" strokeWidth="2.4">
-        <circle cx="49" cy="56" r="8" /><circle cx="71" cy="56" r="8" /><path d="M57 56h6" />
-      </g>
-      <circle cx={mood === 'think' ? 51 : 49} cy={mood === 'think' ? 54 : 56} r="3" fill="#2a1d00" />
-      <circle cx={mood === 'think' ? 73 : 71} cy={mood === 'think' ? 54 : 56} r="3" fill="#2a1d00" />
-      {mood === 'think'
-        ? <path d="M53 72 q7 -3 14 0" stroke="#2a1d00" strokeWidth="2.6" fill="none" strokeLinecap="round" />
-        : <path d="M51 69 q9 9 18 0" stroke="#2a1d00" strokeWidth="2.6" fill={mood === 'cheer' ? '#ff86b5' : 'none'} strokeLinecap="round" />}
-      <circle cx="40" cy="68" r="4" fill="#ff86b5" opacity=".6" /><circle cx="80" cy="68" r="4" fill="#ff86b5" opacity=".6" />
-    </svg>
-  );
+  return <span className={`inline-block ${className}`} dangerouslySetInnerHTML={{ __html: suhaSVG(size, mood) }} />;
 }

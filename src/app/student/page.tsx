@@ -26,7 +26,6 @@ export default async function StudentHome() {
         <Suha size={96} mood="cheer" className="floaty" />
         <div>
           <h1 className="text-3xl font-black">أهلًا {first}</h1>
-          <p className="muted">اختاري مهارة وابدئي التدريب، وتقدمكِ يُحفظ تلقائيًا.</p>
         </div>
         <div className="card-3d flex items-center gap-3 px-5 py-3"><span className="text-3xl">⭐</span><div><p className="text-xs muted">نجومي</p><p className="text-2xl font-black text-star-600">{h.totalStars}</p></div></div>
       </section>
@@ -72,7 +71,7 @@ export default async function StudentHome() {
 
       <section className="mt-10">
         <h2 className="h-section">أوسمتي وشاراتي</h2>
-        {!h.badges.length && <p className="mt-3 muted">ستظهر هنا أوسمة الإتقان والمواظبة والتحسن.</p>}
+        {!h.badges.length && <p className="mt-3 muted">لا توجد أوسمة بعد.</p>}
         <div className="mt-4 flex flex-wrap gap-3">
           {h.badges.map((b, i) => (
             <div key={i} className="card-3d flex items-center gap-3 px-4 py-3"><span className="text-2xl">{ICONS[b.icon] ?? '⭐'}</span><span className="font-bold">{b.name_ar}</span></div>
