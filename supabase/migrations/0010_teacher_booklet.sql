@@ -104,36 +104,26 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'reasoning', 2, 'mcq', 'يريد مدير مدرسة ترتيب عدد من المقاعد في القاعة بحيث لا يمكن وضعها إلا في صف واحد (أو عمود واحد) دون مقاعد متبقية. أي الأعداد التالية يناسب ذلك؟', null, '[{"id": "a", "text": "21"}, {"id": "b", "text": "27"}, {"id": "c", "text": "29"}, {"id": "d", "text": "33"}]'::jsonb, '{"value": "c"}'::jsonb, '["العدد المطلوب لا يقبل القسمة إلا على 1 وعلى نفسه، أي عدد أولي.", "21 = 3 × 7، 27 = 3 × 9، 33 = 3 × 11، أما 29 فأولي."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 4، س 5'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
-with s as (select id from skills where code = 'G8-S02'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-2'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'إذا كان مجموع خمسة أعداد صحيحة متتالية يساوي −35، فما العدد الأصغر بينها؟', null, '[{"id": "a", "text": "−9"}, {"id": "b", "text": "−8"}, {"id": "c", "text": "−7"}, {"id": "d", "text": "−5"}]'::jsonb, '{"value": "a"}'::jsonb, '["العدد الأوسط = −35 ÷ 5 = −7.", "الأعداد: −9، −8، −7، −6، −5، وأصغرها −9."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 4، س 6'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
-with s as (select id from skills where code = 'G8-S02'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-2'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'يهبط غواص إلى عمق 18 مترًا تحت سطح البحر، ويقف حارس على برج ارتفاعه 12 مترًا فوق سطح البحر. أي التعبيرات يمثّل المسافة العمودية الصحيحة بينهما؟', null, '[{"id": "a", "text": "12 + (−18)"}, {"id": "b", "text": "12 + |−18|"}, {"id": "c", "text": "18 − 12"}, {"id": "d", "text": "|12| − |−18|"}]'::jsonb, '{"value": "b"}'::jsonb, '["موقع الغواص −18 وموقع الحارس 12.", "المسافة = 12 + |−18| = 30 مترًا."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 4، س 7'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S01'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'تتضاعف بكتيريا في عينة 7 مرات كل ساعة (أي تتبع القوة 7ⁿ حيث n عدد الساعات). ما رقم الآحاد لعدد البكتيريا بعد 99 ساعة؟', null, '[{"id": "a", "text": "1"}, {"id": "b", "text": "3"}, {"id": "c", "text": "7"}, {"id": "d", "text": "9"}]'::jsonb, '{"value": "b"}'::jsonb, '["أرقام آحاد قوى 7 تتكرر: 7، 9، 3، 1.", "99 ÷ 4 = 24 والباقي 3، فرقم الآحاد هو الثالث في الدورة: 3."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 5، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S01'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'مزرعة مربعة مساحتها 2304 م². ما طول ضلعها؟', null, '[{"id": "a", "text": "46 م"}, {"id": "b", "text": "48 م"}, {"id": "c", "text": "52 م"}, {"id": "d", "text": "576 م"}]'::jsonb, '{"value": "b"}'::jsonb, '["طول الضلع = √2304 = 48 م، لأن 48 × 48 = 2304."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 5، س 9أ (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'مزرعة مربعة مساحتها 2304 م²، خُصص ⅜ مساحتها للزراعة، ثم زادت المساحة المزروعة 192 م². ما الكسر الذي تمثله المساحة المزروعة النهائية من المساحة الكلية؟', null, '[{"id": "a", "text": "⅜"}, {"id": "b", "text": "11/24"}, {"id": "c", "text": "½"}, {"id": "d", "text": "5/12"}]'::jsonb, '{"value": "b"}'::jsonb, '["⅜ × 2304 = 864 م².", "864 + 192 = 1056 م².", "1056 ÷ 2304 = 11/24."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 5، س 9ج (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S01'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'إذا كان √(س + 7) = 5، وكان 2^ص = س − 2، فما قيمة ص؟', null, '[{"id": "a", "text": "3"}, {"id": "b", "text": "4"}, {"id": "c", "text": "5"}, {"id": "d", "text": "8"}]'::jsonb, '{"value": "b"}'::jsonb, '["س + 7 = 25، إذن س = 18.", "2^ص = 16 = 2⁴، إذن ص = 4."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 5، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 11 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S03'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'أي النقاط على خط الأعداد في الشكل تمثّل العدد 0.4375 ؟', '/booklet/n06-1.png', '[{"id": "a", "text": "ل"}, {"id": "b", "text": "ع"}, {"id": "c", "text": "س"}, {"id": "d", "text": "ص"}]'::jsonb, '{"value": "b"}'::jsonb, '["0.4375 = 7/16، وهو منتصف المسافة بين ⅜ = 6/16 و ½ = 8/16.", "النقطة ع تقع بين ⅜ و ½."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 6، س 1'
@@ -199,46 +189,41 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'applying', 1, 'mcq', 'أي الكسور التالية أصغر من 5/11 ؟', null, '[{"id": "a", "text": "¼"}, {"id": "b", "text": "⅔"}, {"id": "c", "text": "7/9"}, {"id": "d", "text": "⅚"}]'::jsonb, '{"value": "a"}'::jsonb, '["5/11 أقل من النصف بقليل.", "¼ أقل من النصف، أما الكسور الأخرى فأكبر من النصف."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 8، س 2'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
-with s as (select id from skills where code = 'G8-S03'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'في مسح حول مهنة المستقبل كانت نسب الاختيار: الهندسة 21/100، الطب 7/25، التمريض 9/50، الطيران ⅕، التدريس 9/100، التجارة 1/25. ما ترتيب المهن من الأكثر اختيارًا إلى الأقل؟', null, '[{"id": "a", "text": "هندسة، طيران، طب، تدريس، تجارة، تمريض"}, {"id": "b", "text": "تمريض، طب، تدريس، هندسة، طيران، تجارة"}, {"id": "c", "text": "طب، هندسة، طيران، تمريض، تدريس، تجارة"}, {"id": "d", "text": "تجارة، تدريس، هندسة، طيران، تمريض، طب"}]'::jsonb, '{"value": "c"}'::jsonb, '["نحوّل الكسور إلى مقام 100: هندسة 21، طب 28، تمريض 18، طيران 20، تدريس 9، تجارة 4.", "الترتيب التنازلي: طب، هندسة، طيران، تمريض، تدريس، تجارة."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 8، س 3'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'اشترى حامد سياجًا طوله 12 م، واستعمل 6.5 م لبستانه و 4.125 م لبستان جاره. كم مترًا بقي من السياج؟', null, '[{"id": "a", "text": "7.875"}, {"id": "b", "text": "5.5"}, {"id": "c", "text": "1.375"}, {"id": "d", "text": "0.87"}]'::jsonb, '{"value": "c"}'::jsonb, '["المستعمل: 6.5 + 4.125 = 10.625 م.", "الباقي: 12 − 10.625 = 1.375 م."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 8، س 4'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'مستطيل طوله 14.3 سم وعرضه 9.7 سم. ما مساحته؟', null, '[{"id": "a", "text": "1387.1 سم²"}, {"id": "b", "text": "138.71 سم²"}, {"id": "c", "text": "48 سم²"}, {"id": "d", "text": "24 سم²"}]'::jsonb, '{"value": "b"}'::jsonb, '["المساحة = 14.3 × 9.7 = 138.71 سم²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 8، س 5'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'قُسم لوح طوله 49½ سم إلى 3 قطع متساوية. ما طول كل قطعة؟', null, '[{"id": "a", "text": "165 سم"}, {"id": "b", "text": "148.5 سم"}, {"id": "c", "text": "15.15 سم"}, {"id": "d", "text": "16.5 سم"}]'::jsonb, '{"value": "d"}'::jsonb, '["49.5 ÷ 3 = 16.5 سم."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 8، س 6'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'تحتاج وصفة إلى 3⅓ كوب من خليط القشطة. إذا أراد سعد أن يستعمل ¾ الكمية المعتادة، فما الكمية التي يحتاجها؟', null, '[{"id": "a", "text": "40/9"}, {"id": "b", "text": "3¼"}, {"id": "c", "text": "31/12"}, {"id": "d", "text": "2½"}]'::jsonb, '{"value": "d"}'::jsonb, '["3⅓ × ¾ = 10/3 × 3/4 = 10/4 = 2½ كوب."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 9، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'يريد سعيد ري حديقته بأنابيب التنقيط. لديه 6 صفوف من الأشجار، طول كل صف 11.25 م. كم مترًا من الأنابيب يحتاج؟', null, '[{"id": "a", "text": "67.5 م"}, {"id": "b", "text": "66.5 م"}, {"id": "c", "text": "17.25 م"}, {"id": "d", "text": "675 م"}]'::jsonb, '{"value": "a"}'::jsonb, '["6 × 11.25 = 67.5 م."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 9، س 9أ (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'لا يريد سعيد أن ينفق أكثر من 18.75 ريالًا على أشتال الفراولة، وثمن المجموعة الواحدة ريالان. ما أكبر عدد من المجموعات يمكنه شراؤه؟', null, '[{"id": "a", "text": "9"}, {"id": "b", "text": "10"}, {"id": "c", "text": "9.375"}, {"id": "d", "text": "8"}]'::jsonb, '{"value": "a"}'::jsonb, '["18.75 ÷ 2 = 9.375.", "عدد المجموعات عدد كلي، ولا يمكن تجاوز المبلغ، فالجواب 9."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 9، س 9ب (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'تُرتب الكسور ½، ⅓، ¼، ⅔، ¾، ⅙، 1/12، 5/12، 7/12 في مربع عجيب 3 × 3 بحيث يتساوى مجموع كل صف وعمود وقطر. ما الكسر الذي يوضع في المربع الأوسط؟', null, '[{"id": "a", "text": "½"}, {"id": "b", "text": "5/12"}, {"id": "c", "text": "⅓"}, {"id": "d", "text": "7/12"}]'::jsonb, '{"value": "b"}'::jsonb, '["بمقام 12 تصبح الكسور: 6، 4، 3، 8، 9، 2، 1، 5، 7، أي الأعداد من 1 إلى 9.", "في المربع العجيب للأعداد 1–9 يكون العدد الأوسط 5، أي 5/12."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 9، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S06'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'إذا كانت كمية الثلج في أي يوم نصف كميته في اليوم السابق، فهل تتناسب كمية الثلج مع عدد الأيام؟', null, '[{"id": "a", "text": "تتناسب كمية الثلج مع عدد الأيام"}, {"id": "b", "text": "تتناسب كمية الثلج مع درجة الحرارة"}, {"id": "c", "text": "لا تتناسبان"}, {"id": "d", "text": "لا يمكن تحديد ذلك"}]'::jsonb, '{"value": "c"}'::jsonb, '["في التناسب تبقى نسبة الكمية إلى عدد الأيام ثابتة.", "هنا تتناقص الكمية إلى النصف كل يوم، فالنسبة ليست ثابتة."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 10، س 1'
@@ -379,76 +364,61 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'applying', 2, 'mcq', 'سلعة كلفتها 41.26 ريالًا تُباع بمبلغ 44.56 ريالًا. ما النسبة المئوية للربح إلى أقرب عدد كلي؟', null, '[{"id": "a", "text": "3٪"}, {"id": "b", "text": "7٪"}, {"id": "c", "text": "8٪"}, {"id": "d", "text": "9٪"}]'::jsonb, '{"value": "c"}'::jsonb, '["الربح = 44.56 − 41.26 = 3.30 ريالات.", "3.30 ÷ 41.26 ≈ 0.08 = 8٪."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 15، س 7'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
-with s as (select id from skills where code = 'G8-S01'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-7'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'ثلاث آلات تعمل في دورات منتظمة: الأولى كل 16 ثانية، والثانية كل 24 ثانية، والثالثة كل 36 ثانية. بدأت الثلاث معًا الساعة 8:00 صباحًا. كم مرة أخرى تعمل الثلاث في اللحظة نفسها خلال الساعة التالية؟', null, '[{"id": "a", "text": "25"}, {"id": "b", "text": "24"}, {"id": "c", "text": "36"}, {"id": "d", "text": "16"}]'::jsonb, '{"value": "a"}'::jsonb, '["المضاعف المشترك الأصغر للأعداد 16 و 24 و 36 هو 144 ثانية.", "الساعة 3600 ثانية، و 3600 ÷ 144 = 25 مرة."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 15، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-7'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'لدى نورة 2½ لتر من العصير، استخدمت منه 0.75 لتر، ثم أضافت كمية تساوي ⅔ الكمية المتبقية، ووزعت الناتج على أكواب سعة كل منها ¼ لتر. كم كوبًا تملؤه بالكامل؟', null, '[{"id": "a", "text": "11"}, {"id": "b", "text": "12"}, {"id": "c", "text": "10"}, {"id": "d", "text": "7"}]'::jsonb, '{"value": "a"}'::jsonb, '["المتبقي: 2.5 − 0.75 = 1.75 لتر.", "المضاف: ⅔ × 1.75 ≈ 1.17 لتر، فالمجموع ≈ 2.92 لتر.", "2.92 ÷ 0.25 ≈ 11.7، فتمتلئ 11 كوبًا بالكامل."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 15، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S05'), a as (select id from assessments where kind = 'model' and form_label = 'bk-num-7'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'صف من 5 مربعات صفراء وزرقاء، ونسبة عدد الصفراء إلى عدد الزرقاء مكافئة للنسبة 4 إلى 6. كم مربعًا أصفر في الصف؟', null, '[{"id": "a", "text": "2"}, {"id": "b", "text": "3"}, {"id": "c", "text": "4"}, {"id": "d", "text": "1"}]'::jsonb, '{"value": "a"}'::jsonb, '["4 إلى 6 = 2 إلى 3، ومجموع الأجزاء 5.", "إذن 2 صفراء و 3 زرقاء."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 15، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
-with s as (select id from skills where code = 'G8-S04'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'knowing', 1, 'mcq', 'كم خُمسًا في العدد 50 ؟', null, '[{"id": "a", "text": "5"}, {"id": "b", "text": "10"}, {"id": "c", "text": "50"}, {"id": "d", "text": "250"}]'::jsonb, '{"value": "d"}'::jsonb, '["في الواحد الصحيح 5 أخماس.", "50 × 5 = 250 خُمسًا."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 17، س 1'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'أوجد العدد المفقود: 25 + □ − 3 × 5 = 100', null, '[{"id": "a", "text": "25"}, {"id": "b", "text": "50"}, {"id": "c", "text": "75"}, {"id": "d", "text": "90"}]'::jsonb, '{"value": "d"}'::jsonb, '["3 × 5 = 15، فتصبح المعادلة 25 + □ − 15 = 100.", "10 + □ = 100، إذن □ = 90."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 17، س 2'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'استُعمل 12 عود ثقاب لعمل ثلاثة مربعات متجاورة منتهية بمثلث كما في الشكل. ما عدد المربعات في الشكل المشابه الذي يمكن عمله باستعمال 48 عودًا؟', '/booklet/a17-3.png', '[{"id": "a", "text": "12"}, {"id": "b", "text": "15"}, {"id": "c", "text": "16"}, {"id": "d", "text": "20"}]'::jsonb, '{"value": "b"}'::jsonb, '["n مربعات متجاورة تحتاج 3n + 1 عودًا، والمثلث يحتاج عودين إضافيين.", "3n + 3 = 48، إذن n = 15."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 17، س 3'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'G8-S07'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'إذا كان أ + ب = 25، فإن قيمة 2أ + 2ب + 4 تساوي:', null, '[{"id": "a", "text": "29"}, {"id": "b", "text": "31"}, {"id": "c", "text": "54"}, {"id": "d", "text": "58"}]'::jsonb, '{"value": "c"}'::jsonb, '["2أ + 2ب = 2(أ + ب) = 50.", "50 + 4 = 54."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 17، س 4'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S09'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'اشترى مروان كتابين، الأول في العلوم والثاني في الأدب. عدد صفحات كتاب العلوم يزيد 32 صفحة على عدد صفحات كتاب الأدب، وعدد صفحات كتاب العلوم ن. ما عدد صفحات كتاب الأدب؟', null, '[{"id": "a", "text": "ن + 32"}, {"id": "b", "text": "ن − 32"}, {"id": "c", "text": "32 − ن"}, {"id": "d", "text": "32ن"}]'::jsonb, '{"value": "b"}'::jsonb, '["كتاب الأدب أقل بمقدار 32 صفحة، فنطرح 32 من ن."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 17، س 5'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'جدول 3 × 3 صفوفه: (1، 8، س) و (10، 5، 0) و (4، 2، 9). ما قيمة س في هذا النمط؟', null, '[{"id": "a", "text": "5"}, {"id": "b", "text": "6"}, {"id": "c", "text": "7"}, {"id": "d", "text": "8"}]'::jsonb, '{"value": "b"}'::jsonb, '["مجموع كل صف وكل عمود 15، مثل 10 + 5 + 0 = 15 و 1 + 10 + 4 = 15.", "1 + 8 + س = 15، إذن س = 6."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 17، س 6'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S09'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'مثلث أطوال أضلاعه (2س + 1) و (س + 2) و (س + 1) سم، ومجموعها 30 سم. أي المعادلات تمكّن من إيجاد قيمة س؟', '/booklet/a18-7.png', '[{"id": "a", "text": "4س + 30 = 4"}, {"id": "b", "text": "س + 4 = 30"}, {"id": "c", "text": "4س + 4 = 30"}, {"id": "d", "text": "4س − 4 = 30"}]'::jsonb, '{"value": "c"}'::jsonb, '["(2س + 1) + (س + 2) + (س + 1) = 4س + 4.", "إذن 4س + 4 = 30."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 18، س 7أ'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'مثلث أطوال أضلاعه (2س + 1) و (س + 2) و (س + 1) سم، ومحيطه 30 سم. ما طول الضلع الأكبر؟', '/booklet/a18-7.png', '[{"id": "a", "text": "14 سم"}, {"id": "b", "text": "8.5 سم"}, {"id": "c", "text": "7.5 سم"}, {"id": "d", "text": "6.5 سم"}]'::jsonb, '{"value": "a"}'::jsonb, '["4س + 4 = 30، إذن س = 6.5.", "الضلع الأكبر 2س + 1 = 14 سم."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 18، س 7ب (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'يوضح الرسم كمية الماء في خزان أثناء تعبئته بمعدل ثابت. إذا استُبدلت المضخة بأخرى تضخ الماء بضعف المعدل مع بقاء كمية الماء في البداية كما هي، فما الدالة التي تمثل العلاقة الجديدة؟ (ص: كمية الماء باللتر، س: الزمن)', '/booklet/a18-8.png', '[{"id": "a", "text": "ص = 10س + 10"}, {"id": "b", "text": "ص = 5س + 20"}, {"id": "c", "text": "ص = 10س + 20"}, {"id": "d", "text": "ص = 5س + 10"}]'::jsonb, '{"value": "a"}'::jsonb, '["من الرسم: الكمية الابتدائية 10 لترات، وتزيد 5 لترات في كل وحدة زمنية.", "ضعف المعدل 10 لترات، والمقطع يبقى 10: ص = 10س + 10."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 18، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'في مسابقة علمية يحتاج المتسابق إلى 80 نقطة على الأقل للتأهل. حصلت ليان على 32 نقطة في المرحلة الأولى، وفي الثانية تحصل على 7 نقاط عن كل مهمة تنجزها. أي مما يلي يمثل الموقف وحله؟', null, '[{"id": "a", "text": "32 + 7م ≥ 80، وأقل عدد من المهام 7"}, {"id": "b", "text": "32 + 7م ≥ 80، وأقل عدد من المهام 6"}, {"id": "c", "text": "7م ≥ 80، وأقل عدد من المهام 12"}, {"id": "d", "text": "32 + 7م ≤ 80، وأكبر عدد من المهام 6"}]'::jsonb, '{"value": "a"}'::jsonb, '["المجموع 32 + 7م يجب ألا يقل عن 80.", "7م ≥ 48، إذن م ≥ 6.86، فأقل عدد صحيح 7 مهام (6 مهام تعطي 74 نقطة فقط)."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 18، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'الدالة (أ): ص = 3س + 6، والدالة (ب) يمثلها الجدول: س = 0، 2، 4، 6 ↤ ص = 12، 16، 20، 24. عند أي قيمة للمتغير س تتساوى الدالتان، وأيهما تصبح قيمها أكبر بعد ذلك؟', null, '[{"id": "a", "text": "س = 6، والدالة (أ)"}, {"id": "b", "text": "س = 6، والدالة (ب)"}, {"id": "c", "text": "س = 2، والدالة (أ)"}, {"id": "d", "text": "لا تتساويان أبدًا"}]'::jsonb, '{"value": "a"}'::jsonb, '["الدالة (ب): الميل 2 والمقطع 12، أي ص = 2س + 12.", "3س + 6 = 2س + 12 ⇐ س = 6.", "بعد ذلك تكبر (أ) أسرع لأن ميلها 3 أكبر من 2."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 19، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 11 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
 with s as (select id from skills where code = 'G8-S08'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'إذا كان س − 1 يمثل العدد الأوسط لثلاثة أعداد صحيحة متتالية، فأي عبارة تمثل مجموع العددين الأول والثالث؟', null, '[{"id": "a", "text": "س + 2"}, {"id": "b", "text": "2س + 1"}, {"id": "c", "text": "2س − 2"}, {"id": "d", "text": "3س"}]'::jsonb, '{"value": "c"}'::jsonb, '["الأعداد: س − 2، س − 1، س.", "(س − 2) + س = 2س − 2."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 20، س 1'
@@ -459,106 +429,96 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'applying', 1, 'mcq', 'في سباق للجري استغرق سمير 3 دقائق أكثر من الزمن الذي استغرقه خالد. إذا قطع سمير مسافة السباق في س دقيقة، فكم دقيقة استغرق خالد؟', null, '[{"id": "a", "text": "3 − س"}, {"id": "b", "text": "3 + س"}, {"id": "c", "text": "س − 3"}, {"id": "d", "text": "3س"}]'::jsonb, '{"value": "c"}'::jsonb, '["خالد أسرع بثلاث دقائق، فنطرح 3 من زمن سمير: س − 3."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 20، س 2'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
-with s as (select id from skills where code = 'G8-S09'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 1, 'mcq', 'شارك في موكب م من الأولاد و ن من البنات، وكل منهم يحمل بالونين. أي العبارات تمثل العدد الإجمالي للبالونات؟', null, '[{"id": "a", "text": "2(م + ن)"}, {"id": "b", "text": "2 + (م + ن)"}, {"id": "c", "text": "2م + ن"}, {"id": "d", "text": "م + 2ن"}]'::jsonb, '{"value": "a"}'::jsonb, '["عدد المشاركين م + ن، وكل منهم يحمل 2.", "الإجمالي 2(م + ن)."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 20، س 3'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S07'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'أوجد العدد المفقود: (85 − 4 × 2) ÷ □ = 7', null, '[{"id": "a", "text": "7"}, {"id": "b", "text": "10"}, {"id": "c", "text": "11"}, {"id": "d", "text": "13"}]'::jsonb, '{"value": "c"}'::jsonb, '["4 × 2 = 8، و 85 − 8 = 77.", "77 ÷ □ = 7، إذن □ = 11."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 20، س 4'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'استُعمل 11 عود ثقاب لعمل خمسة مثلثات متطابقة الأضلاع في صف واحد. ما عدد المثلثات التي يمكن عملها بالطريقة نفسها باستعمال 63 عودًا؟', '/booklet/a20-5.png', '[{"id": "a", "text": "21"}, {"id": "b", "text": "25"}, {"id": "c", "text": "31"}, {"id": "d", "text": "35"}]'::jsonb, '{"value": "c"}'::jsonb, '["n مثلثًا تحتاج 2n + 1 عودًا (5 مثلثات: 11 عودًا).", "2n + 1 = 63، إذن n = 31."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 20، س 5'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'ما الحد التالي في النمط: ½، ¾، ⅚، ⅞، 9/10، ... ؟', null, '[{"id": "a", "text": "10/11"}, {"id": "b", "text": "11/10"}, {"id": "c", "text": "12/11"}, {"id": "d", "text": "11/12"}]'::jsonb, '{"value": "d"}'::jsonb, '["البسط أعداد فردية متتالية والمقام العدد الزوجي الذي يليه.", "الحد التالي 11/12."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 21، س 6أ'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'ما الحد الخمسون في النمط: ½، ¾، ⅚، ⅞، 9/10، ... ؟', null, '[{"id": "a", "text": "99/100"}, {"id": "b", "text": "49/50"}, {"id": "c", "text": "100/101"}, {"id": "d", "text": "101/102"}]'::jsonb, '{"value": "a"}'::jsonb, '["الحد النوني (2ن − 1) ÷ (2ن).", "عند ن = 50: 99/100."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 21، س 6ب (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'إذا كانت د(س) دالة خطية، وكان د(2) = 7 و د(5) = 16، فأي القيم التالية لا يمكن أن تكون صحيحة؟', null, '[{"id": "a", "text": "د(3) = 10"}, {"id": "b", "text": "د(4) = 13"}, {"id": "c", "text": "د(6) = 19"}, {"id": "d", "text": "د(8) = 23"}]'::jsonb, '{"value": "d"}'::jsonb, '["الميل = (16 − 7) ÷ (5 − 2) = 3، إذن د(س) = 3س + 1.", "د(8) = 25، وليس 23."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 21، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'يشترط للتأهل في مسابقة أن يكون مجموع النقاط أكثر من 50. حقق متسابق 26 نقطة في الجولة الأولى، ويحصل على 6 نقاط عن كل مهمة إضافية. ما أقل عدد من المهام الإضافية يلزمه للتأهل؟', null, '[{"id": "a", "text": "5"}, {"id": "b", "text": "4"}, {"id": "c", "text": "6"}, {"id": "d", "text": "24"}]'::jsonb, '{"value": "a"}'::jsonb, '["26 + 6م > 50 ⇐ 6م > 24 ⇐ م > 4.", "أقل عدد صحيح أكبر من 4 هو 5."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 21، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'متتابعة حسابية حدها الرابع 17 وحدها التاسع 42. ما حدها النوني؟', null, '[{"id": "a", "text": "5ن − 3"}, {"id": "b", "text": "5ن + 2"}, {"id": "c", "text": "4ن + 1"}, {"id": "d", "text": "5ن − 8"}]'::jsonb, '{"value": "a"}'::jsonb, '["الأساس = (42 − 17) ÷ (9 − 4) = 5.", "الحد الأول = 17 − 3 × 5 = 2، فالحد النوني 2 + 5(ن − 1) = 5ن − 3."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 21، س 9أ (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'متتابعة حسابية حدها النوني 5ن − 3. ما ترتيب العدد 102 فيها؟', null, '[{"id": "a", "text": "21"}, {"id": "b", "text": "20"}, {"id": "c", "text": "22"}, {"id": "d", "text": "19"}]'::jsonb, '{"value": "a"}'::jsonb, '["5ن − 3 = 102 ⇐ 5ن = 105 ⇐ ن = 21."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 21، س 9ب (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 11 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
 with s as (select id from skills where code = 'G8-S08'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'ما قيمة العبارة [(0.002)(500000)(0.000036)] ÷ [(0.00001)(3000)(0.0006)] بالصيغة العلمية؟', null, '[{"id": "a", "text": "2 × 10³"}, {"id": "b", "text": "2 × 10⁻³"}, {"id": "c", "text": "1.8 × 10⁴"}, {"id": "d", "text": "3.6 × 10²"}]'::jsonb, '{"value": "a"}'::jsonb, '["البسط: (2 × 10⁻³)(5 × 10⁵)(3.6 × 10⁻⁵) = 36 × 10⁻³.", "المقام: (1 × 10⁻⁵)(3 × 10³)(6 × 10⁻⁴) = 18 × 10⁻⁶.", "الناتج: (36 ÷ 18) × 10⁻³⁺⁶ = 2 × 10³."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 22، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 12 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 11 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'يوضح جدول تكلفة استئجار دراجة: ساعة واحدة 15 ريالًا، ساعتان 25، ثلاث ساعات 35، أربع ساعات 45. أي العبارات تصف العلاقة؟', null, '[{"id": "a", "text": "15 ريالًا لكل ساعة، ولا توجد رسوم ثابتة"}, {"id": "b", "text": "5 ريالات لكل ساعة، ورسوم ثابتة 10 ريالات"}, {"id": "c", "text": "10 ريالات لكل ساعة، ورسوم ثابتة 5 ريالات"}, {"id": "d", "text": "10 ريالات لكل ساعة، ورسوم ثابتة 15 ريالًا"}]'::jsonb, '{"value": "c"}'::jsonb, '["تزيد التكلفة 10 ريالات مع كل ساعة.", "عند ساعة واحدة: 10 + 5 = 15، فالرسوم الثابتة 5 ريالات."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 23، س 1'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
-with s as (select id from skills where code = 'G8-S01'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'لدى رنا بطاقات عليها الأرقام 3، 4، 5، 6، 7، 8. تريد تكوين أصغر عدد من ثلاث منازل بحيث يمكن استخدام الرقم الواحد مرتين كحد أقصى. ما العدد؟', null, '[{"id": "a", "text": "345"}, {"id": "b", "text": "334"}, {"id": "c", "text": "333"}, {"id": "d", "text": "343"}]'::jsonb, '{"value": "b"}'::jsonb, '["أصغر رقم 3، ويمكن تكراره مرتين فقط.", "العدد 333 غير مسموح، فالأصغر 334."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 23، س 2'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'يوضح الرسم تكلفة استئجار دراجة لدى شركتين. قالت سارة: تكون تكلفة الشركة (ب) أقل في البداية، ولكن بعد عدد معين من الساعات تصبح تكلفة الشركة (أ) أقل. أي العبارات تدعم استنتاجها؟', '/booklet/a23-3.png', '[{"id": "a", "text": "ميل خط الشركة (أ) أقل من ميل خط (ب)، ويتقاطع الخطان عند 3 ساعات"}, {"id": "b", "text": "ميل خط الشركة (أ) أكبر من ميل خط (ب)"}, {"id": "c", "text": "المقطع الصادي للشركتين متساوٍ"}, {"id": "d", "text": "تكلفة الشركة (ب) أقل من (أ) لجميع الساعات"}]'::jsonb, '{"value": "a"}'::jsonb, '["خط (ب) يبدأ أدنى لكنه أشد انحدارًا.", "بعد نقطة التقاطع عند 3 ساعات يصبح خط (أ) هو الأدنى."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 23، س 3'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'G8-S07'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'سعة مخزن 7500 صندوق، وتكلفة تخزين الصندوق الواحد نصف ريال يوميًا. ما تكلفة تخزين جميع الصناديق 4 أيام؟', null, '[{"id": "a", "text": "3750 ريالًا"}, {"id": "b", "text": "10000 ريال"}, {"id": "c", "text": "12000 ريال"}, {"id": "d", "text": "15000 ريال"}]'::jsonb, '{"value": "d"}'::jsonb, '["التكلفة اليومية: 7500 × 0.5 = 3750 ريالًا.", "لمدة 4 أيام: 3750 × 4 = 15000 ريال."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 24، س 4'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'إذا كان العدد س يقع بين 4 و 7، فإن 2 + 3س يقع بين أي عددين؟', null, '[{"id": "a", "text": "5 و 9"}, {"id": "b", "text": "12 و 21"}, {"id": "c", "text": "14 و 23"}, {"id": "d", "text": "17 و 26"}]'::jsonb, '{"value": "c"}'::jsonb, '["عند س = 4: 2 + 12 = 14، وعند س = 7: 2 + 21 = 23.", "بما أن العبارة تزداد مع س فهي بين 14 و 23."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 24، س 5'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'ترتبط الأعداد بالقاعدة نفسها: 2 ← 7، 4 ← 13، 6 ← 19. إذا كان △ ← 31، فما قيمة △ ؟', null, '[{"id": "a", "text": "8"}, {"id": "b", "text": "9"}, {"id": "c", "text": "10"}, {"id": "d", "text": "12"}]'::jsonb, '{"value": "c"}'::jsonb, '["القاعدة: اضرب في 3 ثم أضف 1.", "3△ + 1 = 31، إذن △ = 10."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 24، س 6'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'يمثل الرسم البياني العلاقة بين المتغيرين س و ص. أي الاستنتاجات التالية صحيح؟', '/booklet/a24-7.png', '[{"id": "a", "text": "تتناقص قيم ص دائمًا كلما زادت قيمة س"}, {"id": "b", "text": "للدالة قيمة صغرى، وبعد الوصول إليها تبدأ قيم ص في الزيادة"}, {"id": "c", "text": "معدل التغير في ص بالنسبة إلى س ثابت؛ لذلك تمثل العلاقة دالة خطية"}, {"id": "d", "text": "لا يمكن أن تتساوى قيمة ص عند قيمتين مختلفتين لـ س"}]'::jsonb, '{"value": "b"}'::jsonb, '["المنحنى قطع مكافئ مفتوح إلى الأعلى، له نقطة دنيا.", "قبل النقطة الدنيا تتناقص ص وبعدها تتزايد، والمنحنى متماثل فتتكرر قيم ص."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 24، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'في متجر ألعاب: بطاقة النجمة تساوي 3 بطاقات دائرة، وبطاقتا سيارة تساويان 3 بطاقات نجمة. إذا كان لدى خالد 4 بطاقات سيارة وأراد استبدالها ببطاقات دائرة، فكم بطاقة دائرة يحصل عليها؟', '/booklet/a24-8.png', '[{"id": "a", "text": "18"}, {"id": "b", "text": "12"}, {"id": "c", "text": "9"}, {"id": "d", "text": "24"}]'::jsonb, '{"value": "a"}'::jsonb, '["4 بطاقات سيارة = 2 × (بطاقتي سيارة) = 2 × 3 = 6 نجوم.", "6 نجوم = 6 × 3 = 18 دائرة."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 24، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'لدى سارة عدد من الأقلام، ولدى نورة 6 أقلام أكثر منها. أعطت سارة نورة 3 أقلام، فأصبح عدد أقلام نورة مثلي عدد أقلام سارة. كم قلمًا كان لدى سارة في البداية؟', null, '[{"id": "a", "text": "15"}, {"id": "b", "text": "12"}, {"id": "c", "text": "9"}, {"id": "d", "text": "18"}]'::jsonb, '{"value": "a"}'::jsonb, '["نورة بعد الإعطاء: س + 9، وسارة: س − 3.", "س + 9 = 2(س − 3) ⇐ س + 9 = 2س − 6 ⇐ س = 15."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 25، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S07'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'لدينا الدالتان د(س) = 2س + 5 و هـ(س) = 3س − 1. إذا حقق العدد أ العلاقة هـ(أ) = د(أ + 2)، فما قيمة د(هـ(أ)) ؟', null, '[{"id": "a", "text": "63"}, {"id": "b", "text": "29"}, {"id": "c", "text": "10"}, {"id": "d", "text": "59"}]'::jsonb, '{"value": "a"}'::jsonb, '["3أ − 1 = 2(أ + 2) + 5 ⇐ 3أ − 1 = 2أ + 9 ⇐ أ = 10.", "هـ(10) = 29، و د(29) = 58 + 5 = 63."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 25، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'إذا كان س − ص = 7 و س ÷ 3 = 4، فما قيمة ص؟', null, '[{"id": "a", "text": "19"}, {"id": "b", "text": "9"}, {"id": "c", "text": "5"}, {"id": "d", "text": "−5"}]'::jsonb, '{"value": "c"}'::jsonb, '["س ÷ 3 = 4 ⇐ س = 12.", "12 − ص = 7 ⇐ ص = 5."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 26، س 1'
@@ -629,101 +589,36 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'applying', 1, 'mcq', 'إذا كان س = −22، فإن قيمة 3س ÷ 22 تساوي:', null, '[{"id": "a", "text": "22"}, {"id": "b", "text": "3"}, {"id": "c", "text": "−3"}, {"id": "d", "text": "−22"}]'::jsonb, '{"value": "c"}'::jsonb, '["3 × (−22) = −66.", "−66 ÷ 22 = −3."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 30، س 2'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
-with s as (select id from skills where code = 'G8-S09'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 1, 'mcq', 'ميزان متزن: في إحدى كفتيه ثقل كتلته 900 غ، وفي الأخرى ثقل كتلته 400 غ وجسم كتلته س. أي المعادلات تمثل الموقف؟', null, '[{"id": "a", "text": "400 − س = 900"}, {"id": "b", "text": "400 + س = 900"}, {"id": "c", "text": "400 × س = 900"}, {"id": "d", "text": "400 ÷ س = 900"}]'::jsonb, '{"value": "b"}'::jsonb, '["الميزان متزن، فمجموع ما في الكفة الثانية يساوي ما في الأولى.", "400 + س = 900."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 30، س 3'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'إذا كان 2 < س < 7، وكانت ص = 3س، فإن:', null, '[{"id": "a", "text": "ص < 14"}, {"id": "b", "text": "2 < ص < 7"}, {"id": "c", "text": "6 < ص < 21"}, {"id": "d", "text": "ص > 21"}]'::jsonb, '{"value": "c"}'::jsonb, '["نضرب أطراف المتباينة في 3 (عدد موجب).", "6 < 3س < 21، أي 6 < ص < 21."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 30، س 4'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'ما الحد التالي في النمط: ½، ⅔، ¾، ⅘، ⅚، ... ؟', null, '[{"id": "a", "text": "7/6"}, {"id": "b", "text": "6/7"}, {"id": "c", "text": "7/8"}, {"id": "d", "text": "8/7"}]'::jsonb, '{"value": "b"}'::jsonb, '["البسط يزيد 1 والمقام يزيد 1، والمقام أكبر من البسط بواحد.", "الحد التالي 6/7."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 31، س 5أ'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
-with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'ما الحد النوني في النمط: ½، ⅔، ¾، ⅘، ⅚، ... ؟', null, '[{"id": "a", "text": "ن ÷ (ن + 1)"}, {"id": "b", "text": "(ن + 1) ÷ ن"}, {"id": "c", "text": "ن ÷ (2ن)"}, {"id": "d", "text": "1 ÷ (ن + 1)"}]'::jsonb, '{"value": "a"}'::jsonb, '["الحد الأول ½: البسط 1 = ن والمقام 2 = ن + 1.", "الحد النوني ن ÷ (ن + 1)."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 31، س 5ب (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'تقع النقاط (2، 7) و (3، 10) و (4، 13) و (5، 16) على خط مستقيم. أي المعادلات تمثل هذا الخط؟', null, '[{"id": "a", "text": "ص = س + 5"}, {"id": "b", "text": "ص = 3س + 2"}, {"id": "c", "text": "ص = 2س + 1"}, {"id": "d", "text": "ص = 3س + 1"}]'::jsonb, '{"value": "d"}'::jsonb, '["الميل: كلما زادت س بمقدار 1 زادت ص بمقدار 3.", "عند س = 2: 3 × 2 + 1 = 7، فالمعادلة ص = 3س + 1."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 31، س 6'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'إذا كان س + ص = 15 و 3س + 4ص = 47، فما قيمتا س و ص؟', null, '[{"id": "a", "text": "س = 13، ص = 2"}, {"id": "b", "text": "س = 5، ص = 10"}, {"id": "c", "text": "س = 6، ص = 9"}, {"id": "d", "text": "س = 9، ص = 5"}]'::jsonb, '{"value": "a"}'::jsonb, '["من الأولى: ص = 15 − س.", "3س + 60 − 4س = 47 ⇐ س = 13، ص = 2."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 31، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'كان مع خالد في بداية العام 420 ريالًا، ويدّخر 20 ريالًا كل أسبوع. هل يتناسب المبلغ الإجمالي مع عدد الأسابيع؟', null, '[{"id": "a", "text": "لا؛ لأن المبلغ لا يساوي صفرًا عند الأسبوع صفر، فنسبة المبلغ إلى عدد الأسابيع غير ثابتة"}, {"id": "b", "text": "نعم؛ لأن المبلغ يزيد بمقدار ثابت كل أسبوع"}, {"id": "c", "text": "نعم؛ لأن العلاقة خطية"}, {"id": "d", "text": "لا؛ لأن المبلغ يتناقص مع الزمن"}]'::jsonb, '{"value": "a"}'::jsonb, '["العلاقة: ص = 20س + 420، وهي خطية لكنها لا تمر بنقطة الأصل.", "بعد أسبوع 440 ÷ 1 = 440، وبعد أسبوعين 460 ÷ 2 = 230، فالنسبة غير ثابتة."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 31، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
-with s as (select id from skills where code = 'G8-S05'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'لكل 6 أشخاص يفضلون فاكهة البرتقال هناك 9 أشخاص لا يفضلونها. كم شخصًا لا يفضلها من بين 45 شخصًا؟', null, '[{"id": "a", "text": "27"}, {"id": "b", "text": "18"}, {"id": "c", "text": "30"}, {"id": "d", "text": "36"}]'::jsonb, '{"value": "a"}'::jsonb, '["في كل مجموعة من 15 شخصًا: 9 لا يفضلونها.", "9/15 = س/45 ⇐ س = 27."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 31، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
-with s as (select id from skills where code = 'G8-S08'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'يوضح الشكل حديقة مستطيلة بعداها (س + 5) م و 2س م، وفيها شريط أبيض مستطيل عرضه 2 م يمتد بطول الحديقة لدورة مياه. أي العبارات تمثل مساحة الجزء المظلل بالمتر المربع؟', '/booklet/a32-10.png', '[{"id": "a", "text": "2س² + 6س"}, {"id": "b", "text": "2س² + 10س"}, {"id": "c", "text": "2س² + 6"}, {"id": "d", "text": "2س² + 10س − 2"}]'::jsonb, '{"value": "a"}'::jsonb, '["مساحة الحديقة: 2س(س + 5) = 2س² + 10س.", "مساحة الشريط: 2 × 2س = 4س.", "المظلل: 2س² + 10س − 4س = 2س² + 6س."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 32، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 11 from a, qi;
-with s as (select id from skills where code = 'G8-S07'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 1, 'mcq', 'إذا كان 2أ + 2ب = 36، فما قيمة أ + ب + 7 ؟', null, '[{"id": "a", "text": "11"}, {"id": "b", "text": "18"}, {"id": "c", "text": "25"}, {"id": "d", "text": "28"}]'::jsonb, '{"value": "c"}'::jsonb, '["أ + ب = 36 ÷ 2 = 18.", "18 + 7 = 25."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 33، س 1'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'إذا كان (ن + 2) ÷ 5 = 4 ÷ 2، فما قيمة ن؟', null, '[{"id": "a", "text": "8"}, {"id": "b", "text": "12"}, {"id": "c", "text": "16"}, {"id": "d", "text": "20"}]'::jsonb, '{"value": "a"}'::jsonb, '["4 ÷ 2 = 2، إذن ن + 2 = 10.", "ن = 8."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 33، س 2'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'أكبر عدد صحيح يحقق المتباينة س + 2 > 2س + 7 هو:', null, '[{"id": "a", "text": "−7"}, {"id": "b", "text": "−6"}, {"id": "c", "text": "−5"}, {"id": "d", "text": "−4"}]'::jsonb, '{"value": "b"}'::jsonb, '["نطرح س من الطرفين: 2 > س + 7.", "نطرح 7: −5 > س، أي س < −5، وأكبر عدد صحيح أقل من −5 هو −6."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 33، س 3'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
-with s as (select id from skills where code = 'G8-S11'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'أي الخيارات يصف كيفية الحصول على العدد الثاني من الأول في الأزواج: (4، 6)، (6، 10)، (8، 14)؟', null, '[{"id": "a", "text": "أضف 2"}, {"id": "b", "text": "اضرب في 2"}, {"id": "c", "text": "اضرب في 2 ثم أضف 2"}, {"id": "d", "text": "اضرب في 2 ثم اطرح 2"}]'::jsonb, '{"value": "d"}'::jsonb, '["4 × 2 − 2 = 6، و 6 × 2 − 2 = 10، و 8 × 2 − 2 = 14."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 33، س 4'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
-with s as (select id from skills where code = 'G8-S07'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'استخدم الصيغة ص = 100 − 100 ÷ (ع + 1) لإيجاد قيمة ص عندما ع = 9.', null, '[{"id": "a", "text": "100"}, {"id": "b", "text": "90"}, {"id": "c", "text": "80"}, {"id": "d", "text": "10"}]'::jsonb, '{"value": "b"}'::jsonb, '["ع + 1 = 10، و 100 ÷ 10 = 10.", "ص = 100 − 10 = 90."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 33، س 5'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
-with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 1, 'mcq', 'يصنع خالد إطارًا للوحة ارتفاعها يزيد على مثلي عرضها بمقدار 2 م. إذا كان ارتفاعها 4 أمتار، فما عرضها؟', null, '[{"id": "a", "text": "4 م"}, {"id": "b", "text": "3 م"}, {"id": "c", "text": "2 م"}, {"id": "d", "text": "1 م"}]'::jsonb, '{"value": "d"}'::jsonb, '["2ع + 2 = 4 ⇐ 2ع = 2 ⇐ ع = 1 م."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 33، س 6'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
-with s as (select id from skills where code = 'G8-S08'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 1, 'mcq', 'مستطيل طوله (س + 3) وعرضه س. ما مساحته؟', null, '[{"id": "a", "text": "س² + 3س"}, {"id": "b", "text": "س² + 3"}, {"id": "c", "text": "2س + 3"}, {"id": "d", "text": "3س + 3"}]'::jsonb, '{"value": "a"}'::jsonb, '["المساحة = س(س + 3) = س² + 3س."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 34، س 7'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
-with s as (select id from skills where code = 'G8-S06'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'استغرق 3 عمال 30 يومًا لحياكة سجادة يدوية. كم عاملًا يلزم لحياكة سجادة مماثلة خلال 20 يومًا إذا عمل الجميع بالمعدل نفسه؟', null, '[{"id": "a", "text": "5 عمال (لأن الحاجة 4.5 عامل، ولا يمكن أخذ نصف عامل)"}, {"id": "b", "text": "2 عاملان"}, {"id": "c", "text": "4 عمال"}, {"id": "d", "text": "6 عمال"}]'::jsonb, '{"value": "a"}'::jsonb, '["العمل الكلي 3 × 30 = 90 يوم عمل.", "90 ÷ 20 = 4.5، وعدد العمال عدد صحيح، فيلزم 5 عمال لإنهائها خلال 20 يومًا.", "العلاقة عكسية: كلما قلت الأيام زاد عدد العمال."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 34، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S10'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'إذا كانت الأعداد 18، 22، 2س − 14، 30 أعدادًا زوجية مرتبة تصاعديًا بفرق ثابت، فما قيمة س؟', null, '[{"id": "a", "text": "20"}, {"id": "b", "text": "13"}, {"id": "c", "text": "26"}, {"id": "d", "text": "18"}]'::jsonb, '{"value": "a"}'::jsonb, '["الفرق الثابت 4، فالعدد الثالث 26.", "2س − 14 = 26 ⇐ 2س = 40 ⇐ س = 20."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 34، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
-with s as (select id from skills where code = 'G8-S12'), a as (select id from assessments where kind = 'model' and form_label = 'bk-alg-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'يكوّن سعد أشكالًا مربعة ن × ن: البلاط الداخلي أسود وعدده (ن − 2)²، والإطار الخارجي أحمر (الشكل 3×3 فيه 8 حمراء، و 4×4 فيه 12، و 5×5 فيه 16). ما عدد البلاط الأحمر في الشكل ن × ن؟', '/booklet/a35-10.png', '[{"id": "a", "text": "4ن − 4"}, {"id": "b", "text": "4ن"}, {"id": "c", "text": "ن² − 4"}, {"id": "d", "text": "2ن + 2"}]'::jsonb, '{"value": "a"}'::jsonb, '["عدد البلاط الكلي ن²، والأحمر = ن² − (ن − 2)².", "ن² − (ن² − 4ن + 4) = 4ن − 4. تحقق: ن = 5 ⇐ 16."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 35، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'G8-S13'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'تُدار طائرة دون طيار عبر شبكة إحداثيات. كانت عند النقطة (−5، −4)، ثم طارت 9 وحدات نحو الشرق (اليمين) و 6 وحدات نحو الشمال (الأعلى). ما الزوج المرتب لموقعها الجديد؟', null, '[{"id": "a", "text": "(14، 10)"}, {"id": "b", "text": "(−4، −2)"}, {"id": "c", "text": "(4، 2)"}, {"id": "d", "text": "(9، 6)"}]'::jsonb, '{"value": "c"}'::jsonb, '["الإحداثي السيني: −5 + 9 = 4.", "الإحداثي الصادي: −4 + 6 = 2."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 37، س 1'
@@ -854,31 +749,26 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'reasoning', 3, 'mcq', 'قصّ عبد العزيز أكبر مربع ممكن من ورقة دائرية نصف قطرها 6 سم. ما مساحة الجزء المتبقي من الورقة مقربة إلى أقرب جزء من عشرة؟', null, '[{"id": "a", "text": "41.1"}, {"id": "b", "text": "72.3"}, {"id": "c", "text": "113.1"}, {"id": "d", "text": "200.9"}]'::jsonb, '{"value": "a"}'::jsonb, '["قطر المربع يساوي قطر الدائرة 12 سم، فمساحة المربع 12² ÷ 2 = 72 سم².", "مساحة الدائرة ط × 36 ≈ 113.1 سم².", "المتبقي ≈ 113.1 − 72 = 41.1 سم²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 45، س 5'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
-with s as (select id from skills where code = 'G8-S03'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-3'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'أي دائرة نسبة مساحة الجزء المظلل منها إلى مساحتها الكلية تساوي نسبة الجزء المظلل في الشكل العلوي إلى مساحته الكلية؟', '/booklet/g45-6.png', '[{"id": "a", "text": "الدائرة أ"}, {"id": "b", "text": "الدائرة ب"}, {"id": "c", "text": "الدائرة ج"}, {"id": "d", "text": "الدائرة د"}]'::jsonb, '{"value": "c"}'::jsonb, '["الشكل العلوي مقسم إلى 8 مثلثات متطابقة، المظلل منها 5، أي ⅝.", "الدائرة ج مظلل منها ⅝ (225°)."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 45، س 6'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'مستطيل طوله 20 سم وعرضه 10 سم. إذا استُخدم شريط طوله يساوي محيط المستطيل لتكوين دائرة، فما نصف قطر الدائرة بالسنتيمتر؟', null, '[{"id": "a", "text": "15ط"}, {"id": "b", "text": "30 ÷ ط"}, {"id": "c", "text": "60 ÷ ط"}, {"id": "d", "text": "30ط"}]'::jsonb, '{"value": "b"}'::jsonb, '["محيط المستطيل 2(20 + 10) = 60 سم.", "2ط نق = 60 ⇐ نق = 30 ÷ ط."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 45، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'أسطوانة ومخروط وهرم مربع القاعدة ارتفاع كل منها 9 سم، ونصف قطر قاعدة الأسطوانة والمخروط د، وطول ضلع قاعدة الهرم د. ما ترتيب أحجامها تصاعديًا؟', '/booklet/g45-8.png', '[{"id": "a", "text": "الهرم، المخروط، الأسطوانة"}, {"id": "b", "text": "المخروط، الهرم، الأسطوانة"}, {"id": "c", "text": "الأسطوانة، المخروط، الهرم"}, {"id": "d", "text": "الهرم، الأسطوانة، المخروط"}]'::jsonb, '{"value": "a"}'::jsonb, '["حجم الأسطوانة ط د² × 9 = 9ط د².", "حجم المخروط ⅓ × 9ط د² = 3ط د²، وحجم الهرم ⅓ × د² × 9 = 3د².", "بما أن ط > 1: 3د² < 3ط د² < 9ط د²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 45، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'منشور رباعي أبعاده 9 بوصات و 7 بوصات و 5 بوصات، قُصّ ثلثه من الخلف بمستوى موازٍ للوجه الأمامي (7 × 5). ما المساحة الكلية لسطح كل من الجسمين الناتجين؟', '/booklet/g45-9.png', '[{"id": "a", "text": "142 بوصة² و 214 بوصة²"}, {"id": "b", "text": "105 بوصات² و 210 بوصات²"}, {"id": "c", "text": "142 بوصة² و 286 بوصة²"}, {"id": "d", "text": "70 بوصة² و 214 بوصة²"}]'::jsonb, '{"value": "a"}'::jsonb, '["الجسم الصغير 3 × 7 × 5: 2(21 + 15 + 35) = 142 بوصة².", "الجسم الكبير 6 × 7 × 5: 2(42 + 30 + 35) = 214 بوصة²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 45، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'في الشكل مستطيل أ ب جـ د بُعداه 3 وحدات و 4 وحدات على شبكة مربعات. أي المثلثات التالية المرسومة بنقاط الشبكة مساحته ضعف مساحة المستطيل؟', '/booklet/g46-10.png', '[{"id": "a", "text": "△ أ هـ م"}, {"id": "b", "text": "△ أ ب م"}, {"id": "c", "text": "△ د جـ ل"}, {"id": "d", "text": "△ ب هـ جـ"}]'::jsonb, '{"value": "a"}'::jsonb, '["مساحة المستطيل 3 × 4 = 12 وحدة مربعة، والمطلوب 24.", "△ أ هـ م: القاعدة أ هـ = 6 والارتفاع 8، فمساحته ½ × 6 × 8 = 24."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 46، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 11 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
 with s as (select id from skills where code = 'G8-S13'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'في الشكل مستقيمان متقاطعان أ ب و جـ د، والزاوية بينهما من الأعلى 150°. ما مجموع قياسي الزاويتين س و ص؟', '/booklet/g47-1.png', '[{"id": "a", "text": "15°"}, {"id": "b", "text": "30°"}, {"id": "c", "text": "60°"}, {"id": "d", "text": "180°"}]'::jsonb, '{"value": "c"}'::jsonb, '["س مجاورة للزاوية 150° على مستقيم، إذن س = 30°.", "ص تقابل س بالرأس، إذن ص = 30°، والمجموع 60°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 47، س 1'
@@ -904,26 +794,21 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'reasoning', 3, 'mcq', 'في الشكل المثلثان أ ب جـ و د هـ و متطابقان، و ب جـ = هـ و، و ق∠ب = 40°، و ق∠و = 60°. ما قياس الزاوية هـ س جـ؟', '/booklet/g48-5.png', '[{"id": "a", "text": "40°"}, {"id": "b", "text": "60°"}, {"id": "c", "text": "80°"}, {"id": "d", "text": "100°"}]'::jsonb, '{"value": "c"}'::jsonb, '["من التطابق: ∠د هـ و تناظر ∠ب فقياسها 40°، و ∠أ جـ ب تناظر ∠و فقياسها 60°.", "في المثلث س هـ جـ: ق∠هـ س جـ = 180° − 40° − 60° = 80°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 48، س 5'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
-with s as (select id from skills where code = 'G8-S05'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-4'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'في الخريطة، طول ضلع المربع الواحد يمثل 8.5 م. كم يبعد الملعب عن المسجد بالمتر؟', '/booklet/g48-6.png', '[{"id": "a", "text": "15"}, {"id": "b", "text": "32"}, {"id": "c", "text": "34"}, {"id": "d", "text": "60"}]'::jsonb, '{"value": "c"}'::jsonb, '["المسافة بين المسجد والملعب 4 وحدات على الشبكة.", "4 × 8.5 = 34 م."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 48، س 6'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'أمامك مخطط مكعب. أي المكعبات التالية ينتج من طي هذا المخطط؟', '/booklet/g48-7.png', '[{"id": "a", "text": "المكعب أ"}, {"id": "b", "text": "المكعب ب"}, {"id": "c", "text": "المكعب ج"}, {"id": "d", "text": "المكعب د"}]'::jsonb, '{"value": "b"}'::jsonb, '["في العمود الرأسي يتقابل الوجهان: الدائرة الداكنة والمثلث، وكذلك الدائرة البيضاء والمربع السفلي، والمربعان الجانبيان.", "أ و ج يظهران الدائرة الداكنة والمثلث معًا وهما متقابلان، ود يظهر المربعين الجانبيين معًا وهما متقابلان، فيبقى ب."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 48، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'حديقة مستطيلة بعداها 10 م و 8 م بجانب بناية، ويحيط بها طريق من الجوانب الأخرى، بحيث تصبح أبعاد الحديقة مع الطريق 12 م و 12 م كما في المخطط. ما مساحة الطريق؟', '/booklet/g49-8.png', '[{"id": "a", "text": "64 م²"}, {"id": "b", "text": "80 م²"}, {"id": "c", "text": "144 م²"}, {"id": "d", "text": "48 م²"}]'::jsonb, '{"value": "a"}'::jsonb, '["مساحة الحديقة مع الطريق 12 × 12 = 144 م².", "مساحة الحديقة 10 × 8 = 80 م²، فمساحة الطريق 144 − 80 = 64 م²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 49، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-4'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'عند طي المخطط في الشكل نحصل على صندوق أبعاده 5 سم و 3 سم و 2 سم. ما حجمه؟', '/booklet/g49-9.png', '[{"id": "a", "text": "30 سم³"}, {"id": "b", "text": "10 سم³"}, {"id": "c", "text": "62 سم³"}, {"id": "d", "text": "15 سم³"}]'::jsonb, '{"value": "a"}'::jsonb, '["حجم الصندوق = الطول × العرض × الارتفاع = 5 × 3 × 2 = 30 سم³."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 49، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S13'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'من خلال الشكل، أوجد قياس الزاوية س.', '/booklet/g50-1.png', '[{"id": "a", "text": "30°"}, {"id": "b", "text": "40°"}, {"id": "c", "text": "45°"}, {"id": "d", "text": "65°"}]'::jsonb, '{"value": "b"}'::jsonb, '["في المثلث الكبير المكوَّن من الزاويتين 45° و 30°: الزاوية الثالثة عند الضلع الأيسر 105°، فالزاوية المجاورة لها على المستقيم 75°.", "في المثلث العلوي الذي فيه الزاوية 65°: س = 180° − 65° − 75° = 40°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 50، س 1'
@@ -939,81 +824,46 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'reasoning', 2, 'mcq', 'في الشكل، المستقيم م محور تناظر للشكل أ ب جـ د هـ. فإن قياس ∠د هـ أ يساوي:', '/booklet/g51-3.png', '[{"id": "a", "text": "27°"}, {"id": "b", "text": "54°"}, {"id": "c", "text": "108°"}, {"id": "d", "text": "216°"}]'::jsonb, '{"value": "b"}'::jsonb, '["محور التناظر يقسم الزاوية عند هـ إلى جزأين متساويين، أحدهما 27°.", "ق∠د هـ أ = 2 × 27° = 54°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 51، س 3'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
-with s as (select id from skills where code = 'G8-S06'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'يجري عداء 216 م في 18 ثانية. إذا استمر بالمعدل نفسه، فكم دقيقة تقريبًا يحتاج لقطع 780 م؟', null, '[{"id": "a", "text": "دقيقة واحدة"}, {"id": "b", "text": "دقيقتان"}, {"id": "c", "text": "3 دقائق"}, {"id": "d", "text": "5 دقائق"}]'::jsonb, '{"value": "a"}'::jsonb, '["المعدل 216 ÷ 18 = 12 م/ث.", "780 ÷ 12 = 65 ثانية ≈ دقيقة واحدة."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 51، س 4'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S13'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'النقطة جـ على المستقيم أ ب، والنقطة ب بين أ و جـ. إذا كان أ ب = 10 سم و ب جـ = 5.2 سم، فما المسافة بين منتصفي القطعتين أ ب و ب جـ؟', null, '[{"id": "a", "text": "2.4 سم"}, {"id": "b", "text": "2.6 سم"}, {"id": "c", "text": "5 سم"}, {"id": "d", "text": "7.6 سم"}]'::jsonb, '{"value": "d"}'::jsonb, '["منتصف أ ب يبعد 5 سم عن ب، ومنتصف ب جـ يبعد 2.6 سم عن ب في الجهة الأخرى.", "المسافة بينهما 5 + 2.6 = 7.6 سم."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 51، س 5'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'قياس الزاوية 1 في الشكل (الزاوية الخارجية لسداسي منتظم) هو:', '/booklet/g51-6.png', '[{"id": "a", "text": "30°"}, {"id": "b", "text": "60°"}, {"id": "c", "text": "120°"}, {"id": "d", "text": "180°"}]'::jsonb, '{"value": "b"}'::jsonb, '["الزاوية الداخلية للسداسي المنتظم = 720° ÷ 6 = 120°.", "الزاوية الخارجية = 180° − 120° = 60°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 51، س 6'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S15'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'إذا أُجري انسحاب لشبه المنحرف أ ب جـ د بمقدار 3 وحدات إلى اليمين و 7 وحدات إلى الأسفل، فما إحداثيات الرأس جـ الناتج؟', '/booklet/g51-7.png', '[{"id": "a", "text": "(1، −3)"}, {"id": "b", "text": "(5، 7)"}, {"id": "c", "text": "(1، 3)"}, {"id": "d", "text": "(−9، 1)"}]'::jsonb, '{"value": "a"}'::jsonb, '["إحداثيات جـ من الشبكة (−2، 4).", "(−2 + 3، 4 − 7) = (1، −3)."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 51، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'رُسم مستطيل بعداه 8 سم و 6 سم داخل دائرة، تقع رؤوسه على محيطها ولهما المركز نفسه. ما مساحة الدائرة؟ (ط ≈ 3.14)', '/booklet/g52-8.png', '[{"id": "a", "text": "78.5 سم²"}, {"id": "b", "text": "314 سم²"}, {"id": "c", "text": "48 سم²"}, {"id": "d", "text": "31.4 سم²"}]'::jsonb, '{"value": "a"}'::jsonb, '["قطر المستطيل قطر الدائرة: √(8² + 6²) = √100 = 10 سم.", "نصف القطر 5 سم، والمساحة ط × 25 ≈ 78.5 سم²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 52، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S13'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-5'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'إذا كان قاطع عموديًا على أحد مستقيمين متوازيين، فهل يكون عموديًا على المستقيم الآخر؟', null, '[{"id": "a", "text": "دائمًا؛ لأن الزاويتين المتناظرتين متطابقتان، فتكون الزاوية مع الآخر 90° أيضًا"}, {"id": "b", "text": "أحيانًا؛ حسب المسافة بين المستقيمين"}, {"id": "c", "text": "لا يكون أبدًا"}, {"id": "d", "text": "أحيانًا؛ حسب طول القاطع"}]'::jsonb, '{"value": "a"}'::jsonb, '["الزوايا المتناظرة الناتجة عن قاطع لمستقيمين متوازيين متطابقة.", "الزاوية مع المستقيم الأول 90°، فتناظرها مع الثاني 90° أيضًا."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 52، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
-with s as (select id from skills where code = 'G8-S15'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'المثلث س ص ع (ضلعا القائمة 3 و 4) يشابه المثلث ك ل م الذي يناظر فيه الضلعَ 3 ضلعٌ طوله 9. ما محيط المثلث ك ل م؟', '/booklet/g53-1.png', '[{"id": "a", "text": "21"}, {"id": "b", "text": "24"}, {"id": "c", "text": "36"}, {"id": "d", "text": "50"}]'::jsonb, '{"value": "c"}'::jsonb, '["وتر المثلث الصغير √(3² + 4²) = 5، ومحيطه 12.", "معامل التشابه 9 ÷ 3 = 3، فمحيط ك ل م = 12 × 3 = 36."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 53، س 1'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'في متوازي المستطيلات المعطى أبعاده 12 سم و 5 سم و 8 سم، ما المسافة التقريبية بين النقطتين أ و و بالسنتيمتر؟', '/booklet/g53-2.png', '[{"id": "a", "text": "9.4"}, {"id": "b", "text": "12.6"}, {"id": "c", "text": "13"}, {"id": "d", "text": "15.3"}]'::jsonb, '{"value": "d"}'::jsonb, '["أ و قطر الجسم الذي يصل بين رأسين متقابلين.", "أ و = √(12² + 5² + 8²) = √233 ≈ 15.3 سم."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 53، س 2'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
-with s as (select id from skills where code = 'G8-S15'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'المثلث أ متطابق الضلعين، رأسه (4، 9) وأحد رأسي قاعدته (1، −3). المثلث ب انعكاس للمثلث أ حول محور الصادات. ما إحداثيات النقطة جـ (رأس القاعدة الأبعد عن المحور في المثلث ب)؟', '/booklet/g53-3.png', '[{"id": "a", "text": "(−1، −3)"}, {"id": "b", "text": "(−1، 3)"}, {"id": "c", "text": "(−3، −7)"}, {"id": "d", "text": "(−7، −3)"}]'::jsonb, '{"value": "d"}'::jsonb, '["المثلث أ متماثل حول المستقيم س = 4، فرأس قاعدته الآخر (7، −3).", "الانعكاس حول محور الصادات يغير إشارة س: (7، −3) ← (−7، −3)."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 53، س 3'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'في الشكل أربع دوائر متطابقة متجاورة داخل مستطيل طوله 28 سم. كم المسافة بين مركزي الدائرة الأولى والرابعة؟', '/booklet/g54-4.png', '[{"id": "a", "text": "14"}, {"id": "b", "text": "18"}, {"id": "c", "text": "21"}, {"id": "d", "text": "24"}]'::jsonb, '{"value": "c"}'::jsonb, '["قطر الدائرة 28 ÷ 4 = 7 سم.", "بين المركزين الأول والرابع ثلاثة أقطار: 3 × 7 = 21 سم."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 54، س 4'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
-with s as (select id from skills where code = 'G8-S13'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'حسب المعطيات في الشكل (مستقيمان متوازيان، والزاوية المنعكسة عند الرأس العلوي 327°، والزاوية 71°)، أوجد قيمة س.', '/booklet/g54-6.png', '[{"id": "a", "text": "38"}, {"id": "b", "text": "71"}, {"id": "c", "text": "109"}, {"id": "d", "text": "142"}]'::jsonb, '{"value": "d"}'::jsonb, '["زاوية الرأس العلوي في المثلث 360° − 327° = 33°، وزاوية المثلث عند القاعدة اليمنى 180° − 71° = 109°.", "زاوية المثلث عند القاعدة اليسرى 180° − 33° − 109° = 38°.", "س تكمل الزاوية المناظرة لها على المستقيم العلوي: س = 180° − 38° = 142°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 54، س 6'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'يراد طلاء خزان ماء أسطواني قطره 20 م وارتفاعه 60 م، ما عدا قاعدته. كم تبلغ المساحة التقريبية التي تُطلى بالمتر المربع؟ (ط ≈ 3.14)', '/booklet/g54-7.png', '[{"id": "a", "text": "4082"}, {"id": "b", "text": "4398.2"}, {"id": "c", "text": "18849.6"}, {"id": "d", "text": "6238.2"}]'::jsonb, '{"value": "a"}'::jsonb, '["المساحة الجانبية: ط × 20 × 60 = 1200ط.", "مساحة السطح العلوي: ط × 10² = 100ط.", "المجموع 1300ط ≈ 4082 م²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 54، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'المنشور (أ) أبعاده 9 و 25 و س، والمنشور (ب) أبعاده 3 و 20 و 15، ولهما الحجم نفسه. ما ارتفاع المنشور (أ)؟', '/booklet/g55-8.png', '[{"id": "a", "text": "4"}, {"id": "b", "text": "5"}, {"id": "c", "text": "3"}, {"id": "d", "text": "6"}]'::jsonb, '{"value": "a"}'::jsonb, '["حجم المنشور (ب) = 3 × 20 × 15 = 900.", "9 × 25 × س = 900 ⇐ 225س = 900 ⇐ س = 4."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 55، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
-with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'ما عدد أضلاع مضلع منتظم قياس زاويته الداخلية 160°؟', null, '[{"id": "a", "text": "18"}, {"id": "b", "text": "16"}, {"id": "c", "text": "9"}, {"id": "d", "text": "20"}]'::jsonb, '{"value": "a"}'::jsonb, '["الزاوية الخارجية = 180° − 160° = 20°.", "مجموع الزوايا الخارجية 360°، فعدد الأضلاع 360 ÷ 20 = 18."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 55، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S14'), a as (select id from assessments where kind = 'model' and form_label = 'bk-geo-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'شبه منحرف قاعدتاه 8 سم و 4 سم وارتفاعه 6 سم، وفيه مثلث أبيض قاعدته القاعدة الصغرى ورأسه في منتصف القاعدة الكبرى. ما مساحة الجزء المظلل؟', '/booklet/g55-10.png', '[{"id": "a", "text": "24 سم²"}, {"id": "b", "text": "36 سم²"}, {"id": "c", "text": "12 سم²"}, {"id": "d", "text": "30 سم²"}]'::jsonb, '{"value": "a"}'::jsonb, '["مساحة شبه المنحرف ½ × (8 + 4) × 6 = 36 سم².", "مساحة المثلث الأبيض ½ × 4 × 6 = 12 سم².", "المظلل 36 − 12 = 24 سم²."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 55، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'G8-S16'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-1'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'يبين المدرج التكراري الزمن الذي استغرقه طلاب الصف الثاني المتوسط في إنجاز مهمة رياضية. كم عدد الطلاب الذين استغرقوا 50 دقيقة على الأقل؟', '/booklet/d57-1.png', '[{"id": "a", "text": "25 طالبًا"}, {"id": "b", "text": "35 طالبًا"}, {"id": "c", "text": "40 طالبًا"}, {"id": "d", "text": "50 طالبًا"}]'::jsonb, '{"value": "c"}'::jsonb, '["المطلوب مجموع عمودي الفئتين 50–59 و 60–69.", "25 + 15 = 40 طالبًا."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 57، س 1'
@@ -1084,36 +934,26 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'knowing', 1, 'mcq', 'يلخص التمثيل بالصندوق وطرفيه درجات مجموعة من الطلاب في نشاط صفي. ما قيمة الوسيط؟', '/booklet/d60-4.png', '[{"id": "a", "text": "16 درجة"}, {"id": "b", "text": "18 درجة"}, {"id": "c", "text": "20 درجة"}, {"id": "d", "text": "24 درجة"}]'::jsonb, '{"value": "b"}'::jsonb, '["الوسيط هو الخط داخل الصندوق.", "يقع الخط عند 18."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 60، س 4'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
-with s as (select id from skills where code = 'G8-S16'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-2'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 1, 'mcq', 'استعمل التمثيل لتحديد نوع العلاقة بين ساعات التدريب الأسبوعية ودرجة الإتقان.', '/booklet/d61-5.png', '[{"id": "a", "text": "علاقة طردية"}, {"id": "b", "text": "علاقة عكسية"}, {"id": "c", "text": "لا توجد علاقة ظاهرة"}, {"id": "d", "text": "علاقة دائرية"}]'::jsonb, '{"value": "a"}'::jsonb, '["كلما زادت ساعات التدريب زادت درجة الإتقان.", "النقاط تتجه إلى الأعلى من اليسار إلى اليمين، فالعلاقة طردية."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 61، س 5'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
-with s as (select id from skills where code = 'G8-S16'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-2'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'يمثل الرسم إنجاز ثلاثة فصول (أ، ب، جـ) في ثلاثة مجالات: القراءة والعلوم والتقنية. أي العبارات صحيحة؟ (1) المجموع الكلي للفصل ب يساوي 25. (2) جزء العلوم في الفصل جـ يساوي 11. (3) مجموع الفصل أ يساوي 22. (4) المجموع الكلي للفصل جـ يساوي 20.', '/booklet/d61-6.png', '[{"id": "a", "text": "(1) و (2) فقط"}, {"id": "b", "text": "(1) و (3) فقط"}, {"id": "c", "text": "(2) و (4) فقط"}, {"id": "d", "text": "(3) و (4) فقط"}]'::jsonb, '{"value": "a"}'::jsonb, '["الفصل ب: 12 + 8 + 5 = 25، والفصل جـ: 9 + 11 + 4 = 24.", "الفصل أ: 10 + 7 + 3 = 20."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 61، س 6'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S18'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'يقارن التمثيلان درجات فصلين (أ) و (ب). قال طالب: «بما أن وسيط الدرجات في الفصلين متساوٍ، فلا بد أن يكون التوزيعان متماثلين». ما التقويم الأدق لقوله؟', '/booklet/d61-7.png', '[{"id": "a", "text": "قوله صحيح؛ فتساوي الوسيط يعني تماثل التوزيعين"}, {"id": "b", "text": "قوله خطأ؛ لأن مدى الفصل ب أكبر"}, {"id": "c", "text": "قوله صحيح؛ لأن الوسيط هو المقياس الوحيد اللازم للمقارنة"}, {"id": "d", "text": "قوله خطأ؛ لأن التمثيل بالصندوق لا يوضح أي مقياس للانتشار"}]'::jsonb, '{"value": "b"}'::jsonb, '["الوسيط متساوٍ (18) لكن طرفي الفصل ب أبعد.", "مدى الفصل ب أكبر، فبياناته أكثر انتشارًا، والتوزيعان غير متماثلين."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 61، س 7'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 5 from a, qi;
 with s as (select id from skills where code = 'G8-S18'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 3, 'mcq', 'يوضح التمثيل بالنقاط زمن إكمال تمرين ذهني لتسعة طلاب: 5، 6، 6، 7، 7، 7، 8، 8، 30. ما القيمة المتطرفة، وكيف يتغير المدى بعد حذفها؟', '/booklet/d61-8.png', '[{"id": "a", "text": "30، ويقل المدى من 25 إلى 3"}, {"id": "b", "text": "5، ويقل المدى من 25 إلى 24"}, {"id": "c", "text": "30، ويقل المدى من 30 إلى 8"}, {"id": "d", "text": "7، ولا يتغير المدى"}]'::jsonb, '{"value": "a"}'::jsonb, '["30 بعيدة جدًا عن بقية القيم، فهي متطرفة.", "المدى قبل الحذف 30 − 5 = 25، وبعده 8 − 5 = 3."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 61، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
 with s as (select id from skills where code = 'G8-S17'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 2, 'mcq', 'درجات 12 طالبًا في اختبار قصير: 42، 45، 48، 51، 54، 55، 57، 61، 63، 66، 68، 69. ما تكرارات الفئات: 40 إلى أقل من 50، و 50 إلى أقل من 60، و 60 إلى أقل من 70؟', null, '[{"id": "a", "text": "3، 4، 5"}, {"id": "b", "text": "4، 4، 4"}, {"id": "c", "text": "3، 5، 4"}, {"id": "d", "text": "4، 3، 5"}]'::jsonb, '{"value": "a"}'::jsonb, '["الفئة الأولى: 42، 45، 48.", "الثانية: 51، 54، 55، 57، والثالثة: 61، 63، 66، 68، 69."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 62، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 with s as (select id from skills where code = 'G8-S18'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-2'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'reasoning', 2, 'mcq', 'يبين التمثيل العلاقة بين عدد التدريبات المنجزة ودرجة الإتقان لثمانية طلاب. أي نقطة لا تتفق مع النمط العام للبيانات؟', '/booklet/d62-10.png', '[{"id": "a", "text": "النقطة عند 8 تدريبات (درجة 30)"}, {"id": "b", "text": "النقطة عند تدريب واحد"}, {"id": "c", "text": "النقطة عند 4 تدريبات"}, {"id": "d", "text": "لا توجد نقطة شاذة"}]'::jsonb, '{"value": "a"}'::jsonb, '["النقاط من 1 إلى 7 تزداد زيادة صغيرة منتظمة (من نحو 2 إلى 12).", "النقطة عند 8 قفزت إلى 30، فهي شاذة، وحذفها يجعل النمط أكثر انتظامًا."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 62، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
 with s as (select id from skills where code = 'G8-S18'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-3'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'عدد المسائل التي أنجزها سبعة طلاب في أسبوع: 12، 14، 14، 15، 17، 18، 22. ما المتوسط الحسابي؟', null, '[{"id": "a", "text": "14 مسألة"}, {"id": "b", "text": "15 مسألة"}, {"id": "c", "text": "16 مسألة"}, {"id": "d", "text": "17 مسألة"}]'::jsonb, '{"value": "c"}'::jsonb, '["المجموع: 12 + 14 + 14 + 15 + 17 + 18 + 22 = 112.", "المتوسط 112 ÷ 7 = 16."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 63، س 1'
@@ -1194,26 +1034,6 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'knowing', 1, 'mcq', 'اختارت لجنة النشاط عشرة طلاب عشوائيًا من كل صف دراسي (الأول والثاني والثالث) لاستطلاع آرائهم. ما نوع العينة؟', null, '[{"id": "a", "text": "عينة بسيطة"}, {"id": "b", "text": "عينة طبقية"}, {"id": "c", "text": "عينة متحيزة"}, {"id": "d", "text": "عينة منتظمة"}]'::jsonb, '{"value": "b"}'::jsonb, '["قُسم المجتمع إلى فئات (الصفوف)، ثم اختير عدد عشوائي من كل فئة.", "هذه عينة طبقية."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 65، س 6'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
-with s as (select id from skills where code = 'G8-S17'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-4'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 2, 'mcq', 'أجرت جماعة الصحة استبانة عن رضا الطلاب عن المقصف، وجمعت الإجابات من الواقفين عند باب المقصف فقط. قال أحد الطلاب: «تمثل النتائج جميع طلاب المدرسة». ما التقويم الأدق؟', null, '[{"id": "a", "text": "صحيح؛ لأن المشاركين يعرفون المقصف"}, {"id": "b", "text": "خطأ؛ مكان الاختيار قد يسبب تحيزًا"}, {"id": "c", "text": "صحيح؛ لأن الاستبانة قصيرة"}, {"id": "d", "text": "لا يؤثر أسلوب اختيار العينة في النتائج"}]'::jsonb, '{"value": "b"}'::jsonb, '["الواقفون عند المقصف هم غالبًا من يستخدمونه، فلا يمثلون جميع الطلاب.", "العينة متحيزة بسبب مكان الاختيار."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 65، س 7'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
-with s as (select id from skills where code = 'G8-S18'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-4'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'يعرض التمثيل بالصندوق وطرفيه نتائج فصلين في اختبار مهاري. أي الفصلين أكثر اتساقًا في النتائج؟', '/booklet/d66-8.png', '[{"id": "a", "text": "الفصل أ؛ لأن الوسيط متساوٍ تقريبًا في الفصلين، لكن مدى الفصل أ ومداه الربيعي أصغر"}, {"id": "b", "text": "الفصل ب؛ لأن مداه أكبر"}, {"id": "c", "text": "الفصل ب؛ لأن وسيطه أعلى بكثير"}, {"id": "d", "text": "الفصلان متساويان في الاتساق لتساوي الوسيط"}]'::jsonb, '{"value": "a"}'::jsonb, '["الوسيط في الفصلين قريب من 50.", "بيانات الفصل أ أقل انتشارًا (صندوق أقصر وطرفان أقصر)، فهو أكثر اتساقًا."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 66، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S17'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-4'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'سُئل 480 طالبًا عن رياضاتهم المفضلة: الهوكي 60، كرة القدم 180، التنس 120، كرة السلة 120. عند تمثيل البيانات بالقطاعات الدائرية، ما قياس زاوية قطاع كرة القدم؟', null, '[{"id": "a", "text": "135°"}, {"id": "b", "text": "180°"}, {"id": "c", "text": "90°"}, {"id": "d", "text": "45°"}]'::jsonb, '{"value": "a"}'::jsonb, '["نسبة كرة القدم 180 ÷ 480 = ⅜.", "زاوية القطاع ⅜ × 360° = 135°."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 66، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
-with s as (select id from skills where code = 'G8-S18'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-4'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'reasoning', 3, 'mcq', 'درجات سبعة طلاب في مهمة: 12، 13، 14، 14، 15، 16، 40. ماذا يحدث للمتوسط والمدى إذا حُذفت الدرجة 40؟', null, '[{"id": "a", "text": "ينخفض المتوسط من 17.7 تقريبًا إلى 14، وينخفض المدى من 28 إلى 4"}, {"id": "b", "text": "يبقى المتوسط 14 وينخفض المدى إلى 4"}, {"id": "c", "text": "ينخفض المتوسط إلى 14 ويبقى المدى 28"}, {"id": "d", "text": "لا يتغير أي منهما"}]'::jsonb, '{"value": "a"}'::jsonb, '["قبل الحذف: المتوسط 124 ÷ 7 ≈ 17.7، والمدى 40 − 12 = 28.", "بعد الحذف: المتوسط 84 ÷ 6 = 14، والمدى 16 − 12 = 4. والوسيط (14) هو الأنسب لوصف الأداء المعتاد."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 66، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;
 with s as (select id from skills where code = 'G8-S19'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-5'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
   select s.id, 'applying', 1, 'mcq', 'أدار طالب قرصًا مقسمًا إلى ستة أقسام متساوية مرقمة من 1 إلى 6. ما احتمال أن يشير السهم إلى عدد زوجي؟', '/booklet/d67-1.png', '[{"id": "a", "text": "⅙"}, {"id": "b", "text": "⅓"}, {"id": "c", "text": "½"}, {"id": "d", "text": "⅔"}]'::jsonb, '{"value": "c"}'::jsonb, '["الأعداد الزوجية: 2، 4، 6، أي 3 نواتج من 6.", "الاحتمال 3/6 = ½."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 67، س 1'
@@ -1304,13 +1124,3 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, me
   select s.id, 'applying', 3, 'mcq', 'في حقيبة 6 بطاقات حمراء و 4 زرقاء. ما احتمال سحب بطاقتين حمراوين دون إرجاع، وما احتماله مع الإرجاع؟', null, '[{"id": "a", "text": "⅓ دون إرجاع، و 9/25 مع الإرجاع"}, {"id": "b", "text": "9/25 دون إرجاع، و ⅓ مع الإرجاع"}, {"id": "c", "text": "⅓ في الحالتين"}, {"id": "d", "text": "3/5 دون إرجاع، و 9/25 مع الإرجاع"}]'::jsonb, '{"value": "a"}'::jsonb, '["دون إرجاع: 6/10 × 5/9 = 30/90 = ⅓.", "مع الإرجاع: 6/10 × 6/10 = 36/100 = 9/25، وهو أكبر لأن الكرة تعود."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 70، س 8 (بتصرف: حُوّل إلى اختيار من متعدد)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 8 from a, qi;
-with s as (select id from skills where code = 'G8-S19'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'عشر بطاقات متساوية مرقمة من 1 إلى 10. ما احتمال سحب بطاقة تحمل عددًا زوجيًا أو من مضاعفات 3؟', null, '[{"id": "a", "text": "7/10"}, {"id": "b", "text": "8/10"}, {"id": "c", "text": "½"}, {"id": "d", "text": "3/10"}]'::jsonb, '{"value": "a"}'::jsonb, '["الزوجية: 2، 4، 6، 8، 10، ومضاعفات 3: 3، 6، 9.", "الاتحاد دون تكرار العدد 6: {2، 3، 4، 6، 8، 9، 10}، أي 7 من 10."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 70، س 9 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 9 from a, qi;
-with s as (select id from skills where code = 'G8-S19'), a as (select id from assessments where kind = 'model' and form_label = 'bk-data-6'),
-qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, media_url, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'يختار الطالب في المقصف وجبة واحدة من 3 ومشروبًا واحدًا من 2 وحلوى واحدة من 2. كم طلبًا مختلفًا يمكن تكوينه، وما احتمال اختيار طلب مفضل واحد بالصدفة؟', null, '[{"id": "a", "text": "12 طلبًا، والاحتمال 1/12"}, {"id": "b", "text": "7 طلبات، والاحتمال 1/7"}, {"id": "c", "text": "12 طلبًا، والاحتمال 1/7"}, {"id": "d", "text": "18 طلبًا، والاحتمال 1/18"}]'::jsonb, '{"value": "a"}'::jsonb, '["بمبدأ العد الأساسي: 3 × 2 × 2 = 12.", "الاحتمال 1/12، وإذا أُضيف مشروب ثالث يصبح العدد 18 والاحتمال 1/18."]'::jsonb, 'published', 'library', 'كراسة تدريبات الصف الثاني متوسط (إعداد معلمات الرياضيات)، ص 70، س 10 (بتصرف: حُوّل إلى اختيار من متعدد)'
-  from s returning id)
-insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 10 from a, qi;

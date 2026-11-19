@@ -5,6 +5,8 @@ import { studentHome } from '@/lib/student-data';
 import { STATUS_AR } from '@/lib/types';
 import { LogoutStudent } from '@/components/student/LogoutStudent';
 import { BadgeCase } from '@/components/student/BadgeCase';
+import { MeasureCard } from '@/components/student/MeasureCard';
+import { measureStatus } from '@/lib/library-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +20,7 @@ const STATUS_STYLE = {
 
 export default async function StudentHome() {
   const h = await studentHome();
+  const ms = await measureStatus(h.student.id);
   const mastered = h.skills.filter((s) => s.status === 'mastered').length;
   const first = h.student.full_name.split(' ')[0];
   return (
@@ -29,6 +32,8 @@ export default async function StudentHome() {
         </div>
         <div className="card-3d flex items-center gap-3 px-5 py-3"><span className="text-3xl">⭐</span><div><p className="text-xs muted">نجومي</p><p className="text-2xl font-black text-star-600">{h.totalStars}</p></div></div>
       </section>
+
+      <MeasureCard pre={ms.pre} post={ms.post} />
 
       {/* رحلة التقدم */}
       <section className="card-3d mt-8 p-6">

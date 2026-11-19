@@ -4,6 +4,7 @@ import { classData, skillNames } from '@/lib/teacher-data';
 import { classIndicators, hardestSkills, studentIndicators, weeklySeries } from '@/lib/metrics';
 import { STATUS_AR } from '@/lib/types';
 import { WeeklyChart, SimpleBars } from '@/components/teacher/Charts';
+import { MeasurePanel } from '@/components/teacher/MeasurePanel';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +24,12 @@ export default async function Overview({ searchParams }: { searchParams: Promise
   }
   const classId = sp.class && classes.some((c) => c.id === sp.class) ? sp.class : classes[0].id;
   const [{ students, outcomes, mastery }, names] = await Promise.all([classData(sb, classId), skillNames(sb)]);
+  const { data: mAs } = await sb.from('assessments').select('id, kind, is_open').in('kind', ['pre', 'post']);
+  const ids = students.map((st) => st.id);
+  const { data: mAtt } = ids.length && mAs?.length ? await sb.from('assessment_attempts').select('assessment_id, student_id, score, max_score').in('student_id', ids).in('assessment_id', mAs.map((x) => x.id)).not('submitted_at', 'is', null) : { data: [] as { assessment_id: string; student_id: string; score: number; max_score: number }[] };
+  const pctOf = (sid: string, kind: string) => { const a = mAs?.find((x) => x.kind === kind); const t = (mAtt ?? []).find((x) => x.student_id === sid && x.assessment_id === a?.id); return t ? Math.round((t.score / Math.max(1, t.max_score)) * 100) : null; };
+  const postA = mAs?.find((x) => x.kind === 'post');
+  const measureRows = students.filter((st) => st.is_active).map((st) => ({ id: st.id, name: st.full_name, pre: pctOf(st.id, 'pre'), post: pctOf(st.id, 'post') }));
   const ci = classIndicators(students.filter((s) => s.is_active).map((s) => s.id), outcomes, mastery);
   const start = settings.program_start_date ? new Date(settings.program_start_date) : null;
   const weekly = weeklySeries(outcomes, start, settings.program_weeks);
@@ -37,6 +44,8 @@ export default async function Overview({ searchParams }: { searchParams: Promise
           {classes.map((c) => <Link key={c.id} href={`/teacher?class=${c.id}`} className={`chip px-4 py-2 ${c.id === classId ? 'bg-star-400 text-night-950' : ''}`}>{c.name}</Link>)}
         </div>
       </div>
+
+      <MeasurePanel rows={measureRows} postOpen={!!postA?.is_open} postId={postA?.id ?? null} />
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Kpi label="الطلاب المشاركون" value={`${ci.participants} من ${ci.enrolled}`} hint={ci.participationPct !== null ? `نسبة المشاركة ${ci.participationPct}%` : undefined} />

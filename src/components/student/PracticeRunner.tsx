@@ -12,9 +12,8 @@ const SESSION_LENGTH = 8;
 
 type Feedback =
   | null
-  | { kind: 'correct'; message: string; explanation: string | null; starsEarned: number; masteryStatus: keyof typeof STATUS_AR; level: number }
-  | { kind: 'hint'; message: string; hint: string; triesLeft: number }
-  | { kind: 'reveal'; correctText: string; steps: string[]; explanation: string | null; remedial: string | null; masteryStatus: keyof typeof STATUS_AR; level: number };
+  | { kind: 'correct'; message: string; explanation: string | null; steps: string[]; starsEarned: number; masteryStatus: keyof typeof STATUS_AR; level: number }
+  | { kind: 'reveal'; correctText: string; hint: string | null; steps: string[]; explanation: string | null; remedial: string | null; masteryStatus: keyof typeof STATUS_AR; level: number };
 
 interface Summary { items: number; independent: number; withHint: number; revealed: number; bonusStars: number; newBadges: string[] }
 
@@ -42,12 +41,12 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [summary, setSummary] = useState<Summary | null>(null);
-  const [stepShown, setStepShown] = useState(0);
+  const [hintOn, setHintOn] = useState(false);
   const t0 = useRef(Date.now());
   const started = useRef(false);
 
   const load = useCallback(async (sid: string, similarTo?: string) => {
-    setBusy(true); setFb(null); setAnswer(null); setStepShown(0);
+    setBusy(true); setFb(null); setAnswer(null); setHintOn(false);
     try {
       const r = await post<{ done: boolean; question?: PublicQuestion }>('/api/practice/next', { sessionId: sid, similarTo });
       if (r.done || !r.question) await finish(sid);
@@ -68,24 +67,18 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
     try { setSummary(await post<Summary>('/api/practice/finish', { sessionId: sid })); } catch (e) { setError((e as Error).message); }
   }
 
-  async function check() {
-    if (!sessionId || !q) return;
+  async function check(value: unknown = answer) {
+    if (!sessionId || !q || fb) return;
     setBusy(true);
     try {
-      const r = await post<NonNullable<Feedback> & { starsEarned?: number }>('/api/practice/answer', { sessionId, questionId: q.id, answer, timeMs: Date.now() - t0.current });
+      const r = await post<NonNullable<Feedback> & { starsEarned?: number }>('/api/practice/answer', { sessionId, questionId: q.id, answer: value, timeMs: Date.now() - t0.current, hintUsed: hintOn });
       setFb(r);
       if (r.kind === 'correct') { play('correct'); setStars((s) => s + (r.starsEarned ?? 0)); setCount((c) => c + 1); }
-      else if (r.kind === 'reveal') { play('retry'); setCount((c) => c + 1); }
-      else { play('retry'); t0.current = Date.now(); }
+      else { play('retry'); setCount((c) => c + 1); }
     } catch (e) { setError((e as Error).message); }
     setBusy(false);
   }
 
-  useEffect(() => {
-    if (fb?.kind !== 'reveal' || stepShown >= fb.steps.length) return;
-    const t = setTimeout(() => setStepShown((n) => n + 1), 1100);
-    return () => clearTimeout(t);
-  }, [fb, stepShown]);
 
   const next = (similar = false) => {
     if (!sessionId) return;
@@ -120,7 +113,7 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
       <div className="mb-4 flex items-center justify-between gap-3">
         <div><p className="text-sm muted">تدريب</p><h1 className="text-2xl font-black">{skillName}</h1></div>
         <div className="flex items-center gap-3">
-          <span className="chip">سؤال {Math.min(count + (fb && fb.kind !== 'hint' ? 0 : 1), SESSION_LENGTH)} من {SESSION_LENGTH}</span>
+          <span className="chip">سؤال {Math.min(count + (fb ? 0 : 1), SESSION_LENGTH)} من {SESSION_LENGTH}</span>
           <span className="chip text-star-600">★ {stars}</span>
         </div>
       </div>
@@ -130,14 +123,15 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
         {q && (
           <motion.div key={q.id} initial={{ opacity: 0, rotateX: -12, y: 20 }} animate={{ opacity: 1, rotateX: 0, y: 0 }} exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.35 }} className="card-3d p-6 md:p-8" style={{ transformPerspective: 900 }}>
-            <div className="mb-2 flex gap-2"><span className="chip">المستوى {q.difficulty}</span></div>
+            <div className="mb-2 flex items-center justify-between gap-2"><span className="chip">المستوى {q.difficulty}</span>{!fb && !hintOn && q.hint && <button onClick={() => setHintOn(true)} className="chip font-bold text-sky2-600">💡 همسة</button>}</div>
             <p className="text-2xl font-bold leading-[1.9]" dir="auto">{q.prompt}</p>
             {q.media_url && <img src={q.media_url} alt="" className="mt-4 max-h-72 rounded-xl bg-white p-2" />}
             <div className="mt-6">
-              <QuestionView q={q} disabled={busy || (fb !== null && fb.kind !== 'hint')} onChange={setAnswer} />
+              <QuestionView q={q} disabled={busy || fb !== null} onChange={(v) => { setAnswer(v); if ((q.qtype === 'mcq' || q.qtype === 'true_false') && hasAnswer(v)) check(v); }} />
             </div>
-            {(!fb || fb.kind === 'hint') && (
-              <button onClick={check} disabled={busy || !hasAnswer(answer)} className="btn-star mt-6 w-full sm:w-auto">تحقق من الإجابة</button>
+            {!fb && hintOn && q.hint && <div className="mt-4 rounded-2xl border border-sky2-400/40 bg-sky2-400/10 p-4"><p className="text-sm font-bold text-sky2-600">همسة</p><p className="mt-1 text-lg" dir="auto">{q.hint}</p></div>}
+            {!fb && q.qtype !== 'mcq' && q.qtype !== 'true_false' && (
+              <button onClick={() => check()} disabled={busy || !hasAnswer(answer)} className="btn-star mt-6 w-full sm:w-auto">تحقق من الإجابة</button>
             )}
           </motion.div>
         )}
@@ -147,41 +141,24 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
         {fb && (
           <motion.div key={fb.kind + (q?.id ?? '')} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mt-5" role="status" aria-live="polite">
             {fb.kind === 'correct' && (
-              <div className="card-3d flex flex-col gap-3 border-aqua-400/40 p-6 sm:flex-row sm:items-center">
-                <Suha size={70} mood="cheer" />
-                <div className="flex-1">
-                  <p className="text-xl font-extrabold text-aqua-600">{fb.message}</p>
-                  {fb.starsEarned > 0 && <motion.p initial={{ scale: 0.6 }} animate={{ scale: 1 }} className="text-star-600">+{fb.starsEarned} ★</motion.p>}
-                  {fb.explanation && <p className="mt-1 muted">{fb.explanation}</p>}
-                </div>
-                <button onClick={() => next()} className="btn-aqua">التالي</button>
-              </div>
-            )}
-            {fb.kind === 'hint' && (
-              <div className="card-3d flex gap-4 border-sky2-400/40 p-6">
-                <Suha size={64} mood="think" />
-                <div><p className="text-lg font-bold">{fb.message}</p><p className="mt-2 rounded-xl bg-sky2-400/10 p-3 text-sky2-600">💡 {fb.hint}</p></div>
+              <div className="rounded-2xl border-2 border-aqua-400 bg-aqua-300/15 p-6">
+                <p className="text-xl font-extrabold text-aqua-600">✓ إجابة صحيحة {fb.starsEarned > 0 && <span className="text-base text-star-600">+{fb.starsEarned} ★</span>}</p>
+                {fb.steps.length > 0 && <><p className="mt-3 font-bold">لماذا هذه هي الإجابة الصحيحة؟</p><ol className="mt-3 space-y-2">{fb.steps.map((st, i) => (<li key={i} className="flex gap-3 rounded-xl bg-white/70 p-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-sm font-black text-white">{i + 1}</span><span className="text-lg leading-8" dir="auto">{st}</span></li>))}</ol></>}
+                {fb.explanation && <p className="mt-3 muted">{fb.explanation}</p>}
+                <button onClick={() => next()} className="btn-star mt-5">السؤال التالي</button>
               </div>
             )}
             {fb.kind === 'reveal' && (
-              <div className="card-3d border-rose-400/40 p-6">
-                <div className="flex gap-4"><Suha size={64} mood="reveal" /><div>
-                  <p className="text-lg font-bold">لنرَ الحل معًا خطوة بخطوة</p>
-                  <p className="mt-1">الإجابة الصحيحة: <b className="text-star-600" dir="auto">{fb.correctText}</b></p>
-                </div></div>
-                <ol className="mt-4 space-y-2">
-                  {fb.steps.slice(0, stepShown).map((s, i) => (
-                    <motion.li key={i} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="flex gap-3 rounded-xl bg-ink/5 p-3">
-                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rose-400 font-black text-night-950">{i + 1}</span>
-                      <span className="text-lg" dir="auto">{s}</span>
-                    </motion.li>
-                  ))}
-                </ol>
-                {stepShown >= fb.steps.length && fb.explanation && <p className="mt-3 muted">{fb.explanation}</p>}
-                {stepShown >= fb.steps.length && fb.remedial && <p className="mt-3 rounded-xl bg-ink/5 p-3 text-sm">نشاط مقترح: {fb.remedial}</p>}
+              <div className="rounded-2xl border-2 border-rose-400 bg-rose-300/10 p-6">
+                <p className="text-xl font-extrabold text-rose-600">✗ إجابة غير صحيحة</p>
+                {fb.hint && <div className="mt-3 rounded-xl bg-sky2-400/10 p-3"><p className="text-sm font-bold text-sky2-600">همسة</p><p className="mt-1" dir="auto">{fb.hint}</p></div>}
+                <p className="mt-4">الإجابة الصحيحة: <b className="text-aqua-600" dir="auto">{fb.correctText}</b></p>
+                <p className="mt-3 font-bold">شرح الإجابة الصحيحة</p><ol className="mt-3 space-y-2">{fb.steps.map((st, i) => (<li key={i} className="flex gap-3 rounded-xl bg-white/70 p-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-sm font-black text-white">{i + 1}</span><span className="text-lg leading-8" dir="auto">{st}</span></li>))}</ol>
+                {fb.explanation && <p className="mt-3 muted">{fb.explanation}</p>}
+                {fb.remedial && <p className="mt-3 rounded-xl bg-ink/5 p-3 text-sm">نشاط مقترح: {fb.remedial}</p>}
                 <div className="mt-5 flex flex-wrap gap-3">
-                  <button onClick={() => next(true)} className="btn-rose">سؤال مشابه</button>
-                  <button onClick={() => next()} className="btn-ghost">التالي</button>
+                  <button onClick={() => next(true)} className="btn-star">سؤال مشابه</button>
+                  <button onClick={() => next()} className="btn-ghost">السؤال التالي</button>
                 </div>
               </div>
             )}

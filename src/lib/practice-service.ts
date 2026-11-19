@@ -43,7 +43,7 @@ export async function startSession(studentId: string, skillId: string, mode: 'pr
 function toPublic(q: Question): PublicQuestion {
   // خلط الخيارات في كل عرض لتقليل حفظ مواقع الإجابات
   const options = [...(q.options ?? [])].sort(() => Math.random() - 0.5);
-  return { id: q.id, qtype: q.qtype, prompt: q.prompt, media_url: q.media_url, options, difficulty: q.difficulty };
+  return { id: q.id, qtype: q.qtype, prompt: q.prompt, media_url: q.media_url, options, difficulty: q.difficulty, hint: q.hint ?? q.solution_steps?.[0] ?? null };
 }
 
 /**
@@ -77,7 +77,7 @@ export async function nextQuestion(studentId: string, sessionId: string, similar
   return { done: false as const, question: toPublic(candidates[0]), level: mastery.level, seen: seenHere.size };
 }
 
-export async function submitAnswer(studentId: string, sessionId: string, questionId: string, answer: unknown, timeMs: number) {
+export async function submitAnswer(studentId: string, sessionId: string, questionId: string, answer: unknown, timeMs: number, hintUsed = false) {
   const db = supabaseAdmin();
   const session = await ownSession(db, studentId, sessionId);
   const { a: aRules, r: rRules } = await rules(db);
@@ -91,11 +91,12 @@ export async function submitAnswer(studentId: string, sessionId: string, questio
   const { data: prevTries } = await db.from('attempts').select('try_no, time_ms').eq('session_id', sessionId).eq('question_id', questionId);
   const tryNo = (prevTries?.length ?? 0) + 1;
   const correct = isCorrect(q, answer);
-  const action = decideFeedback({ correct, tryNo, maxTriesBeforeReveal: aRules.max_tries_before_reveal, solutionRevealed: false });
+  // محاولة واحدة لكل سؤال: تظهر الإجابة الصحيحة وشرحها مباشرة، و«الهمسة» متاحة قبل الإجابة
+  const action = decideFeedback({ correct, tryNo, maxTriesBeforeReveal: 1, solutionRevealed: false });
 
   await db.from('attempts').insert({
     session_id: sessionId, student_id: studentId, question_id: questionId, try_no: tryNo,
-    answer: { value: answer }, is_correct: correct, hint_shown: tryNo > 1, solution_revealed: false,
+    answer: { value: answer }, is_correct: correct, hint_shown: hintUsed, solution_revealed: !correct,
     error_type: correct ? null : classifyError(q, answer), time_ms: Math.max(0, Math.min(timeMs, 30 * 60 * 1000)),
   });
 
@@ -103,7 +104,7 @@ export async function submitAnswer(studentId: string, sessionId: string, questio
     return { kind: 'hint' as const, message: retryMessage(tryNo + q.prompt.length), hint: q.hint ?? q.solution_steps?.[0] ?? 'تحديد المطلوب في السؤال هو الخطوة الأولى.', triesLeft: action.triesLeft };
   }
 
-  const outcome: Outcome = action.outcome;
+  const outcome: Outcome = correct && hintUsed ? 'with_hint' : action.outcome;
   const totalTime = (prevTries ?? []).reduce((s, t) => s + (t.time_ms ?? 0), 0) + timeMs;
   await db.from('item_outcomes').insert({
     session_id: sessionId, question_id: questionId, student_id: studentId, skill_id: session.skill_id,
@@ -127,12 +128,12 @@ export async function submitAnswer(studentId: string, sessionId: string, questio
   }
 
   if (action.kind === 'correct') {
-    return { kind: 'correct' as const, outcome, message: praiseMessage(tryNo + q.prompt.length + Date.now()), explanation: q.explanation ?? null, starsEarned, masteryStatus: after.status, level: after.level };
+    return { kind: 'correct' as const, outcome, message: praiseMessage(tryNo + q.prompt.length + Date.now()), explanation: q.explanation ?? null, steps: q.solution_steps ?? [], starsEarned, masteryStatus: after.status, level: after.level };
   }
   return {
     kind: 'reveal' as const, outcome, correctAnswer: q.correct_answer.value,
     correctText: q.options?.find((o) => String(o.id) === String(q.correct_answer.value))?.text ?? String(q.correct_answer.value),
-    steps: q.solution_steps ?? [], explanation: q.explanation ?? null, remedial: q.remedial_activity ?? null,
+    steps: q.solution_steps ?? [], explanation: q.explanation ?? null, remedial: q.remedial_activity ?? null, hint: q.hint ?? q.solution_steps?.[0] ?? null, chosen: answer,
     starsEarned, masteryStatus: after.status, level: after.level,
   };
 }

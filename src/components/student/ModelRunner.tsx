@@ -11,8 +11,9 @@ interface Result { newBadges?: string[]; score: number; total: number; byCog: Re
 
 const has = (v: unknown) => v !== undefined && v !== null && v !== '';
 
-/** نموذج اختبار: سؤال في كل شاشة، تنقل حر بين الأسئلة، تسليم ثم مراجعة الحل. لا تلميحات أثناء النموذج. */
-export function ModelRunner({ model }: { model: { id: string; title: string; source: string | null; sourceUrl: string | null; items: Item[] } }) {
+/** نموذج تدريبي: سؤال في كل شاشة، تغذية راجعة فورية بعد الاختيار (صحيح/خطأ، همسة، شرح الحل)، ثم ملخص عند التسليم. */
+type Check = { ok: boolean; correctText: string; steps: string[]; hint: string | null };
+export function ModelRunner({ model, exam = false }: { model: { id: string; title: string; source: string | null; sourceUrl: string | null; items: Item[] }; exam?: boolean }) {
   const { play } = usePrefs();
   const [i, setI] = useState(0);
   const [ans, setAns] = useState<Record<string, unknown>>({});
@@ -20,8 +21,17 @@ export function ModelRunner({ model }: { model: { id: string; title: string; sou
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
   const [res, setRes] = useState<Result | null>(null);
+  const [checks, setChecks] = useState<Record<string, Check>>({});
+  const [hints, setHints] = useState<Record<string, boolean>>({});
   const it = model.items[i];
   const left = model.items.filter((x) => !has(ans[x.id])).length;
+
+  async function checkItem(id: string, v: unknown) {
+    const r = await fetch('/api/library/check', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ assessmentId: model.id, questionId: id, answer: v }) });
+    const j = await r.json();
+    if (!r.ok) { setErr(j.error ?? 'تعذر التحقق'); return; }
+    setChecks((c) => ({ ...c, [id]: j })); play(j.ok ? 'correct' : 'retry');
+  }
 
   async function submit() {
     if (left && !confirm) { setConfirm(true); return; }
@@ -63,7 +73,7 @@ export function ModelRunner({ model }: { model: { id: string; title: string; sou
             );
           })}
         </div>
-        <div className="mt-6 flex flex-wrap gap-3"><button onClick={() => location.reload()} className="btn-star">إعادة النموذج</button><Link href="/student/library" className="btn-ghost">المكتبة</Link></div>
+        <div className="mt-6 flex flex-wrap gap-3">{!exam && <button onClick={() => location.reload()} className="btn-star">إعادة النموذج</button>}<Link href="/student/library" className="btn-ghost">المكتبة</Link></div>
       </div>
     );
   }
@@ -71,7 +81,7 @@ export function ModelRunner({ model }: { model: { id: string; title: string; sou
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div><p className="text-sm muted">مكتبة النماذج</p><h1 className="text-2xl font-black">{model.title}</h1></div>
+        <div><p className="text-sm muted">{exam ? 'قياس لتحديد المستوى' : 'مكتبة النماذج'}</p><h1 className="text-2xl font-black">{model.title}</h1>{exam && <p className="mt-2 rounded-xl bg-sky2-400/10 p-3 text-sm">لا تظهر الإجابة الصحيحة أثناء القياس. تظهر النتيجة وشرح كل سؤال بعد التسليم، ولا يُعاد القياس.</p>}</div>
         <span className="chip">أُجيب عن {model.items.length - left} من {model.items.length}</span>
       </div>
       {model.source && <p className="mb-4 text-xs muted">{model.sourceUrl ? <a className="underline" href={model.sourceUrl} target="_blank" rel="noreferrer">{model.source}</a> : model.source}</p>}
@@ -81,10 +91,20 @@ export function ModelRunner({ model }: { model: { id: string; title: string; sou
         ))}
       </div>
       <div key={it.id} className="card-3d p-6 md:p-8">
-        <div className="flex flex-wrap gap-2"><span className="chip">السؤال {i + 1}</span><span className="chip">{it.cognitive}</span></div>
+        <div className="flex flex-wrap items-center gap-2"><span className="chip">السؤال {i + 1}</span><span className="chip">{it.cognitive}</span>{!checks[it.id] && !hints[it.id] && it.hint && <button onClick={() => setHints((h) => ({ ...h, [it.id]: true }))} className="chip mr-auto font-bold text-sky2-600">💡 همسة</button>}</div>
         <p className="mt-3 text-xl font-bold leading-[1.9]" dir="auto">{it.prompt}</p>
         {it.media_url && <img src={it.media_url} alt="الشكل المرافق للسؤال" className="mt-4 max-h-72 max-w-full rounded-xl border border-ink/10 bg-white p-2" />}
-        <div className="mt-5"><QuestionView q={it} disabled={false} onChange={(v) => setAns((a) => (a[it.id] === v ? a : { ...a, [it.id]: v }))} /></div>
+        <div className="mt-5"><QuestionView key={it.id} q={it} disabled={!!checks[it.id]} onChange={(v) => { setAns((a) => (a[it.id] === v ? a : { ...a, [it.id]: v })); if (!exam && has(v) && !checks[it.id] && (it.qtype === 'mcq' || it.qtype === 'true_false')) checkItem(it.id, v); }} /></div>
+        {!checks[it.id] && hints[it.id] && it.hint && <div className="mt-4 rounded-2xl border border-sky2-400/40 bg-sky2-400/10 p-4"><p className="text-sm font-bold text-sky2-600">همسة</p><p className="mt-1" dir="auto">{it.hint}</p></div>}
+        {!exam && !checks[it.id] && has(ans[it.id]) && it.qtype !== 'mcq' && it.qtype !== 'true_false' && <button onClick={() => checkItem(it.id, ans[it.id])} className="btn-star mt-4">تحقق من الإجابة</button>}
+        {checks[it.id] && (() => { const c = checks[it.id]; return (
+          <div className={`mt-5 rounded-2xl border-2 p-5 ${c.ok ? 'border-aqua-400 bg-aqua-300/15' : 'border-rose-400 bg-rose-300/10'}`} role="status">
+            <p className={`text-xl font-extrabold ${c.ok ? 'text-aqua-600' : 'text-rose-600'}`}>{c.ok ? '✓ إجابة صحيحة' : '✗ إجابة غير صحيحة'}</p>
+            {!c.ok && c.hint && <div className="mt-3 rounded-xl bg-sky2-400/10 p-3"><p className="text-sm font-bold text-sky2-600">همسة</p><p className="mt-1" dir="auto">{c.hint}</p></div>}
+            {!c.ok && <p className="mt-3">الإجابة الصحيحة: <b className="text-aqua-600" dir="auto">{c.correctText}</b></p>}
+            <p className="mt-3 font-bold">{c.ok ? 'لماذا هذه هي الإجابة الصحيحة؟' : 'شرح الإجابة الصحيحة'}</p>
+            <ol className="mt-2 space-y-2">{c.steps.map((st, k) => <li key={k} className="flex gap-3 rounded-xl bg-white/70 p-3"><span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-ink text-sm font-black text-white">{k + 1}</span><span className="leading-8" dir="auto">{st}</span></li>)}</ol>
+          </div>); })()}
       </div>
       <div className="mt-5 flex flex-wrap justify-between gap-3">
         <div className="flex gap-2">

@@ -24,7 +24,7 @@ export interface Question {
 }
 
 /** ما يصل إلى متصفح الطالب: دون الإجابة أو الحل */
-export type PublicQuestion = Pick<Question, 'id' | 'qtype' | 'prompt' | 'media_url' | 'options' | 'difficulty'>;
+export type PublicQuestion = Pick<Question, 'id' | 'qtype' | 'prompt' | 'media_url' | 'options' | 'difficulty'> & { hint?: string | null };
 
 export interface AdaptiveRules {
   promote_after_independent_correct: number;

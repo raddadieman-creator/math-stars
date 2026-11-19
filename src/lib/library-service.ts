@@ -22,10 +22,10 @@ export async function listModels(studentId: string) {
 }
 
 /** أسئلة النموذج دون الإجابات. النموذج الشامل يختار أسئلة عشوائية من بنك المكتبة في كل محاولة */
-export async function loadModel(assessmentId: string) {
+export async function loadModel(assessmentId: string, measure = false) {
   const db = supabaseAdmin();
   const { data: a } = await db.from('assessments').select('id, title, form_label, kind, is_open, source_label, source_url').eq('id', assessmentId).single();
-  if (!a || a.kind !== 'model' || !a.is_open) return null;
+  if (!a || !a.is_open || (measure ? !['pre', 'post'].includes(a.kind) : a.kind !== 'model')) return null;
   let qs: Question[];
   if (a.form_label === 'mix') {
     const { data } = await db.from('questions').select('*').eq('bank', 'library').eq('status', 'published');
@@ -34,14 +34,18 @@ export async function loadModel(assessmentId: string) {
     const { data } = await db.from('assessment_items').select('position, questions(*)').eq('assessment_id', a.id).order('position');
     qs = (data ?? []).map((r) => r.questions as unknown as Question).filter((q) => q && (q as unknown as { status: string }).status === 'published');
   }
-  const items = qs.map((q) => ({ id: q.id, qtype: q.qtype, prompt: q.prompt, media_url: q.media_url, options: q.options, difficulty: q.difficulty, cognitive: COGNITIVE_AR[q.cognitive] }));
+  const items = qs.map((q) => ({ id: q.id, qtype: q.qtype, prompt: q.prompt, media_url: q.media_url, options: q.options, difficulty: q.difficulty, cognitive: COGNITIVE_AR[q.cognitive], hint: measure ? null : q.hint ?? q.solution_steps?.[0] ?? null }));
   return { id: a.id as string, title: a.title as string, source: (a.source_label as string | null) ?? null, sourceUrl: (a.source_url as string | null) ?? null, items: items as (PublicQuestion & { cognitive: string })[] };
 }
 
 export async function submitModel(studentId: string, assessmentId: string, answers: Record<string, unknown>) {
   const db = supabaseAdmin();
   const { data: a } = await db.from('assessments').select('id, form_label, kind, is_open').eq('id', assessmentId).single();
-  if (!a || a.kind !== 'model' || !a.is_open) throw new Error('النموذج غير متاح');
+  if (!a || !['model', 'pre', 'post'].includes(a.kind) || !a.is_open) throw new Error('النموذج غير متاح');
+  if (a.kind !== 'model') { // القياس: محاولة واحدة فقط
+    const { data: prev } = await db.from('assessment_attempts').select('id').eq('assessment_id', a.id).eq('student_id', studentId).not('submitted_at', 'is', null).limit(1);
+    if (prev?.length) throw new Error('أُنجز هذا القياس من قبل');
+  }
   const ids = Object.keys(answers ?? {});
   if (!ids.length || ids.length > 40) throw new Error('لا توجد إجابات صالحة');
   let allowed: Set<string>;
@@ -92,4 +96,34 @@ export async function listFiles() {
     if (url) out.push({ id: f.id, title: f.title, publisher: f.publisher, language: f.language, url, official: f.is_official });
   }
   return out;
+}
+
+/** تغذية راجعة فورية لسؤال واحد في نماذج التدريب (لا تُسجَّل؛ التسجيل عند تسليم النموذج) */
+export async function checkModelItem(studentId: string, assessmentId: string, questionId: string, answer: unknown) {
+  void studentId;
+  const db = supabaseAdmin();
+  const { data: a } = await db.from('assessments').select('id, form_label, kind, is_open').eq('id', assessmentId).single();
+  if (!a || a.kind !== 'model' || !a.is_open) throw new Error('النموذج غير متاح');
+  if (a.form_label !== 'mix') {
+    const { data: link } = await db.from('assessment_items').select('question_id').eq('assessment_id', a.id).eq('question_id', questionId).maybeSingle();
+    if (!link) throw new Error('السؤال غير متاح');
+  }
+  const { data: qd } = await db.from('questions').select('*').eq('id', questionId).eq('status', 'published').single();
+  if (!qd) throw new Error('السؤال غير متاح');
+  const q = qd as Question;
+  const correctText = q.qtype === 'mcq' || q.qtype === 'image_mcq'
+    ? q.options.find((o) => o.id === q.correct_answer.value)?.text ?? ''
+    : q.qtype === 'true_false' ? (q.correct_answer.value ? 'صواب' : 'خطأ') : String(q.correct_answer.value);
+  return { ok: isCorrect(q, answer), correct: q.correct_answer.value, correctText, steps: q.solution_steps ?? [], hint: q.hint ?? q.solution_steps?.[0] ?? null };
+}
+
+/** حالة القياس القبلي والبعدي للطالب */
+export async function measureStatus(studentId: string) {
+  const db = supabaseAdmin();
+  const { data: as } = await db.from('assessments').select('id, kind, is_open, assessment_items(count)').in('kind', ['pre', 'post']).order('created_at');
+  const { data: att } = await db.from('assessment_attempts').select('assessment_id, score, max_score, submitted_at').eq('student_id', studentId).not('submitted_at', 'is', null);
+  const pick = (k: string) => { const a = (as ?? []).find((x) => x.kind === k); if (!a) return null;
+    const t = (att ?? []).find((x) => x.assessment_id === a.id);
+    return { id: a.id as string, open: a.is_open as boolean, count: (a.assessment_items as unknown as { count: number }[])[0]?.count ?? 0, done: t ? { score: t.score as number, max: t.max_score as number, at: t.submitted_at as string } : null }; };
+  return { pre: pick('pre'), post: pick('post') };
 }
