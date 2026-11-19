@@ -42,7 +42,7 @@ export default async function Students() {
                   <td className="py-2">{s.full_name}{s.is_demo && <span className="chip mr-2 text-[10px]">تجريبية</span>}</td>
                   <td>{s.nickname}</td>
                   <td className="text-center">{s.is_active ? 'نشطة' : 'موقوفة'}</td>
-                  <td className="text-center"><StudentRowActions id={s.id} active={s.is_active} /></td>
+                  <td className="text-center"><StudentRowActions id={s.id} active={s.is_active} name={s.full_name} /></td>
                 </tr>
               ))}
             </tbody>
@@ -50,7 +50,7 @@ export default async function Students() {
         </div>
       ))}
       {!classes?.length && <p className="panel muted">لا توجد فصول مرتبطة بحسابك.</p>}
-      <p className="text-xs text-ink/45">رمز الدخول يظهر مرة واحدة عند الإنشاء أو إعادة التعيين، ولا يُخزن نصًا في قاعدة البيانات.</p>
+      <p className="text-xs text-ink/45">تدخل الطالبة باسمها الثلاثي واختيار فصلها، فلا يلزم رمز دخول. الإيقاف يمنع الدخول مؤقتًا، والحذف يزيل الطالبة وسجلاتها نهائيًا.</p>
     </div>
   );
 }

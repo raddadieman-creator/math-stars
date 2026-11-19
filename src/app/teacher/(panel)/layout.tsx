@@ -21,6 +21,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     }>
       <nav className="no-print mb-6 flex flex-wrap gap-2">
         {NAV.map(([href, label]) => <Link key={href} href={href} className="chip px-4 py-2 text-sm hover:bg-ink/5">{label}</Link>)}
+        {staff.role === 'admin' && <Link href="/teacher/staff" className="chip px-4 py-2 text-sm hover:bg-ink/5">حسابات المعلمين</Link>}
       </nav>
       {children}
     </Shell>

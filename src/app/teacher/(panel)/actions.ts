@@ -2,7 +2,6 @@
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { requireStaff } from '@/lib/data';
-import { generateLoginCode, hashLoginCode } from '@/lib/codes';
 
 export async function signOut() {
   const { sb } = await requireStaff();
@@ -70,29 +69,33 @@ export async function createClass(f: FormData) {
   revalidatePath('/teacher/students');
 }
 
-export async function addStudent(f: FormData): Promise<{ code?: string; error?: string }> {
+/** إضافة طالبة: تدخل باسمها الثلاثي وفصلها، فلا يُصدر لها رمز */
+export async function addStudent(f: FormData): Promise<{ ok?: boolean; error?: string }> {
   const { sb } = await requireStaff();
-  const pepper = process.env.STUDENT_CODE_PEPPER ?? '';
-  const full = str(f, 'full_name');
+  const { normName } = await import('@/lib/names');
+  const { randomBytes } = await import('node:crypto');
+  const full = (str(f, 'full_name') ?? '').replace(/\s+/g, ' ');
   const classId = str(f, 'class_id');
   if (!full || !classId) return { error: 'الاسم والفصل مطلوبان' };
-  for (let i = 0; i < 5; i++) {
-    const code = generateLoginCode();
-    const { error } = await sb.from('students').insert({
-      full_name: full, nickname: str(f, 'nickname') ?? `نجمة ${Math.floor(100 + Math.random() * 900)}`,
-      class_id: classId, login_code_hash: hashLoginCode(code, pepper),
-    });
-    if (!error) { revalidatePath('/teacher/students'); return { code }; }
-    if (!error.message.includes('duplicate')) return { error: error.message };
-  }
-  return { error: 'تعذر توليد رمز فريد' };
+  if (full.split(' ').length < 3) return { error: 'يُكتب الاسم ثلاثيًا على الأقل' };
+  const { data: dup } = await sb.from('students').select('full_name').eq('class_id', classId);
+  if ((dup ?? []).some((d) => normName(d.full_name) === normName(full))) return { error: 'الاسم مسجل في هذا الفصل' };
+  const { error } = await sb.from('students').insert({
+    full_name: full, nickname: str(f, 'nickname') ?? full.split(' ').slice(0, 2).join(' '),
+    class_id: classId, login_code_hash: 'name:' + randomBytes(16).toString('hex'),
+  });
+  if (error) return { error: error.message };
+  revalidatePath('/teacher/students');
+  return { ok: true };
 }
 
-export async function resetCode(studentId: string): Promise<{ code?: string; error?: string }> {
+/** حذف طالبة مع سجلاتها (للمعلم صاحب الفصل أو الإدارة) */
+export async function deleteStudent(studentId: string): Promise<{ ok?: boolean; error?: string }> {
   const { sb } = await requireStaff();
-  const code = generateLoginCode();
-  const { error } = await sb.from('students').update({ login_code_hash: hashLoginCode(code, process.env.STUDENT_CODE_PEPPER ?? '') }).eq('id', studentId);
-  return error ? { error: error.message } : { code };
+  const { error } = await sb.from('students').delete().eq('id', studentId);
+  if (error) return { error: error.message };
+  revalidatePath('/teacher/students');
+  return { ok: true };
 }
 
 export async function toggleStudent(studentId: string, active: boolean) {
