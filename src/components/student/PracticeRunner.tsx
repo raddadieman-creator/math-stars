@@ -106,7 +106,7 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
           <div className="rounded-xl bg-ink/5 p-3"><p className="text-xs muted">تعلمت من الحل</p><p className="text-2xl font-black text-rose-600">{summary.revealed}</p></div>
         </div>
         <p className="mt-5 text-lg">نجوم هذه الجلسة: <b className="text-star-600">★ {stars + summary.bonusStars}</b></p>
-        {summary.newBadges.length > 0 && <p className="mt-2 text-star-600">حصلت على وسام جديد! تجدينه في صفحتك.</p>}
+        {summary.newBadges.length > 0 && <div className="mt-4 rounded-2xl bg-star-300/40 p-4"><p className="font-extrabold">أوسمة جديدة</p><p className="mt-1">{summary.newBadges.join("، ")}</p></div>}
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <button onClick={() => location.reload()} className="btn-star">تدريب جديد</button>
           <Link href="/student" className="btn-ghost">صفحتي</Link>

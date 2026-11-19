@@ -4,6 +4,8 @@ import { supabaseAdmin } from './supabase/admin';
 import { getStudentSession } from './student-session';
 import { isConfigured } from './env';
 import type { MasteryStatus } from './types';
+import { monthlyGoals, studentStats } from './badge-service';
+import { hijriMonth } from './badges';
 
 export async function requireStudent() {
   if (!isConfigured()) redirect('/setup');
@@ -19,7 +21,7 @@ export async function studentHome() {
   const { db, student } = await requireStudent();
   const [stars, badges, mastery, skills, pubQ, lessons] = await Promise.all([
     db.from('star_ledger').select('amount').eq('student_id', student.id),
-    db.from('student_badges').select('awarded_at, skill_id, badges(code, name_ar, icon, kind)').eq('student_id', student.id).order('awarded_at', { ascending: false }),
+    db.from('student_badges').select('awarded_at, period, badges(code)').eq('student_id', student.id).order('awarded_at', { ascending: false }),
     db.from('skill_mastery').select('skill_id, level, status, items_seen').eq('student_id', student.id),
     db.from('skills').select('id, code, name_ar, sort_order, content_domains(name_ar, sort_order)').order('sort_order'),
     db.from('questions').select('skill_id').eq('status', 'published'),
@@ -37,7 +39,11 @@ export async function studentHome() {
   return {
     student,
     totalStars: (stars.data ?? []).reduce((a, r) => a + r.amount, 0),
-    badges: (badges.data ?? []).map((b) => ({ ...(b.badges as unknown as { code: string; name_ar: string; icon: string; kind: string }), awarded_at: b.awarded_at })),
+    owned: new Map((badges.data ?? []).filter((b) => !b.period).map((b) => [(b.badges as unknown as { code: string }).code, b.awarded_at as string])),
+    monthlyWins: (badges.data ?? []).filter((b) => b.period).map((b) => b.period as string),
+    stats: await studentStats(db, student.id),
+    goals: await monthlyGoals(db),
+    monthName: hijriMonth(new Date()).name,
     skills: skillList,
     lessons: lessons.data ?? [],
   };

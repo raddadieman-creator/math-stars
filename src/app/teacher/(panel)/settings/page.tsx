@@ -57,6 +57,10 @@ export default async function Settings() {
           ['s_session', 'إكمال جلسة (3 أسئلة فأكثر)', r?.stars_session_complete], ['s_mastered', 'إتقان مهارة', r?.stars_skill_mastered], ['s_improve', 'تحسن شخصي', r?.stars_personal_improvement]] as const).map(([n, l, v]) => (
           <div key={n}><label className="label">{l}</label><input name={n} type="number" min={0} max={50} defaultValue={v ?? 0} className="field" /></div>
         ))}
+        <h2 className="mt-4 text-lg font-extrabold md:col-span-3">مهام وسام تميّز الشهر</h2>
+        <div><label className="label">جلسات تدريب في الشهر</label><input name="m_sessions" type="number" min={1} max={60} defaultValue={r?.monthly_sessions ?? 8} className="field" /></div>
+        <div><label className="label">نماذج اختبار في الشهر</label><input name="m_models" type="number" min={0} max={20} defaultValue={r?.monthly_models ?? 2} className="field" /></div>
+        <div><label className="label">إجابات صحيحة من المحاولة الأولى</label><input name="m_independent" type="number" min={1} max={300} defaultValue={r?.monthly_independent ?? 30} className="field" /></div>
         <div className="md:col-span-3"><button className="btn-star">حفظ القواعد</button></div>
       </form>
     </div>

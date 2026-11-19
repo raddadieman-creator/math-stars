@@ -4,6 +4,7 @@ import { Suha } from '@/components/Suha';
 import { studentHome } from '@/lib/student-data';
 import { STATUS_AR } from '@/lib/types';
 import { LogoutStudent } from '@/components/student/LogoutStudent';
+import { BadgeCase } from '@/components/student/BadgeCase';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +15,6 @@ const STATUS_STYLE = {
   mastered: 'bg-star-400/20 text-star-600',
 } as const;
 
-const ICONS: Record<string, string> = { medal: '🏅', flame: '🔥', mountain: '⛰️', trend: '📈', rocket: '🚀', star: '⭐' };
 
 export default async function StudentHome() {
   const h = await studentHome();
@@ -74,15 +74,7 @@ export default async function StudentHome() {
         </section>
       )}
 
-      <section className="mt-10">
-        <h2 className="h-section">أوسمتي وشاراتي</h2>
-        {!h.badges.length && <p className="mt-3 muted">لا توجد أوسمة بعد.</p>}
-        <div className="mt-4 flex flex-wrap gap-3">
-          {h.badges.map((b, i) => (
-            <div key={i} className="card-3d flex items-center gap-3 px-4 py-3"><span className="text-2xl">{ICONS[b.icon] ?? '⭐'}</span><span className="font-bold">{b.name_ar}</span></div>
-          ))}
-        </div>
-      </section>
+      <BadgeCase stats={h.stats} goals={h.goals} owned={h.owned} monthName={h.monthName} monthlyWins={h.monthlyWins} />
     </Shell>
   );
 }

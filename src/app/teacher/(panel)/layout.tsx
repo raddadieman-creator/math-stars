@@ -6,7 +6,7 @@ import { signOut } from './actions';
 export const dynamic = 'force-dynamic';
 
 const NAV = [
-  ['/teacher', 'لوحة المتابعة'], ['/teacher/students', 'الطلاب والفصول'], ['/teacher/questions', 'بنك الأسئلة'], ['/teacher/library', 'مكتبة النماذج'],
+  ['/teacher', 'لوحة المتابعة'], ['/teacher/students', 'الطلاب والفصول'], ['/teacher/questions', 'بنك الأسئلة'], ['/teacher/library', 'مكتبة النماذج'], ['/teacher/awards', 'الجوائز'],
   ['/teacher/lessons', 'الدروس المرئية'], ['/teacher/settings', 'الإعدادات والقواعد'],
 ] as const;
 

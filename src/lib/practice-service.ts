@@ -3,7 +3,8 @@ import { supabaseAdmin } from './supabase/admin';
 import { isCorrect, classifyError } from './grading';
 import { decideFeedback, praiseMessage, retryMessage } from './feedback';
 import { updateMastery, INITIAL_MASTERY, DEFAULT_RULES } from './adaptive';
-import { starsForOutcome, rewardsForMasteryChange, isPersonalImprovement, hasPersistence, DEFAULT_REWARDS } from './rewards';
+import { starsForOutcome, rewardsForMasteryChange, isPersonalImprovement, DEFAULT_REWARDS } from './rewards';
+import { awardNewBadges } from './badge-service';
 import type { AdaptiveRules, MasteryState, Outcome, PublicQuestion, Question, RewardRules } from './types';
 
 type DB = ReturnType<typeof supabaseAdmin>;
@@ -124,9 +125,6 @@ export async function submitAnswer(studentId: string, sessionId: string, questio
     starsEarned += g.amount;
     await db.from('star_ledger').insert({ student_id: studentId, amount: g.amount, reason: g.reason, session_id: sessionId });
   }
-  const newBadges: string[] = mc.badges.map((b) => b.code);
-  if (outcome === 'with_hint') newBadges.push('comeback');
-  await awardBadges(db, studentId, newBadges, session.skill_id);
 
   if (action.kind === 'correct') {
     return { kind: 'correct' as const, outcome, message: praiseMessage(tryNo + q.prompt.length + Date.now()), explanation: q.explanation ?? null, starsEarned, masteryStatus: after.status, level: after.level };
@@ -139,23 +137,6 @@ export async function submitAnswer(studentId: string, sessionId: string, questio
   };
 }
 
-async function awardBadges(db: DB, studentId: string, codes: string[], skillId: string | null) {
-  if (!codes.length) return [] as string[];
-  const { data: badges } = await db.from('badges').select('id, code').in('code', codes);
-  const awarded: string[] = [];
-  for (const b of badges ?? []) {
-    // أوسمة الإتقان لكل مهارة، وغيرها مرة واحدة
-    const sk = b.code === 'skill_master' ? skillId : null;
-    let exists = db.from('student_badges').select('badge_id').eq('student_id', studentId).eq('badge_id', b.id);
-    exists = sk ? exists.eq('skill_id', sk) : exists.is('skill_id', null);
-    const { data: ex } = await exists.maybeSingle();
-    if (ex) continue;
-    await db.from('student_badges').insert({ student_id: studentId, badge_id: b.id, skill_id: sk });
-    awarded.push(b.code);
-  }
-  return awarded;
-}
-
 export async function finishSession(studentId: string, sessionId: string) {
   const db = supabaseAdmin();
   const session = await ownSession(db, studentId, sessionId);
@@ -165,7 +146,6 @@ export async function finishSession(studentId: string, sessionId: string) {
   const { data: outs } = await db.from('item_outcomes').select('outcome').eq('session_id', sessionId);
   const current = (outs ?? []).map((o) => o.outcome as Outcome);
   let stars = 0;
-  const badges: string[] = [];
   if (current.length >= 3) {
     stars += rRules.stars_session_complete;
     await db.from('star_ledger').insert({ student_id: studentId, amount: rRules.stars_session_complete, reason: 'إكمال جلسة تدريب', session_id: sessionId });
@@ -178,14 +158,9 @@ export async function finishSession(studentId: string, sessionId: string) {
     if (isPersonalImprovement(current, (po ?? []).map((o) => o.outcome as Outcome))) {
       stars += rRules.stars_personal_improvement;
       await db.from('star_ledger').insert({ student_id: studentId, amount: rRules.stars_personal_improvement, reason: 'تحسن شخصي', session_id: sessionId });
-      badges.push('personal_best');
     }
   }
-  const { data: dates } = await db.from('practice_sessions').select('started_at').eq('student_id', studentId)
-    .gte('started_at', new Date(Date.now() - 8 * 864e5).toISOString());
-  if (hasPersistence((dates ?? []).map((d) => new Date(d.started_at)), new Date())) badges.push('persistence_3');
-  badges.push('first_session');
-  const awarded = await awardBadges(db, studentId, badges, null);
+  const awarded = await awardNewBadges(studentId);
   return {
     items: current.length,
     independent: current.filter((o) => o === 'independent').length,

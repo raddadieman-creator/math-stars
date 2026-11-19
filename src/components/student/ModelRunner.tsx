@@ -7,7 +7,7 @@ import { Suha } from '../Suha';
 import { usePrefs } from '../Prefs';
 
 type Item = PublicQuestion & { cognitive: string };
-interface Result { score: number; total: number; byCog: Record<string, [number, number]>; review: { id: string; ok: boolean; answer: unknown; correctText: string; steps: string[]; intlPct: number | null }[] }
+interface Result { newBadges?: string[]; score: number; total: number; byCog: Record<string, [number, number]>; review: { id: string; ok: boolean; answer: unknown; correctText: string; steps: string[]; intlPct: number | null }[] }
 
 const has = (v: unknown) => v !== undefined && v !== null && v !== '';
 
@@ -41,6 +41,7 @@ export function ModelRunner({ model }: { model: { id: string; title: string; sou
         <div className="card-3d p-6 md:p-8">
           <div className="flex flex-wrap items-center gap-6"><Suha size={90} mood={pct >= 50 ? 'correct' : 'reveal'} />
             <div><p className="text-sm muted">{model.title}</p><p className="text-4xl font-black">{res.score} من {res.total}</p><p className="text-lg font-bold text-aqua-600">{pct}%</p></div></div>
+          {res.newBadges && res.newBadges.length > 0 && <div className="mt-4 rounded-2xl bg-star-300/40 p-4"><p className="font-extrabold">أوسمة جديدة</p><p className="mt-1">{res.newBadges.join('، ')}</p></div>}
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             {['المعرفة', 'التطبيق', 'الاستدلال'].filter((c) => res.byCog[c]).map((c) => (
               <div key={c} className="rounded-xl bg-ink/5 p-3"><p className="text-xs muted">{c}</p><p className="text-xl font-black">{res.byCog[c][0]} من {res.byCog[c][1]}</p></div>

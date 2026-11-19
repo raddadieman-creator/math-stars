@@ -54,7 +54,7 @@ export async function saveRules(f: FormData) {
   const r = await sb.from('reward_rules').update({
     stars_first_try: num(f, 's_first'), stars_after_hint: num(f, 's_hint'), stars_after_reveal: num(f, 's_reveal'),
     stars_session_complete: num(f, 's_session'), stars_skill_mastered: num(f, 's_mastered'),
-    stars_personal_improvement: num(f, 's_improve'), updated_at: new Date().toISOString(), updated_by: staff.id,
+    stars_personal_improvement: num(f, 's_improve'), monthly_sessions: num(f, 'm_sessions') || 8, monthly_models: num(f, 'm_models') || 2, monthly_independent: num(f, 'm_independent') || 30, updated_at: new Date().toISOString(), updated_by: staff.id,
   }).eq('id', 1);
   if (r.error) throw new Error(r.error.message);
   revalidatePath('/teacher/settings');

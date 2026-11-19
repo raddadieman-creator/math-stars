@@ -221,3 +221,35 @@ describe('تغطية المعايير', () => {
     expect(all.length).toBe(115);
   });
 });
+
+import { evaluateBadges, badgeProgress, monthlyProgress, hijriMonth, BADGES, type StudentStats } from '../src/lib/badges';
+describe('الأوسمة', () => {
+  const base: StudentStats = { sessions: 0, masteredStandards: [], modelsCompleted: 0, bestModelPct: 0, officialModelsDone: 0, officialModelsTotal: 6, practiceDaysLast7: 0, solvedAfterHint: 0, improvements: 0, month: { sessions: 0, models: 0, independent: 0 } };
+  it('لا أوسمة في البداية', () => expect(evaluateBadges(base, new Set(), '1448-05')).toEqual([]));
+  it('أوسمة المهام والإتقان والمجال', () => {
+    const s = { ...base, sessions: 6, masteredStandards: [13, 14, 15], modelsCompleted: 1, bestModelPct: 85 };
+    const codes = evaluateBadges(s, new Set(), '1448-05').map((b) => b.code);
+    expect(codes).toEqual(expect.arrayContaining(['first_session', 'sessions_5', 'std_1', 'dom_geometry', 'model_1', 'model_80']));
+    expect(codes).not.toContain('sessions_20');
+    expect(codes).not.toContain('std_5');
+  });
+  it('لا يُمنح الوسام مرتين، ووسام الشهر مرة لكل شهر', () => {
+    const s = { ...base, sessions: 10, month: { sessions: 8, models: 2, independent: 30 } };
+    const first = evaluateBadges(s, new Set(), '1448-05');
+    expect(first.find((b) => b.code === 'monthly_excellence')?.period).toBe('1448-05');
+    const owned = new Set([...first.filter((b) => !b.period).map((b) => b.code), 'monthly_excellence:1448-05']);
+    expect(evaluateBadges(s, owned, '1448-05')).toEqual([]);
+    expect(evaluateBadges(s, owned, '1448-06').map((b) => b.code)).toEqual(['monthly_excellence']);
+  });
+  it('التقدم نحو الأوسمة والتحدي الشهري', () => {
+    const p = badgeProgress({ ...base, sessions: 3 }).find((x) => x.code === 'sessions_5')!;
+    expect(p).toEqual({ code: 'sessions_5', value: 3, target: 5, done: false });
+    expect(monthlyProgress({ ...base, month: { sessions: 8, models: 1, independent: 40 } }).done).toBe(false);
+    expect(BADGES.length).toBe(17);
+  });
+  it('الشهر الهجري', () => {
+    const m = hijriMonth(new Date('2026-11-19T10:00:00Z'));
+    expect(m.key).toMatch(/^14\d\d-\d\d$/);
+    expect(m.name.length).toBeGreaterThan(3);
+  });
+});

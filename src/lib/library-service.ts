@@ -3,6 +3,7 @@ import { supabaseAdmin } from './supabase/admin';
 import { isCorrect } from './grading';
 import type { PublicQuestion, Question } from './types';
 import { COGNITIVE_AR } from './types';
+import { awardNewBadges } from './badge-service';
 
 export const MIX_SIZE = 8;
 
@@ -76,7 +77,8 @@ export async function submitModel(studentId: string, assessmentId: string, answe
   }).select('id').single();
   if (error) throw error;
   await db.from('assessment_responses').insert(review.map((r) => ({ attempt_id: att.id, question_id: r.id, answer: { value: r.answer }, is_correct: r.ok })));
-  return { score, total: review.length, byCog, review };
+  const newBadges = await awardNewBadges(studentId);
+  return { score, total: review.length, byCog, review, newBadges };
 }
 
 /** ملفات المكتبة الظاهرة للطلاب: الرسمية أولًا ثم ملفات المعلم، مع روابط موقعة مؤقتة للملفات المرفوعة */
