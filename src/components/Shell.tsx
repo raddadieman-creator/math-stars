@@ -11,14 +11,14 @@ export function Logo({ small = false }: { small?: boolean }) {
         <text x="20" y="23" textAnchor="middle" fontSize="10" fontWeight="900" fill="#141244">∑</text>
       </svg>
       <span className={small ? 'text-lg' : 'text-xl'}>نجوم الرياضيات</span>
-      <span className="hidden text-sm font-bold text-star-300 sm:inline">Math Stars</span>
+      <span className="hidden text-sm font-bold text-star-600 sm:inline">Math Stars</span>
     </Link>
   );
 }
 
 export function Footer({ school }: { school?: string | null }) {
   return (
-    <footer className="mt-16 border-t border-white/10 py-8 text-center text-sm text-white/60">
+    <footer className="mt-16 border-t border-ink/10 py-8 text-center text-sm text-ink/60">
       {school && <p className="mb-1">{school}</p>}
       <p>تصميم: Research by Eman</p>
     </footer>
@@ -29,7 +29,7 @@ export function Shell({ children, right, school }: { children: React.ReactNode; 
   return (
     <>
       <StarField />
-      <header className="no-print sticky top-0 z-30 border-b border-white/10 bg-night-950/70 backdrop-blur">
+      <header className="no-print sticky top-0 z-30 border-b border-ink/10 bg-white/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
           <Logo />
           <div className="flex flex-wrap items-center gap-3">{right}<PrefsToggles /></div>

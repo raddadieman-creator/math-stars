@@ -41,8 +41,8 @@ export default async function Questions({ searchParams }: { searchParams: Promis
               <div className="mt-2 flex flex-wrap gap-2 text-xs">
                 <span className="chip">{skillName.get(x.skill_id)}</span><span className="chip">{COGNITIVE_AR[x.cognitive as Cognitive]}</span>
                 <span className="chip">الصعوبة {x.difficulty}</span><span className="chip">{QTYPE_AR[x.qtype as QType]}</span>
-                <span className={`chip ${x.status === 'published' ? 'bg-aqua-500/20 text-aqua-300' : ''}`}>{STATUS[x.status]}</span>
-                {x.is_demo && <span className="chip bg-rose-500/20 text-rose-300">تجريبي</span>}
+                <span className={`chip ${x.status === 'published' ? 'bg-aqua-500/20 text-aqua-600' : ''}`}>{STATUS[x.status]}</span>
+                {x.is_demo && <span className="chip bg-rose-500/20 text-rose-600">تجريبي</span>}
               </div>
             </div>
             <div className="flex flex-wrap gap-2"><Link href={`/teacher/questions/${x.id}`} className="chip px-3 py-2">مراجعة وتعديل</Link><StatusButtons id={x.id} status={x.status} /></div>
@@ -58,7 +58,7 @@ export default async function Questions({ searchParams }: { searchParams: Promis
         <div><label className="label">اسم المهارة</label><input name="name_ar" required className="field" /></div>
         <div className="flex items-end"><button className="btn-aqua w-full">إضافة</button></div>
       </form>
-      <p className="text-xs text-white/45">الاستيراد الجماعي من Excel/CSV مع شاشة المراجعة مُدرج في المرحلة الثانية.</p>
+      <p className="text-xs text-ink/45">الاستيراد الجماعي من Excel/CSV مع شاشة المراجعة مُدرج في المرحلة الثانية.</p>
     </div>
   );
 }

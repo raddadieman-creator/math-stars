@@ -21,7 +21,7 @@ export default async function Lessons() {
       </form>
       <div className="grid gap-3 md:grid-cols-2">
         {(data ?? []).map((l) => (
-          <Link key={l.id} href={`/teacher/lessons/${l.id}`} className="panel hover:bg-white/5">
+          <Link key={l.id} href={`/teacher/lessons/${l.id}`} className="panel hover:bg-ink/5">
             <p className="text-lg font-extrabold">{l.title}</p>
             <div className="mt-2 flex gap-2 text-xs"><span className="chip">{ST[l.status]}</span>{l.scenario_source === 'ai_draft' && <span className="chip">مسودة مقترحة آليًا</span>}{l.is_demo && <span className="chip">تجريبي</span>}</div>
           </Link>

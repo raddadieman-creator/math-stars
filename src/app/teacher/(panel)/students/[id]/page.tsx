@@ -46,9 +46,9 @@ export default async function StudentDetail({ params }: { params: Promise<{ id: 
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="panel overflow-x-auto">
           <h2 className="mb-3 text-lg font-extrabold">الإتقان في كل مهارة</h2>
-          <table className="w-full text-sm"><thead className="text-white/60"><tr><th className="text-start">المهارة</th><th>المستوى</th><th>الأسئلة</th><th>الحالة</th></tr></thead>
+          <table className="w-full text-sm"><thead className="text-ink/60"><tr><th className="text-start">المهارة</th><th>المستوى</th><th>الأسئلة</th><th>الحالة</th></tr></thead>
             <tbody>{(mastery ?? []).map((m) => (
-              <tr key={m.skill_id} className="border-t border-white/5 text-center"><td className="py-2 text-start">{names.get(m.skill_id)}</td><td>{m.level}</td><td>{m.items_seen}</td><td>{STATUS_AR[m.status as MasteryStatus]}</td></tr>
+              <tr key={m.skill_id} className="border-t border-ink/5 text-center"><td className="py-2 text-start">{names.get(m.skill_id)}</td><td>{m.level}</td><td>{m.items_seen}</td><td>{STATUS_AR[m.status as MasteryStatus]}</td></tr>
             ))}</tbody></table>
           {!mastery?.length && <p className="muted">لم تبدأ التدريب بعد.</p>}
         </div>

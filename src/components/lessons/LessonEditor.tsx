@@ -120,7 +120,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
             : <span className="text-xs muted">الاقتراح الآلي غير مفعّل (يتطلب مفتاح Gemini). يمكن بناء المشاهد يدويًا.</span>}
         </div>
         <div className="flex flex-wrap gap-2">
-          {TEMPLATES.map((t) => <button key={t.key} onClick={() => setScenes((s) => [...s, newScene(t.key as Template)])} className="chip px-3 py-2 hover:bg-white/10" title={t.use}>+ {t.name}</button>)}
+          {TEMPLATES.map((t) => <button key={t.key} onClick={() => setScenes((s) => [...s, newScene(t.key as Template)])} className="chip px-3 py-2 hover:bg-ink/5" title={t.use}>+ {t.name}</button>)}
         </div>
         {l.scenario.scenes.map((s, i) => (
           <SceneEditor key={s.id} scene={s} index={i} lessonId={l.id}
@@ -136,7 +136,7 @@ export function LessonEditor({ lesson, skills, aiEnabled }: { lesson: Lesson; sk
       </section>
 
       <div className="panel sticky bottom-3 z-20 flex flex-wrap items-center justify-between gap-3">
-        <div>{busy && <span className="text-star-300">{busy}</span>}{msg && <span className={msg.t === 'ok' ? 'text-aqua-300' : 'text-rose-300'}>{msg.m}</span>}</div>
+        <div>{busy && <span className="text-star-600">{busy}</span>}{msg && <span className={msg.t === 'ok' ? 'text-aqua-600' : 'text-rose-600'}>{msg.m}</span>}</div>
         <div className="flex flex-wrap gap-2">
           <button disabled={pending || !!busy} onClick={() => start(async () => { await doSave(); })} className="btn-ghost">حفظ</button>
           {l.status !== 'published'
@@ -152,10 +152,10 @@ function SceneEditor({ scene, index, lessonId, onChange, onMove, onDelete }: { s
   const tname = TEMPLATES.find((t) => t.key === scene.template)?.name;
   const data = (patch: object) => onChange({ ...scene, data: { ...scene.data, ...patch } } as Scene);
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[.03] p-4">
+    <div className="rounded-2xl border border-ink/10 bg-ink/[.025] p-4">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="font-extrabold">مشهد {index + 1} · <span className="text-star-300">{tname}</span></p>
-        <div className="flex gap-2"><button className="chip" onClick={() => onMove(-1)}>▲</button><button className="chip" onClick={() => onMove(1)}>▼</button><button className="chip text-rose-300" onClick={onDelete}>حذف</button></div>
+        <p className="font-extrabold">مشهد {index + 1} · <span className="text-star-600">{tname}</span></p>
+        <div className="flex gap-2"><button className="chip" onClick={() => onMove(-1)}>▲</button><button className="chip" onClick={() => onMove(1)}>▼</button><button className="chip text-rose-600" onClick={onDelete}>حذف</button></div>
       </div>
       <div className="grid gap-3 md:grid-cols-[2fr_1fr]">
         <input value={scene.title} onChange={(e) => onChange({ ...scene, title: e.target.value })} className="field" placeholder="عنوان المشهد" />

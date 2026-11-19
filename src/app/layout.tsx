@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'نجوم الرياضيات | Math Stars',
   description: 'منصة تدريب تفاعلية في الرياضيات لطالبات الصف الثاني المتوسط استعدادًا لدراسة TIMSS 2027',
 };
-export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#141244' };
+export const viewport: Viewport = { width: 'device-width', initialScale: 1, themeColor: '#fbf8ff' };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

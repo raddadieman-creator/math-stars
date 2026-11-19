@@ -19,7 +19,7 @@ export default async function StudentLesson({ params }: { params: Promise<{ id: 
     if (data?.signedUrl) urls[s.id] = data.signedUrl;
   }
   return (
-    <Shell right={<Link href="/student" className="chip hover:bg-white/10">صفحتي</Link>}>
+    <Shell right={<Link href="/student" className="chip hover:bg-ink/5">صفحتي</Link>}>
       <h1 className="mb-4 text-3xl font-black">{l.title}</h1>
       <ScenePlayer scenario={parsed.data} audioUrls={urls} />
       {l.skill_id && <div className="mt-6 text-center"><Link href={`/student/practice/${l.skill_id}`} className="btn-aqua">انتقلي إلى التدريب على الدرس</Link></div>}

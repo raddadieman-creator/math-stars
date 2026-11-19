@@ -2,21 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: dark; }
-html, body { background: #0b0a2a; }
+:root { color-scheme: light; }
+html, body { background: #fbf8ff; }
 body {
-  color: #f4f2ff;
+  color: #2b2457;
   background:
-    radial-gradient(1200px 600px at 85% -10%, rgba(240, 86, 154, .22), transparent 60%),
-    radial-gradient(900px 500px at 0% 20%, rgba(63, 220, 200, .16), transparent 60%),
-    linear-gradient(180deg, #141244 0%, #0b0a2a 70%);
+    radial-gradient(1000px 520px at 90% -10%, rgba(255, 134, 181, .20), transparent 60%),
+    radial-gradient(900px 520px at 0% 15%, rgba(63, 220, 200, .18), transparent 60%),
+    radial-gradient(900px 600px at 50% 110%, rgba(255, 208, 77, .20), transparent 60%),
+    linear-gradient(180deg, #fbf8ff 0%, #fffdf7 100%);
   background-attachment: fixed;
   min-height: 100vh;
 }
 
 /* بطاقات بعمق ثلاثي الأبعاد */
 .card-3d {
-  @apply rounded-3xl border border-white/10 bg-white/[.06] backdrop-blur-md shadow-card3d;
+  @apply rounded-3xl border border-ink/10 bg-white shadow-card3d;
   transform-style: preserve-3d;
   transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
 }
@@ -29,20 +30,21 @@ body {
 .btn-star { @apply btn bg-gradient-to-b from-star-300 to-star-500 text-night-950; box-shadow: 0 -5px 0 rgba(0,0,0,.18) inset, 0 10px 24px -10px rgba(246,184,26,.8); }
 .btn-aqua { @apply btn bg-gradient-to-b from-aqua-300 to-aqua-500 text-night-950; box-shadow: 0 -5px 0 rgba(0,0,0,.18) inset, 0 10px 24px -10px rgba(20,184,166,.8); }
 .btn-rose { @apply btn bg-gradient-to-b from-rose-300 to-rose-500 text-night-950; box-shadow: 0 -5px 0 rgba(0,0,0,.18) inset, 0 10px 24px -10px rgba(240,86,154,.8); }
-.btn-ghost { @apply btn border border-white/20 bg-white/5 text-white hover:bg-white/10; }
+.btn-ghost { @apply btn border border-ink/15 bg-white text-ink hover:bg-ink/5; box-shadow: 0 -4px 0 rgba(43,36,87,.06) inset, 0 8px 18px -12px rgba(43,36,87,.4); }
 
-.field { @apply w-full rounded-xl border border-white/15 bg-night-950/60 px-4 py-3 text-base text-white placeholder:text-white/40 focus:border-star-400 focus:outline-none; }
-.label { @apply mb-1 block text-sm font-semibold text-white/80; }
-.chip { @apply inline-flex items-center rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold; }
+.field { @apply w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-base text-ink placeholder:text-ink/40 focus:border-star-500 focus:outline-none; }
+.label { @apply mb-1 block text-sm font-semibold text-ink/80; }
+.chip { @apply inline-flex items-center rounded-full border border-ink/15 bg-white px-3 py-1 text-xs font-semibold; }
 .h-section { @apply text-2xl md:text-3xl font-extrabold; }
-.muted { @apply text-white/65; }
+.muted { @apply text-ink/65; }
 
-/* حقول التعديل في لوحة المعلمة بخلفية فاتحة للقراءة الطويلة */
-.panel { @apply rounded-2xl border border-white/10 bg-night-900/70 p-5; }
+.panel { @apply rounded-2xl border border-ink/10 bg-white p-5; box-shadow: 0 14px 30px -22px rgba(43,36,87,.35); }
 
 /* نجوم الخلفية */
-.starfield span { position: absolute; border-radius: 9999px; background: #fff; animation: twinkle 3.5s ease-in-out infinite; }
-@keyframes twinkle { 0%,100% { opacity: .25; transform: scale(.8);} 50% { opacity: 1; transform: scale(1.2);} }
+.starfield span { position: absolute; border-radius: 9999px; background: #f6b81a; opacity: .5; animation: twinkle 3.5s ease-in-out infinite; }
+.starfield span:nth-child(3n) { background: #ff86b5; }
+.starfield span:nth-child(3n+1) { background: #3fdcc8; }
+@keyframes twinkle { 0%,100% { opacity: .2; transform: scale(.8);} 50% { opacity: .7; transform: scale(1.3);} }
 @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
 .floaty { animation: floaty 5s ease-in-out infinite; }
 

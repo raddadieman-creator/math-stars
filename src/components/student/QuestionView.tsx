@@ -22,7 +22,7 @@ export function QuestionView({ q, disabled, onChange }: { q: PublicQuestion; dis
       <div className="grid gap-3 sm:grid-cols-2">
         {q.options.map((o) => (
           <button key={o.id} disabled={disabled} onClick={() => setVal(o.id)}
-            className={`card-3d min-h-[64px] px-5 py-4 text-start text-xl font-bold transition ${val === o.id ? 'ring-2 ring-star-400 bg-star-400/15' : 'hover:bg-white/10'}`}>
+            className={`card-3d min-h-[64px] px-5 py-4 text-start text-xl font-bold transition ${val === o.id ? 'ring-2 ring-star-400 bg-star-400/15' : 'hover:bg-ink/5'}`}>
             {o.image && <img src={o.image} alt="" className="mb-2 max-h-32 rounded-lg" />}
             <span dir="auto">{o.text}</span>
           </button>
@@ -35,7 +35,7 @@ export function QuestionView({ q, disabled, onChange }: { q: PublicQuestion; dis
       <div className="grid grid-cols-2 gap-3">
         {[{ v: true, t: 'صواب ✓' }, { v: false, t: 'خطأ ✗' }].map((o) => (
           <button key={String(o.v)} disabled={disabled} onClick={() => setVal(o.v)}
-            className={`card-3d min-h-[72px] text-2xl font-black ${val === o.v ? 'ring-2 ring-star-400 bg-star-400/15' : 'hover:bg-white/10'}`}>{o.t}</button>
+            className={`card-3d min-h-[72px] text-2xl font-black ${val === o.v ? 'ring-2 ring-star-400 bg-star-400/15' : 'hover:bg-ink/5'}`}>{o.t}</button>
         ))}
       </div>
     );

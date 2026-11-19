@@ -14,7 +14,7 @@ const COGNITIVE = [
 ];
 
 function Pending({ what }: { what: string }) {
-  return <span className="text-white/45">({what} — تُضاف من لوحة الإعدادات)</span>;
+  return <span className="text-ink/45">({what} — تُضاف من لوحة الإعدادات)</span>;
 }
 
 export default async function Home() {
@@ -40,7 +40,7 @@ export default async function Home() {
           </div>
           <h1 className="text-4xl font-black leading-tight md:text-6xl">
             نجوم الرياضيات
-            <span className="mt-2 block bg-gradient-to-l from-star-300 via-rose-300 to-aqua-300 bg-clip-text text-2xl text-transparent md:text-3xl">
+            <span className="mt-2 block bg-gradient-to-l from-star-500 via-rose-500 to-aqua-500 bg-clip-text text-2xl text-transparent md:text-3xl">
               {s.slogan}
             </span>
           </h1>
@@ -70,10 +70,10 @@ export default async function Home() {
 
       {/* الرؤية والرسالة والأهداف */}
       <section className="mt-12 grid gap-4 md:grid-cols-3">
-        <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-star-300">الرؤية</h2><p className="mt-2 leading-8">{s.vision ?? <Pending what="الرؤية" />}</p></div>
-        <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-aqua-300">الرسالة</h2><p className="mt-2 leading-8">{s.mission ?? <Pending what="الرسالة" />}</p></div>
+        <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-star-600">الرؤية</h2><p className="mt-2 leading-8">{s.vision ?? <Pending what="الرؤية" />}</p></div>
+        <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-aqua-600">الرسالة</h2><p className="mt-2 leading-8">{s.mission ?? <Pending what="الرسالة" />}</p></div>
         <div className="card-3d p-6">
-          <h2 className="text-xl font-extrabold text-rose-300">الأهداف</h2>
+          <h2 className="text-xl font-extrabold text-rose-600">الأهداف</h2>
           {s.goals.length ? <ul className="mt-2 list-disc space-y-1 pr-5 leading-7">{s.goals.map((g) => <li key={g}>{g}</li>)}</ul> : <p className="mt-2"><Pending what="الأهداف" /></p>}
         </div>
       </section>
@@ -89,11 +89,11 @@ export default async function Home() {
         <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {domains.map((d) => (
             <div key={d.id} className="card-3d tilt p-5">
-              <div className="flex items-baseline justify-between"><p className="text-lg font-extrabold">{d.name_ar}</p><span className="text-2xl font-black text-star-300">{d.target_percent}%</span></div>
-              <p className="text-xs text-white/50">{d.name_en}</p>
+              <div className="flex items-baseline justify-between"><p className="text-lg font-extrabold">{d.name_ar}</p><span className="text-2xl font-black text-star-600">{d.target_percent}%</span></div>
+              <p className="text-xs text-ink/50">{d.name_en}</p>
               <ul className="mt-3 space-y-1 text-sm">
                 {[...d.topic_areas].sort((a, b) => a.sort_order - b.sort_order).map((t) => (
-                  <li key={t.id} className="flex justify-between gap-2"><span>{t.name_ar}</span><span className="text-white/50">{t.target_percent}%</span></li>
+                  <li key={t.id} className="flex justify-between gap-2"><span>{t.name_ar}</span><span className="text-ink/50">{t.target_percent}%</span></li>
                 ))}
               </ul>
             </div>
@@ -104,12 +104,12 @@ export default async function Home() {
         <div className="mt-3 grid gap-4 md:grid-cols-3">
           {COGNITIVE.map((c) => (
             <div key={c.en} className="card-3d p-5">
-              <div className="flex items-baseline justify-between"><p className="text-lg font-extrabold">{c.name}</p><span className="text-2xl font-black text-aqua-300">{c.pct}%</span></div>
+              <div className="flex items-baseline justify-between"><p className="text-lg font-extrabold">{c.name}</p><span className="text-2xl font-black text-aqua-600">{c.pct}%</span></div>
               <p className="mt-2 text-sm muted">{c.desc}</p>
             </div>
           ))}
         </div>
-        <p className="mt-3 text-xs text-white/45">
+        <p className="mt-3 text-xs text-ink/45">
           المصدر: TIMSS 2027 Assessment Frameworks — IEA / TIMSS &amp; PIRLS International Study Center،{' '}
           <a className="underline" href="https://timss2027.org/frameworks" target="_blank" rel="noreferrer">timss2027.org/frameworks</a>
         </p>
@@ -145,7 +145,7 @@ export default async function Home() {
               <p className="text-3xl">{g.icon}</p>
               <p className="mt-2 font-extrabold">{g.name}</p>
               <p className="mt-1 text-sm muted">{g.desc}</p>
-              <span className="chip mt-3 text-white/60">{g.ready ? 'متاحة' : 'قيد البناء'}</span>
+              <span className="chip mt-3 text-ink/60">{g.ready ? 'متاحة' : 'قيد البناء'}</span>
             </div>
           ))}
         </div>
@@ -159,8 +159,8 @@ export default async function Home() {
           {board.length ? (
             <ol className="mt-4 space-y-2">
               {board.map((b, i) => (
-                <li key={i} className="flex items-center justify-between rounded-xl bg-white/5 px-4 py-2">
-                  <span className="font-bold">{i + 1}. {b.nickname}</span><span className="text-star-300">★ {b.stars}</span>
+                <li key={i} className="flex items-center justify-between rounded-xl bg-ink/5 px-4 py-2">
+                  <span className="font-bold">{i + 1}. {b.nickname}</span><span className="text-star-600">★ {b.stars}</span>
                 </li>
               ))}
             </ol>
@@ -174,7 +174,7 @@ export default async function Home() {
                 ['طالبات شاركن', stats.participants], ['أسئلة أُجيب عنها', stats.answered_items],
                 ['مهارات أُتقنت', stats.mastered_skills], ['أسئلة منشورة', stats.published_questions],
               ].map(([k, v]) => (
-                <div key={String(k)} className="rounded-xl bg-white/5 p-3"><dt className="text-xs muted">{k}</dt><dd className="text-2xl font-black">{v}</dd></div>
+                <div key={String(k)} className="rounded-xl bg-ink/5 p-3"><dt className="text-xs muted">{k}</dt><dd className="text-2xl font-black">{v}</dd></div>
               ))}
             </dl>
           ) : <p className="mt-4 muted">تظهر بعد ربط قاعدة البيانات.</p>}

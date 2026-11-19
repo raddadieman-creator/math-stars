@@ -33,10 +33,10 @@ export default async function Students() {
             <p className="text-sm muted">المعلمات: {(c.class_teachers as { teacher_id: string }[]).map((t) => tName.get(t.teacher_id)).join('، ') || '—'}</p>
           </div>
           <table className="mt-3 w-full min-w-[560px] text-sm">
-            <thead className="text-white/60"><tr><th className="text-start">الاسم</th><th className="text-start">الاسم المستعار</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <thead className="text-ink/60"><tr><th className="text-start">الاسم</th><th className="text-start">الاسم المستعار</th><th>الحالة</th><th>إجراءات</th></tr></thead>
             <tbody>
               {(students ?? []).filter((s) => s.class_id === c.id).map((s) => (
-                <tr key={s.id} className="border-t border-white/5">
+                <tr key={s.id} className="border-t border-ink/5">
                   <td className="py-2">{s.full_name}{s.is_demo && <span className="chip mr-2 text-[10px]">تجريبية</span>}</td>
                   <td>{s.nickname}</td>
                   <td className="text-center">{s.is_active ? 'نشطة' : 'موقوفة'}</td>
@@ -48,7 +48,7 @@ export default async function Students() {
         </div>
       ))}
       {!classes?.length && <p className="panel muted">لا توجد فصول مرتبطة بحسابك.</p>}
-      <p className="text-xs text-white/45">رمز الدخول يظهر مرة واحدة عند الإنشاء أو إعادة التعيين، ولا يُخزن نصًا في قاعدة البيانات.</p>
+      <p className="text-xs text-ink/45">رمز الدخول يظهر مرة واحدة عند الإنشاء أو إعادة التعيين، ولا يُخزن نصًا في قاعدة البيانات.</p>
     </div>
   );
 }

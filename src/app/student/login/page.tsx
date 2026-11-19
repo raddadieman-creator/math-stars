@@ -30,20 +30,20 @@ export default function StudentLogin() {
         <p className="mt-1 muted">اكتبي رمز الدخول المكوّن من ستة أرقام</p>
         <div className="mt-6 flex justify-center gap-2" dir="ltr" aria-live="polite">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className={`flex h-14 w-11 items-center justify-center rounded-xl border text-2xl font-black ${code[i] ? 'border-star-400 bg-star-400/15' : 'border-white/15 bg-white/5'}`}>
+            <div key={i} className={`flex h-14 w-11 items-center justify-center rounded-xl border text-2xl font-black ${code[i] ? 'border-star-400 bg-star-400/15' : 'border-ink/15 bg-ink/5'}`}>
               {code[i] ? '●' : ''}
             </div>
           ))}
         </div>
         <div className="mx-auto mt-6 grid max-w-xs grid-cols-3 gap-3" dir="ltr">
           {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((d) => (
-            <button key={d} onClick={() => press(d)} className="card-3d h-16 text-2xl font-black hover:bg-white/10">{d}</button>
+            <button key={d} onClick={() => press(d)} className="card-3d h-16 text-2xl font-black hover:bg-ink/5">{d}</button>
           ))}
-          <button onClick={() => setCode((c) => c.slice(0, -1))} className="card-3d h-16 text-lg font-bold hover:bg-white/10" aria-label="حذف">⌫</button>
-          <button onClick={() => press('0')} className="card-3d h-16 text-2xl font-black hover:bg-white/10">0</button>
+          <button onClick={() => setCode((c) => c.slice(0, -1))} className="card-3d h-16 text-lg font-bold hover:bg-ink/5" aria-label="حذف">⌫</button>
+          <button onClick={() => press('0')} className="card-3d h-16 text-2xl font-black hover:bg-ink/5">0</button>
           <button onClick={submit} disabled={code.length !== 6 || busy} className="btn-star h-16 rounded-3xl">دخول</button>
         </div>
-        {msg && <p className="mt-4 rounded-xl bg-rose-500/15 p-3 text-rose-300" role="alert">{msg}</p>}
+        {msg && <p className="mt-4 rounded-xl bg-rose-500/15 p-3 text-rose-600" role="alert">{msg}</p>}
       </div>
     </Shell>
   );

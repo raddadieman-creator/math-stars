@@ -39,22 +39,22 @@ export function ScenePlayer({ scenario, audioUrls = {} }: { scenario: Scenario; 
 
   return (
     <div className="card-3d overflow-hidden">
-      <div className="relative aspect-video w-full bg-gradient-to-b from-night-800 to-night-950 p-4 md:p-8">
-        <p className="absolute right-4 top-3 text-sm font-bold text-white/60">{scene.title}</p>
+      <div className="relative aspect-video w-full bg-gradient-to-b from-[#f3efff] to-[#fffdf7] p-4 md:p-8">
+        <p className="absolute right-4 top-3 text-sm font-bold text-ink/60">{scene.title}</p>
         <AnimatePresence mode="wait">
           <motion.div key={`${scene.id}-${playing}`} className="h-full" initial={{ opacity: 0, rotateY: 15 }} animate={{ opacity: 1, rotateY: 0 }} exit={{ opacity: 0, rotateY: -15 }} transition={{ duration: calm ? 0 : 0.4 }}>
             <SceneView scene={scene} d={playing || i > 0 ? d : d} onAnswered={() => setAnswered(true)} />
           </motion.div>
         </AnimatePresence>
       </div>
-      {scene.caption && <p className="border-t border-white/10 bg-night-950/70 px-5 py-3 text-lg leading-8" dir="auto">{scene.caption}</p>}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-3 no-print">
+      {scene.caption && <p className="border-t border-ink/10 bg-white/85 px-5 py-3 text-lg leading-8" dir="auto">{scene.caption}</p>}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-ink/10 px-4 py-3 no-print">
         <div className="flex gap-2">
           <button className="chip px-3 py-2" disabled={i === 0} onClick={() => setI((x) => x - 1)}>السابق</button>
           <button className="btn-star min-h-0 px-5 py-2 text-base" onClick={() => setPlaying((p) => !p)}>{playing ? 'إيقاف مؤقت' : 'تشغيل'}</button>
           <button className="chip px-3 py-2" disabled={last || (scene.template === 'question' && !answered)} onClick={() => setI((x) => x + 1)}>التالي</button>
         </div>
-        <div className="flex gap-1" aria-label="المشاهد">{scenario.scenes.map((s, k) => <button key={s.id} onClick={() => setI(k)} className={`h-2.5 w-6 rounded-full ${k === i ? 'bg-star-400' : 'bg-white/20'}`} aria-label={`المشهد ${k + 1}`} />)}</div>
+        <div className="flex gap-1" aria-label="المشاهد">{scenario.scenes.map((s, k) => <button key={s.id} onClick={() => setI(k)} className={`h-2.5 w-6 rounded-full ${k === i ? 'bg-star-400' : 'bg-ink/15'}`} aria-label={`المشهد ${k + 1}`} />)}</div>
       </div>
     </div>
   );

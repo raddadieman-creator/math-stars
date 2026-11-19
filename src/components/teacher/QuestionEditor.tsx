@@ -50,7 +50,7 @@ export function QuestionEditor({ skills, initial }: { skills: { id: string; code
       </div>
       <div className="panel flex flex-wrap items-end justify-between gap-3">
         <div><label className="label">الحالة</label><select name="status" defaultValue={initial?.status ?? 'draft'} className="field"><option value="draft">مسودة</option><option value="review">قيد المراجعة</option><option value="published">منشور (يظهر للطالبات)</option></select></div>
-        {state?.error && <p className="text-rose-300" role="alert">{state.error}</p>}
+        {state?.error && <p className="text-rose-600" role="alert">{state.error}</p>}
         <button disabled={pending} className="btn-star">حفظ</button>
       </div>
     </form>

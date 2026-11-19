@@ -11,7 +11,7 @@ export default async function Practice({ params }: { params: Promise<{ skillId: 
   const { data: skill } = await db.from('skills').select('id, name_ar').eq('id', skillId).single();
   if (!skill) return <Shell><p>المهارة غير موجودة.</p></Shell>;
   return (
-    <Shell right={<Link href="/student" className="chip hover:bg-white/10">صفحتي</Link>}>
+    <Shell right={<Link href="/student" className="chip hover:bg-ink/5">صفحتي</Link>}>
       <PracticeRunner skillId={skill.id} skillName={skill.name_ar} />
     </Shell>
   );

@@ -15,7 +15,7 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
         <div className="flex h-full flex-col items-center justify-center gap-4 text-center">
           <motion.div initial={{ scale: 0.4, rotate: -20, opacity: 0 }} animate={{ scale: 1, rotate: 0, opacity: 1 }} transition={{ duration: d ? 0.8 : 0 }}><Suha size={120} mood="cheer" /></motion.div>
           <motion.h2 initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: d * 0.6 }} className="text-4xl font-black md:text-5xl">{scene.title}</motion.h2>
-          {scene.data.subtitle && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: d * 1.2 }} className="text-xl text-star-300">{scene.data.subtitle}</motion.p>}
+          {scene.data.subtitle && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: d * 1.2 }} className="text-xl text-star-600">{scene.data.subtitle}</motion.p>}
         </div>
       );
     case 'cycle': {
@@ -23,8 +23,8 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
       const R = 140;
       return (
         <svg viewBox="-220 -200 440 400" className="h-full w-full">
-          <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff" /></marker></defs>
-          <circle r={R} fill="none" stroke="rgba(255,255,255,.12)" strokeWidth="2" strokeDasharray="6 10" />
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#2b2457" /></marker></defs>
+          <circle r={R} fill="none" stroke="rgba(43,36,87,.15)" strokeWidth="2" strokeDasharray="6 10" />
           {scene.data.stages.map((st, i) => {
             const a = (-Math.PI / 2) - (i * 2 * Math.PI) / n; // عكس عقارب الساعة يناسب القراءة من اليمين
             const x = R * Math.cos(a), y = R * Math.sin(a);
@@ -36,7 +36,7 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
               <g key={i}>
                 <motion.path initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }} transition={{ delay: d * (i + 0.7), duration: d ? 0.6 : 0 }}
                   d={`M${p1[0]} ${p1[1]} A ${R} ${R} 0 0 0 ${p2[0]} ${p2[1]}`}
-                  fill="none" stroke="#fff" strokeWidth="3" markerEnd="url(#arr)" />
+                  fill="none" stroke="#2b2457" strokeWidth="3" markerEnd="url(#arr)" />
                 <motion.g initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: d * i, type: 'spring' }} style={{ originX: `${x}px`, originY: `${y}px` }}>
                   <circle cx={x} cy={y} r="46" fill={COLORS[i % COLORS.length]} />
                   <text x={x} y={y + 6} textAnchor="middle" fontSize="17" fontWeight="800" fill="#141244">{st.length > 12 ? st.slice(0, 12) + '…' : st}</text>
@@ -70,10 +70,10 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
           {[fmt(scene.data.start, true), ...scene.data.moves.flatMap((m) => ['+', fmt(m, true)]), '=', fmt(pts[pts.length - 1], false)].map((t, k) => <span key={k} dir="ltr">{t}</span>)}
         </motion.div>
         <svg viewBox="-330 -110 660 200" className="w-full flex-1" style={{ direction: 'ltr' }}>
-          <line x1={-W / 2 - 10} x2={W / 2 + 10} y1="40" y2="40" stroke="#fff" strokeWidth="3" />
+          <line x1={-W / 2 - 10} x2={W / 2 + 10} y1="40" y2="40" stroke="#2b2457" strokeWidth="3" />
           {Array.from({ length: hi - lo + 1 }, (_, i) => lo + i).map((v) => (
-            <g key={v}><line x1={X(v)} x2={X(v)} y1="32" y2="48" stroke="#fff" strokeWidth={v === 0 ? 3 : 1.5} />
-              {(hi - lo <= 24 || v % 2 === 0) && <text x={X(v)} y="72" textAnchor="middle" fontSize="15" fill={v === 0 ? '#ffd04d' : '#fff'} fontWeight="700">{fmt(v, false)}</text>}</g>
+            <g key={v}><line x1={X(v)} x2={X(v)} y1="32" y2="48" stroke="#2b2457" strokeWidth={v === 0 ? 3 : 1.5} />
+              {(hi - lo <= 24 || v % 2 === 0) && <text x={X(v)} y="72" textAnchor="middle" fontSize="15" fill={v === 0 ? '#d98e04' : '#2b2457'} fontWeight="700">{fmt(v, false)}</text>}</g>
           ))}
           {scene.data.moves.map((m, i) => {
             const a = X(pts[i]), b = X(pts[i + 1]);
@@ -100,14 +100,14 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
               <line x1="-150" x2="150" y1="20" y2="20" stroke="#ffd04d" strokeWidth="6" strokeLinecap="round" />
               <rect x="-185" y="22" width="90" height="10" rx="4" fill="#ff86b5" /><rect x="95" y="22" width="90" height="10" rx="4" fill="#3fdcc8" />
             </motion.g>
-            <path d="M0 20 L-30 140 L30 140 Z" fill="#2d2880" stroke="#fff" strokeOpacity=".3" />
+            <path d="M0 20 L-30 140 L30 140 Z" fill="#d9d1ff" stroke="#2b2457" strokeOpacity=".3" />
           </svg>
           <div className="w-full max-w-xl space-y-2" dir="rtl">
             {states.map((s, i) => (
               <motion.div key={i} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: d * i * 1.8 }}
                 className="card-3d flex items-center justify-between gap-3 px-5 py-3 text-2xl font-black" dir="rtl">
-                <span className="text-aqua-300">{s.left}</span><span>=</span><span className="text-rose-300">{s.right}</span>
-                {s.note && <span className="text-sm font-bold text-white/70" dir="rtl">{s.note}</span>}
+                <span className="text-aqua-600">{s.left}</span><span>=</span><span className="text-rose-600">{s.right}</span>
+                {s.note && <span className="text-sm font-bold text-ink/70" dir="rtl">{s.note}</span>}
               </motion.div>
             ))}
           </div>
@@ -121,12 +121,12 @@ export function SceneView({ scene, d, onAnswered }: { scene: Scene; d: number; o
           <svg viewBox="0 0 102 102" className="h-full max-h-full" style={{ aspectRatio: '1' }}>
             {Array.from({ length: 100 }, (_, i) => (
               <motion.rect key={i} x={1 + (i % 10) * 10} y={1 + Math.floor(i / 10) * 10} width="9" height="9" rx="1.5"
-                initial={{ fill: 'rgba(255,255,255,.12)' }} animate={{ fill: i < filled ? '#ffd04d' : 'rgba(255,255,255,.12)' }}
+                initial={{ fill: 'rgba(43,36,87,.15)' }} animate={{ fill: i < filled ? '#ffd04d' : 'rgba(43,36,87,.15)' }}
                 transition={{ delay: i < filled ? d * 0.04 * i : 0, duration: d ? 0.2 : 0 }} />
             ))}
           </svg>
           <div className="text-center">
-            <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: d * 0.04 * filled + d }} className="text-5xl font-black text-star-300">{scene.data.percent}%</motion.p>
+            <motion.p initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: d * 0.04 * filled + d }} className="text-5xl font-black text-star-600">{scene.data.percent}%</motion.p>
             {scene.data.label && <p className="mt-2 text-xl">{scene.data.label}</p>}
           </div>
         </div>
@@ -146,10 +146,10 @@ function QuestionScene({ scene, onAnswered }: { scene: Extract<Scene, { template
       <div className="grid gap-3 sm:grid-cols-2">
         {scene.data.options.map((o, i) => (
           <button key={i} onClick={() => { if (picked === null || !ok) { setPicked(i); if (i === scene.data.correct) onAnswered?.(); } }}
-            className={`card-3d px-4 py-4 text-xl font-bold ${picked === i ? (ok ? 'ring-2 ring-aqua-400' : 'ring-2 ring-rose-400') : 'hover:bg-white/10'}`}>{o}</button>
+            className={`card-3d px-4 py-4 text-xl font-bold ${picked === i ? (ok ? 'ring-2 ring-aqua-400' : 'ring-2 ring-rose-400') : 'hover:bg-ink/5'}`}>{o}</button>
         ))}
       </div>
-      {picked !== null && <p className={ok ? 'text-aqua-300' : 'text-rose-300'}>{ok ? `أحسنتِ. ${scene.data.explain}` : 'حاولي مرة أخرى.'}</p>}
+      {picked !== null && <p className={ok ? 'text-aqua-600' : 'text-rose-600'}>{ok ? `أحسنتِ. ${scene.data.explain}` : 'حاولي مرة أخرى.'}</p>}
     </div>
   );
 }

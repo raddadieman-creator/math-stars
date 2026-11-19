@@ -48,8 +48,8 @@ export function PrefsToggles() {
   const { calm, muted, toggleCalm, toggleMuted } = usePrefs();
   return (
     <div className="flex gap-2 no-print">
-      <button onClick={toggleMuted} className="chip hover:bg-white/10" aria-pressed={!muted}>{muted ? '🔇 الصوت مكتوم' : '🔊 المؤثرات'}</button>
-      <button onClick={toggleCalm} className="chip hover:bg-white/10" aria-pressed={calm}>{calm ? '◐ الوضع المبسط' : '✦ الحركة'}</button>
+      <button onClick={toggleMuted} className="chip hover:bg-ink/5" aria-pressed={!muted}>{muted ? '🔇 الصوت مكتوم' : '🔊 المؤثرات'}</button>
+      <button onClick={toggleCalm} className="chip hover:bg-ink/5" aria-pressed={calm}>{calm ? '◐ الوضع المبسط' : '✦ الحركة'}</button>
     </div>
   );
 }

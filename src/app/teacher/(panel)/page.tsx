@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 function Kpi({ label, value, hint }: { label: string; value: string | number | null; hint?: string }) {
   return (
-    <div className="panel"><p className="text-xs muted">{label}</p><p className="mt-1 text-3xl font-black">{value ?? '—'}</p>{hint && <p className="text-xs text-white/45">{hint}</p>}</div>
+    <div className="panel"><p className="text-xs muted">{label}</p><p className="mt-1 text-3xl font-black">{value ?? '—'}</p>{hint && <p className="text-xs text-ink/45">{hint}</p>}</div>
   );
 }
 
@@ -65,27 +65,27 @@ export default async function Overview({ searchParams }: { searchParams: Promise
       <div className="panel overflow-x-auto">
         <h2 className="mb-3 text-lg font-extrabold">الطالبات</h2>
         <table className="w-full min-w-[640px] text-sm">
-          <thead className="text-white/60"><tr className="border-b border-white/10 text-start">
+          <thead className="text-ink/60"><tr className="border-b border-ink/10 text-start">
             <th className="py-2 text-start">الطالبة</th><th>الجلسات</th><th>الأسئلة</th><th>من المحاولة الأولى</th><th>بعد مساعدة</th><th>إعادة التدريب</th><th>الحالة</th>
           </tr></thead>
           <tbody>
             {students.map((s) => {
               const ind = studentIndicators(outcomes.filter((o) => o.student_id === s.id));
               return (
-                <tr key={s.id} className="border-b border-white/5 text-center">
+                <tr key={s.id} className="border-b border-ink/5 text-center">
                   <td className="py-2 text-start"><Link className="font-bold underline-offset-4 hover:underline" href={`/teacher/students/${s.id}`}>{s.full_name}</Link>{s.is_demo && <span className="chip mr-2 text-[10px]">تجريبية</span>}</td>
                   <td>{ind.sessions}</td><td>{ind.itemsAnswered}</td>
                   <td>{ind.firstTryPct ?? '—'}{ind.firstTryPct !== null && '%'}</td>
                   <td>{ind.withHelpPct ?? '—'}{ind.withHelpPct !== null && '%'}</td>
                   <td>{ind.retrainCount}</td>
-                  <td>{supportSet.has(s.id) ? <span className="chip bg-rose-500/20 text-rose-300">تحتاج إلى دعم</span> : ind.itemsAnswered ? <span className="chip">متابعة</span> : <span className="chip text-white/50">لم تبدأ</span>}</td>
+                  <td>{supportSet.has(s.id) ? <span className="chip bg-rose-500/20 text-rose-600">تحتاج إلى دعم</span> : ind.itemsAnswered ? <span className="chip">متابعة</span> : <span className="chip text-ink/50">لم تبدأ</span>}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-white/45">المؤشرات وصفية مبنية على البيانات المحفوظة فعليًا. عدد مرات التدريب لا يدخل في حساب الإتقان.</p>
+      <p className="text-xs text-ink/45">المؤشرات وصفية مبنية على البيانات المحفوظة فعليًا. عدد مرات التدريب لا يدخل في حساب الإتقان.</p>
     </div>
   );
 }
