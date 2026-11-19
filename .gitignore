@@ -1,0 +1,13 @@
+node_modules
+.next
+.env
+.env.local
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+# لا تُرفع بيانات الطالبات أو التصديرات إلى GitHub
+exports/
+*.xlsx
+*.csv
+!supabase/templates/*.csv
