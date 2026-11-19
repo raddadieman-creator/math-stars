@@ -14,6 +14,8 @@ const CSS = `
 .mp-name{margin-top:6px;font-weight:900;font-size:15px;color:#262a4a}
 .mp-glow{transition:opacity .4s}
 .mada-launch{position:fixed;left:18px;bottom:18px;z-index:60;display:flex;align-items:flex-end;gap:8px;direction:rtl}
+.mada-launch.roam{left:0!important;top:0!important;bottom:auto!important;will-change:transform}
+.mada-launch.roam .mada-btn{transition:transform .5s ease}
 .mada-launch button.mada-btn{border:0;background:transparent;cursor:pointer;padding:0}
 .mada-hello{background:#fff;border-radius:16px 16px 4px 16px;padding:8px 12px;font-weight:800;font-size:13px;box-shadow:0 8px 20px -8px rgba(38,42,74,.35);max-width:210px;line-height:1.7}
 .mada-panel{position:fixed;left:18px;bottom:110px;z-index:61;width:min(380px,calc(100vw - 36px));height:min(560px,calc(100vh - 140px));display:flex;flex-direction:column;background:#fff;border-radius:22px;box-shadow:0 20px 50px -15px rgba(38,42,74,.45);overflow:hidden;direction:rtl;border:1px solid rgba(38,42,74,.08)}
@@ -198,7 +200,34 @@ export function mountMadaAssistant(host: HTMLElement = document.body): () => voi
   const firstTime = (() => { try { const v = localStorage.getItem('mada_hello'); localStorage.setItem('mada_hello', '1'); return !v; } catch { return true; } })();
   wrap.innerHTML = `<button class="mada-btn" aria-label="فتح مساعد مدى">${planetHTML(82)}</button>${firstTime ? '<div class="mada-hello">مرحبًا، أنا مدى، مساعدك في الرياضيات واختبار TIMSS.</div>' : ''}`;
   host.appendChild(wrap);
-  const stop = planetLive(wrap.querySelector('.mada-btn') as HTMLElement, { roam: 0.12 });
+  const stop = planetLive(wrap.querySelector('.mada-btn') as HTMLElement, { roam: 0.05 });
+  // تجوال «مَدى» في الصفحة كلها طوال فتحها: تختار نقطة عشوائية وتتجه إليها، ثم تتوقف لحظة وتختار غيرها
+  wrap.classList.add('roam');
+  const btn = wrap.querySelector('.mada-btn') as HTMLElement;
+  const calm = () => document.documentElement.classList.contains('calm') || matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const box = () => { const r = wrap.getBoundingClientRect(); const bar = document.querySelector('#tabbar:not([hidden]), .student-tabbar'); const barH = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect().height : 0;
+    return { minX: 8, maxX: Math.max(8, innerWidth - r.width - 8), minY: 70, maxY: Math.max(70, innerHeight - r.height - barH - 10) }; };
+  const corner = () => { const b = box(); return { x: b.minX + 6, y: b.maxY }; };
+  let pos = corner(), tgt = { ...pos }, waitUntil = performance.now() + 2500, hover = false, last = performance.now(), roamRaf = 0;
+  const pick = () => { const b = box(); let best = tgt, bd = -1;
+    for (let k = 0; k < 6; k++) { const c = { x: b.minX + Math.random() * (b.maxX - b.minX), y: b.minY + Math.random() * (b.maxY - b.minY) }; const d = Math.hypot(c.x - pos.x, c.y - pos.y); if (d > bd) { bd = d; best = c; } }
+    tgt = best; };
+  wrap.addEventListener('pointerenter', () => { hover = true; }); wrap.addEventListener('pointerleave', () => { hover = false; });
+  const roamFrame = (now: number) => {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    const b = box();
+    if (panel || calm()) tgt = corner();
+    else if (now > waitUntil && Math.hypot(tgt.x - pos.x, tgt.y - pos.y) < 3) { pick(); }
+    if (!hover && now > waitUntil) {
+      const dx = tgt.x - pos.x, dy = tgt.y - pos.y, d = Math.hypot(dx, dy), sp = (innerWidth < 768 ? 55 : 80) * (panel || calm() ? 4 : 1);
+      if (d > 2) { const st = Math.min(d, sp * dt); pos.x += (dx / d) * st; pos.y += (dy / d) * st; btn.style.transform = `rotate(${Math.max(-12, Math.min(12, dx / Math.max(d, 1) * 12))}deg)`; }
+      else if (!panel && !calm()) { waitUntil = now + 800 + Math.random() * 2200; btn.style.transform = ''; tgt = { ...pos }; }
+    }
+    pos.x = Math.min(b.maxX, Math.max(b.minX, pos.x)); pos.y = Math.min(b.maxY, Math.max(b.minY, pos.y));
+    wrap.style.transform = `translate(${pos.x}px, ${pos.y}px)`;
+    roamRaf = requestAnimationFrame(roamFrame);
+  };
+  roamRaf = requestAnimationFrame(roamFrame);
   setTimeout(() => wrap.querySelector('.mada-hello')?.remove(), 7000);
   let panel: HTMLElement | null = null;
   const open = () => {
@@ -230,5 +259,5 @@ export function mountMadaAssistant(host: HTMLElement = document.body): () => voi
     input.focus();
   };
   (wrap.querySelector('.mada-btn') as HTMLButtonElement).onclick = open;
-  return () => { stop(); wrap.remove(); panel?.remove(); };
+  return () => { stop(); cancelAnimationFrame(roamRaf); wrap.remove(); panel?.remove(); };
 }
