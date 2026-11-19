@@ -113,3 +113,13 @@ body{background:#f6f7fb!important;background-image:none!important}
 .flipin{animation:flatin .25s ease both!important}@keyframes flatin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 .dot,.floaty{animation:none!important}.dot{display:none!important}
 .starfield{display:none!important}
+/* ===== الجوال ===== */
+@media (max-width: 767px) {
+  body:has(.student-tabbar) main { padding-bottom: 6.5rem; }
+  body:has(.student-tabbar) .mada-launch { bottom: 84px !important; }
+  .mada-launch { left: 10px !important; }
+  .mada-launch .mada-btn { width: 58px; height: 58px; border-radius: 50%; background: #fff; box-shadow: 0 6px 18px -6px rgba(38,42,74,.45); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .mada-launch .mp { --s: 46px !important; } .mada-launch .mp-shadow, .mada-launch .mp-name, .mada-hello { display: none; }
+  .mada-panel { left: 8px !important; right: 8px; width: auto !important; bottom: 150px !important; height: min(520px, calc(100vh - 190px)) !important; }
+  .h-section { font-size: 1.35rem; }
+}
