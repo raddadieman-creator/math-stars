@@ -1,5 +1,6 @@
 import { requireStaff } from '@/lib/data';
 import { qCount } from '@/lib/types';
+import standards from '@/lib/standards.json';
 import { addLibraryLink, createModel, uploadLibraryFile } from './actions';
 import { ImportQuestions } from '@/components/teacher/ImportQuestions';
 import { FileRowActions, ModelToggle } from '@/components/teacher/LibraryActions';
@@ -11,8 +12,9 @@ export default async function TeacherLibrary() {
   const [{ data: models }, { data: files }, { data: skills }] = await Promise.all([
     sb.from('assessments').select('id, title, form_label, is_open, source_label, assessment_items(count)').eq('kind', 'model').order('sort_order'),
     sb.from('library_files').select('id, title, publisher, language, is_official, is_visible, external_url, storage_path').order('is_official', { ascending: false }).order('sort_order'),
-    sb.from('skills').select('id, code, name_ar').order('code'),
+    sb.from('skills').select('id, code, name_ar, description, standard_no, questions(count)').order('code'),
   ]);
+  const std = (skills ?? []).filter((k) => k.standard_no).sort((a, b) => (a.standard_no as number) - (b.standard_no as number));
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-black">مكتبة النماذج</h1>
@@ -33,6 +35,22 @@ export default async function TeacherLibrary() {
           <div className="flex items-end"><button className="btn-aqua w-full">إنشاء</button></div>
           <div className="md:col-span-4"><label className="label">المصدر (اختياري)</label><input name="source" className="field" placeholder="مثل: أسئلة TIMSS 2011 المنشورة — IEA" /></div>
         </form>
+      </section>
+
+      <section className="panel">
+        <h2 className="text-lg font-extrabold">تغطية المعايير الفرعية للصف الثامن</h2>
+        <p className="text-xs muted">المصدر: {standards.source}</p>
+        <div className="mt-3 grid gap-2 md:grid-cols-2">
+          {std.map((k) => {
+            const n = (k.questions as unknown as { count: number }[])[0]?.count ?? 0;
+            return (
+              <details key={k.id} className="rounded-xl border border-ink/10 p-3">
+                <summary className="flex cursor-pointer items-center justify-between gap-2 text-sm"><span><b>{k.standard_no}.</b> {k.name_ar}</span><span className={`chip ${n ? 'bg-aqua-300/40' : 'bg-rose-300/30'}`}>{n} سؤال</span></summary>
+                <p className="mt-2 text-xs leading-6 muted">{k.description}</p>
+              </details>
+            );
+          })}
+        </div>
       </section>
 
       <ImportQuestions skills={skills ?? []} models={(models ?? []).filter((m) => m.form_label !== 'mix').map((m) => ({ id: m.id, title: m.title }))} />

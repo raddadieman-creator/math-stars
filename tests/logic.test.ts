@@ -181,15 +181,18 @@ describe('استيراد الأسئلة', () => {
     expect(ok[1].payload.correct_answer.value).toBe(7);
     expect(ok[2].payload.correct_answer.value).toBe(false);
     expect(ok[0].cognitive).toBe('knowing');
+    expect(ok[0].standard_no).toBe(2);
+    expect(ok[0].cognitive_skill).toBe('الحساب');
   });
   it('يقبل نص الخيار إجابةً ويرفض الأسطر الناقصة', () => {
     const { ok, errors } = rowsToQuestions([
       ['س؟', 'اختيار من متعدد', '1|2|3', '3', 'تطبيق'],
       ['', 'عددي', '', '4'],
       ['س؟', 'غريب', '', '4'],
+      ['س؟', 'عددي', '', '4', '', '', '', '', '', '25'],
     ]);
     expect(ok[0].payload.correct_answer.value).toBe('c');
-    expect(errors.map((e) => e.line)).toEqual([2, 3]);
+    expect(errors.map((e) => e.line)).toEqual([2, 3, 4]);
   });
 });
 describe('محتوى المكتبة', () => {

@@ -2,11 +2,11 @@ import { buildQuestionPayload } from './question-form';
 import type { Cognitive, QType } from './types';
 
 /** أعمدة ملف الاستيراد (Excel أو CSV) بالترتيب */
-export const IMPORT_COLUMNS = ['السؤال', 'النوع', 'الخيارات', 'الإجابة', 'العملية المعرفية', 'الصعوبة', 'التلميح', 'خطوات الحل', 'المصدر'] as const;
+export const IMPORT_COLUMNS = ['السؤال', 'النوع', 'الخيارات', 'الإجابة', 'العملية المعرفية', 'الصعوبة', 'التلميح', 'خطوات الحل', 'المصدر', 'رقم المعيار', 'المهارة الفرعية'] as const;
 export const IMPORT_EXAMPLE = [
-  ['ما ناتج: (−8) + 3 ؟', 'اختيار من متعدد', '−11|−5|5|11', 'ب', 'معرفة', '1', 'نطرح القيمتين المطلقتين', '8 − 3 = 5|الإشارة سالبة', 'إعداد المعلم'],
-  ['إذا كان 3س = 21 فما قيمة س؟', 'عددي', '', '7', 'تطبيق', '1', '', 'نقسم الطرفين على 3|س = 7', ''],
-  ['كل مستطيل مربع.', 'صواب وخطأ', '', 'خطأ', 'استدلال', '2', '', 'المستطيل لا يشترط تساوي أضلاعه', ''],
+  ['ما ناتج: (−8) + 3 ؟', 'اختيار من متعدد', '−11|−5|5|11', 'ب', 'معرفة', '1', 'نطرح القيمتين المطلقتين', '8 − 3 = 5|الإشارة سالبة', 'إعداد المعلم', '2', 'الحساب'],
+  ['إذا كان 3س = 21 فما قيمة س؟', 'عددي', '', '7', 'تطبيق', '1', '', 'نقسم الطرفين على 3|س = 7', '', '10', 'التنفيذ'],
+  ['كل مستطيل مربع.', 'صواب وخطأ', '', 'خطأ', 'استدلال', '2', '', 'المستطيل لا يشترط تساوي أضلاعه', '', '14', 'التبرير'],
 ];
 
 /** محلل CSV يدعم الحقول المحاطة بعلامات اقتباس والفواصل والأسطر داخلها */
@@ -54,6 +54,8 @@ export interface ImportedQuestion {
   difficulty: 1 | 2 | 3;
   hint: string | null;
   source_label: string | null;
+  standard_no: number | null;
+  cognitive_skill: string | null;
   payload: ReturnType<typeof buildQuestionPayload>;
 }
 
@@ -64,7 +66,7 @@ export function rowsToQuestions(rows: string[][]) {
   const start = rows.length && String(rows[0][0] ?? '').trim() === IMPORT_COLUMNS[0] ? 1 : 0;
   rows.slice(start).forEach((r, idx) => {
     const line = idx + start + 1;
-    const [prompt, type, options, answer, cog, diff, hint, steps, source] = r.map((c) => String(c ?? '').trim());
+    const [prompt, type, options, answer, cog, diff, hint, steps, source, stdNo, cogSkill] = r.map((c) => String(c ?? '').trim());
     try {
       if (!prompt) throw new Error('نص السؤال فارغ');
       const qtype = TYPE[type];
@@ -82,9 +84,11 @@ export function rowsToQuestions(rows: string[][]) {
       }
       const payload = buildQuestionPayload({ qtype, optionsText: opts.join('\n'), correct, stepsText: (steps ?? '').split('|').join('\n'), errorsText: '' });
       const d = Number(diff || 2);
+      const sn = stdNo ? Number(stdNo) : null;
+      if (sn !== null && !(Number.isInteger(sn) && sn >= 1 && sn <= 19)) throw new Error('رقم المعيار من 1 إلى 19');
       ok.push({
         line, prompt, qtype, cognitive: COG[cog] ?? 'applying', difficulty: (d >= 1 && d <= 3 ? d : 2) as 1 | 2 | 3,
-        hint: hint || null, source_label: source || null, payload,
+        hint: hint || null, source_label: source || null, standard_no: sn, cognitive_skill: cogSkill || null, payload,
       });
     } catch (e) {
       errors.push({ line, message: (e as Error).message });

@@ -3,6 +3,7 @@ import { useActionState, useState } from 'react';
 import { saveQuestion } from '@/app/teacher/(panel)/questions/actions';
 import { COGNITIVE_AR, QTYPE_AR, type QType } from '@/lib/types';
 import type { QuestionFormInput } from '@/lib/question-form';
+import standards from '@/lib/standards.json';
 
 type Initial = Record<string, any> & { form: QuestionFormInput };
 
@@ -19,6 +20,7 @@ const OPTION_HELP: Record<QType, string> = {
 export function QuestionEditor({ skills, initial }: { skills: { id: string; code: string; name_ar: string }[]; initial?: Initial }) {
   const [state, action, pending] = useActionState(saveQuestion, {});
   const [qtype, setQtype] = useState<QType>((initial?.qtype as QType) ?? 'mcq');
+  const [cog, setCog] = useState<string>(initial?.cognitive ?? 'knowing');
   const f = initial?.form;
   return (
     <form action={action} className="space-y-5">
@@ -26,10 +28,11 @@ export function QuestionEditor({ skills, initial }: { skills: { id: string; code
       {initial && <input type="hidden" name="id" value={initial.id} />}
       <div className="panel grid gap-4 md:grid-cols-3">
         <div><label className="label">المهارة</label><select name="skill_id" required defaultValue={initial?.skill_id} className="field">{skills.map((s) => <option key={s.id} value={s.id}>{s.code} — {s.name_ar}</option>)}</select></div>
-        <div><label className="label">العملية المعرفية</label><select name="cognitive" defaultValue={initial?.cognitive ?? 'knowing'} className="field">{Object.entries(COGNITIVE_AR).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></div>
+        <div><label className="label">العملية المعرفية</label><select name="cognitive" value={cog} onChange={(e) => setCog(e.target.value)} className="field">{Object.entries(COGNITIVE_AR).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></div>
         <div><label className="label">مستوى الصعوبة</label><select name="difficulty" defaultValue={initial?.difficulty ?? 1} className="field"><option value="1">1 — أساسي</option><option value="2">2 — متوسط</option><option value="3">3 — متقدم</option></select></div>
         <div><label className="label">نوع السؤال</label><select name="qtype" value={qtype} onChange={(e) => setQtype(e.target.value as QType)} className="field">{Object.entries(QTYPE_AR).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select></div>
-        <div className="md:col-span-2"><label className="label">الهدف التعليمي</label><input name="objective" defaultValue={initial?.objective ?? ''} className="field" /></div>
+        <div><label className="label">المهارة الفرعية</label><select name="cognitive_skill" defaultValue={initial?.cognitive_skill ?? ''} className="field"><option value="">—</option>{(standards.cognitive as Record<string, string[]>)[cog]?.map((c) => <option key={c}>{c}</option>)}</select></div>
+        <div><label className="label">الهدف التعليمي</label><input name="objective" defaultValue={initial?.objective ?? ''} className="field" /></div>
       </div>
       <div className="panel space-y-4">
         <div><label className="label">نص السؤال</label><textarea name="prompt" required rows={3} defaultValue={initial?.prompt} className="field" /></div>

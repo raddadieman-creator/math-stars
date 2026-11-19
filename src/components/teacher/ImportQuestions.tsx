@@ -33,7 +33,7 @@ export function ImportQuestions({ skills, models }: { skills: { id: string; code
       <h2 className="text-lg font-extrabold">استيراد أسئلة من Excel أو CSV</h2>
       <div className="overflow-x-auto"><table className="w-full min-w-[720px] text-xs"><thead><tr>{IMPORT_COLUMNS.map((c) => <th key={c} className="border border-ink/10 bg-ink/5 p-2">{c}</th>)}</tr></thead>
         <tbody>{IMPORT_EXAMPLE.map((r, i) => <tr key={i}>{r.map((c, k) => <td key={k} className="border border-ink/10 p-2">{c}</td>)}</tr>)}</tbody></table></div>
-      <p className="text-xs muted">الخيارات وخطوات الحل يُفصل بينها بالرمز |. الإجابة في الاختيار من متعدد حرف الخيار أو نصه. العملية المعرفية: معرفة أو تطبيق أو استدلال. الصعوبة من 1 إلى 3.</p>
+      <p className="text-xs muted">الخيارات وخطوات الحل يُفصل بينها بالرمز |. الإجابة في الاختيار من متعدد حرف الخيار أو نصه. العملية المعرفية: معرفة أو تطبيق أو استدلال. الصعوبة من 1 إلى 3. رقم المعيار من 1 إلى 19 وفق دليل إدارة تعليم جدة، وعند تركه تُربط الأسئلة بالمهارة المختارة أدناه.</p>
       <div className="flex flex-wrap items-center gap-3">
         <a className="btn-ghost" download="قالب-الأسئلة.csv" href={`data:text/csv;charset=utf-8,${encodeURIComponent('﻿' + template)}`}>تنزيل القالب</a>
         <input type="file" accept=".csv,.xlsx,.xls,text/csv" className="field max-w-sm" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
@@ -53,7 +53,7 @@ export function ImportQuestions({ skills, models }: { skills: { id: string; code
             <div><label className="label">المهارة</label><select value={skillId} onChange={(e) => setSkillId(e.target.value)} className="field"><option value="">—</option>{skills.map((s) => <option key={s.id} value={s.id}>{s.code} — {s.name_ar}</option>)}</select></div>
             <div><label className="label">الوجهة</label><select value={target} onChange={(e) => setTarget(e.target.value)} className="field"><option value="">بنك التدريب</option>{models.map((m) => <option key={m.id} value={m.id}>نموذج: {m.title}</option>)}</select></div>
             <label className="flex items-end gap-2 pb-3 text-sm"><input type="checkbox" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> نشر مباشرة بعد المراجعة</label>
-            <div className="flex items-end"><button disabled={pending || !ok.length || !skillId} onClick={() => start(async () => {
+            <div className="flex items-end"><button disabled={pending || !ok.length || (!skillId && ok.some((q) => !q.standard_no))} onClick={() => start(async () => {
               const r = await importQuestions({ skillId, assessmentId: target || null, publish, items: ok });
               if ('error' in r && r.error) setMsg(r.error); else { setMsg(`حُفظ ${r.count} سؤالًا.`); setOk([]); setErrors([]); }
             })} className="btn-star w-full">حفظ {ok.length} سؤالًا</button></div>

@@ -45,6 +45,11 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
   select s.id, 'applying', 2, 'mcq', 'كانت درجة الحرارة في مدينة −4° صباحًا، وصارت 9° ظهرًا. كم درجة ارتفعت الحرارة؟', '[{"id": "a", "text": "5"}, {"id": "b", "text": "13"}, {"id": "c", "text": "−13"}, {"id": "d", "text": "36"}]'::jsonb, '{"value": "b"}'::jsonb, '["مقدار الارتفاع = 9 − (−4)", "= 9 + 4 = 13 درجة"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+with s as (select id from skills where code = 'LIB-NUM'), a as (select id from assessments where kind = 'model' and form_label = 'num'),
+qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
+  select s.id, 'knowing', 2, 'mcq', 'أيّ الأعداد الآتية عدد أولي؟', '[{"id": "a", "text": "21"}, {"id": "b", "text": "27"}, {"id": "c", "text": "29"}, {"id": "d", "text": "33"}]'::jsonb, '{"value": "c"}'::jsonb, '["21 = 3 × 7 ، 27 = 3 × 9 ، 33 = 3 × 11", "العدد 29 لا يقبل القسمة إلا على 1 وعلى نفسه", "إذن 29 عدد أولي"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  from s returning id)
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 insert into assessments (kind, form_label, title, domain_code, is_open, sort_order) values ('model', 'alg', 'نموذج الجبر', 'algebra', true, 2);
 with s as (select id from skills where code = 'LIB-ALG'), a as (select id from assessments where kind = 'model' and form_label = 'alg'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
@@ -107,6 +112,11 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
   select s.id, 'applying', 2, 'mcq', 'زاويتان متكاملتان، قياس إحداهما ثلاثة أمثال قياس الأخرى. ما قياس الزاوية الصغرى؟', '[{"id": "a", "text": "30°"}, {"id": "b", "text": "45°"}, {"id": "c", "text": "60°"}, {"id": "d", "text": "135°"}]'::jsonb, '{"value": "b"}'::jsonb, '["الزاويتان المتكاملتان مجموعهما 180°", "س + 3س = 180", "4س = 180، إذن س = 45°"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+with s as (select id from skills where code = 'LIB-GEO'), a as (select id from assessments where kind = 'model' and form_label = 'geo'),
+qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
+  select s.id, 'applying', 2, 'mcq', 'مثلثان متشابهان، أطوال أضلاع الأول 3 سم و 4 سم و 5 سم، وطول أقصر ضلع في الثاني 6 سم. ما طول أطول ضلع في المثلث الثاني؟', '[{"id": "a", "text": "8 سم"}, {"id": "b", "text": "10 سم"}, {"id": "c", "text": "12 سم"}, {"id": "d", "text": "15 سم"}]'::jsonb, '{"value": "b"}'::jsonb, '["معامل التشابه = 6 ÷ 3 = 2", "أطول ضلع = 5 × 2 = 10 سم"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  from s returning id)
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 insert into assessments (kind, form_label, title, domain_code, is_open, sort_order) values ('model', 'data', 'نموذج البيانات والاحتمالات', 'data_probability', true, 4);
 with s as (select id from skills where code = 'LIB-DATA'), a as (select id from assessments where kind = 'model' and form_label = 'data'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
@@ -138,4 +148,9 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
   select s.id, 'reasoning', 2, 'mcq', 'أُضيف العدد 30 إلى البيانات: 10، 12، 14، 16. أيّ المقاييس الآتية يتغير بالمقدار الأكبر؟', '[{"id": "a", "text": "الوسيط"}, {"id": "b", "text": "المتوسط الحسابي"}, {"id": "c", "text": "المنوال"}, {"id": "d", "text": "لا يتغير أيٌّ منها"}]'::jsonb, '{"value": "b"}'::jsonb, '["قبل الإضافة: المتوسط 13 والوسيط 13", "بعد الإضافة: المتوسط = 82 ÷ 5 = 16.4، والوسيط = 14", "المتوسط تغير 3.4 والوسيط تغير 1، فالمتوسط يتأثر أكثر بالقيمة المتطرفة"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 6 from a, qi;
+with s as (select id from skills where code = 'LIB-DATA'), a as (select id from assessments where kind = 'model' and form_label = 'data'),
+qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
+  select s.id, 'applying', 2, 'mcq', 'تريد مدرسة عرض نسبة الطلاب المشاركين في كل نشاط من أنشطتها الخمسة إلى مجموع الطلاب. ما التمثيل البياني الأنسب لذلك؟', '[{"id": "a", "text": "القطاعات الدائرية"}, {"id": "b", "text": "الخط البياني"}, {"id": "c", "text": "المدرج التكراري"}, {"id": "d", "text": "شكل الانتشار"}]'::jsonb, '{"value": "a"}'::jsonb, '["المطلوب مقارنة أجزاء بالكل", "القطاعات الدائرية تعرض نسبة كل جزء من الكل"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  from s returning id)
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 7 from a, qi;
 insert into assessments (kind, form_label, title, is_open, sort_order, description) values ('model', 'mix', 'نموذج شامل', true, 5, 'ثمانية أسئلة عشوائية من جميع النماذج في كل محاولة');

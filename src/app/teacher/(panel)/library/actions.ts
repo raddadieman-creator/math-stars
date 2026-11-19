@@ -26,11 +26,14 @@ export async function toggleModel(id: string, open: boolean) {
 /** حفظ الأسئلة بعد مراجعتها في شاشة المعاينة. أسئلة النماذج تذهب إلى بنك المكتبة، وغيرها إلى بنك التدريب */
 export async function importQuestions(input: { skillId: string; assessmentId: string | null; publish: boolean; items: ImportedQuestion[] }) {
   const { sb, staff } = await requireStaff();
-  if (!input.skillId) return { error: 'اختيار المهارة مطلوب' };
+  const needSkill = input.items.some((q) => !q.standard_no);
+  if (needSkill && !input.skillId) return { error: 'اختيار المهارة مطلوب للأسئلة التي لا تحمل رقم معيار' };
+  const { data: stdSkills } = await sb.from('skills').select('id, standard_no').not('standard_no', 'is', null);
+  const byStd = new Map((stdSkills ?? []).map((r) => [r.standard_no as number, r.id as string]));
   if (!input.items.length || input.items.length > 500) return { error: 'عدد الأسئلة غير صالح' };
   const bank = input.assessmentId ? 'library' : 'practice';
   const rows = input.items.map((q) => ({
-    skill_id: input.skillId, cognitive: q.cognitive, difficulty: q.difficulty, qtype: q.qtype, prompt: q.prompt,
+    skill_id: (q.standard_no && byStd.get(q.standard_no)) || input.skillId, cognitive: q.cognitive, cognitive_skill: q.cognitive_skill, difficulty: q.difficulty, qtype: q.qtype, prompt: q.prompt,
     hint: q.hint, source_label: q.source_label, ...q.payload, status: input.publish ? 'published' : 'review', bank, created_by: staff.id,
   }));
   const { data, error } = await sb.from('questions').insert(rows).select('id');

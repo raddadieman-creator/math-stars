@@ -20,7 +20,7 @@ export async function saveQuestion(_: unknown, f: FormData): Promise<{ error?: s
     skill_id: s(f, 'skill_id'), cognitive: s(f, 'cognitive'), difficulty: Number(s(f, 'difficulty')), qtype: s(f, 'qtype'),
     objective: s(f, 'objective') || null, prompt: s(f, 'prompt'), media_url: s(f, 'media_url') || null,
     explanation: s(f, 'explanation') || null, hint: s(f, 'hint') || null, remedial_activity: s(f, 'remedial') || null,
-    status: s(f, 'status') || 'draft', ...payload,
+    cognitive_skill: s(f, 'cognitive_skill') || null, status: s(f, 'status') || 'draft', ...payload,
   };
   if (!row.prompt || !row.skill_id) return { error: 'نص السؤال والمهارة مطلوبان' };
   const res = id ? await sb.from('questions').update(row).eq('id', id) : await sb.from('questions').insert({ ...row, created_by: staff.id });
