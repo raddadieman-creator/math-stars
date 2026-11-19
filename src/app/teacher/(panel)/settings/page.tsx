@@ -1,3 +1,4 @@
+import { ChangePassword } from '@/components/teacher/ImportStudents';
 import { requireStaff, getSettings } from '@/lib/data';
 import { saveRules, saveSettings, uploadBranding } from '../actions';
 
@@ -13,6 +14,7 @@ export default async function Settings() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-black">الإعدادات والقواعد</h1>
+      <ChangePassword />
 
       <form action={saveSettings} className="panel grid gap-4 md:grid-cols-2">
         <h2 className="text-lg font-extrabold md:col-span-2">بيانات المدرسة والمنصة</h2>

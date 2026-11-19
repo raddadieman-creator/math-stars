@@ -1,50 +1,39 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Shell } from '@/components/Shell';
 import { Suha } from '@/components/Suha';
 import { usePrefs } from '@/components/Prefs';
 
+/** دخول الطالب: اختيار الفصل وكتابة الاسم الثلاثي كما سجّله المعلم */
 export default function StudentLogin() {
-  const [code, setCode] = useState('');
+  const [classes, setClasses] = useState<{ id: string; name: string }[]>([]);
+  const [classId, setClassId] = useState('');
+  const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
   const router = useRouter();
   const { play } = usePrefs();
-
-  const press = (d: string) => { play('tap'); setMsg(''); setCode((c) => (c.length < 6 ? c + d : c)); };
-  const submit = async () => {
-    setBusy(true);
-    const r = await fetch('/api/student/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
-    const j = await r.json();
-    setBusy(false);
-    if (r.ok) router.push('/student');
-    else { setMsg(j.error); setCode(''); play('retry'); }
+  useEffect(() => { fetch('/api/classes').then((r) => r.json()).then(setClasses).catch(() => {}); }, []);
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault(); setBusy(true); setMsg('');
+    const r = await fetch('/api/student/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ classId, name }) });
+    const j = await r.json(); setBusy(false);
+    if (r.ok) { play('correct'); router.push('/student'); router.refresh(); } else { play('retry'); setMsg(j.error ?? 'تعذر الدخول'); }
   };
-
   return (
     <Shell>
-      <div className="mx-auto max-w-md text-center">
-        <Suha size={100} mood="idle" named className="mx-auto" />
-        <h1 className="mt-2 text-3xl font-black">مرحبًا بك</h1>
-        <p className="mt-1 muted">رمز الدخول (ستة أرقام)</p>
-        <div className="mt-6 flex justify-center gap-2" dir="ltr" aria-live="polite">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className={`flex h-14 w-11 items-center justify-center rounded-xl border text-2xl font-black ${code[i] ? 'border-star-400 bg-star-400/15' : 'border-ink/15 bg-ink/5'}`}>
-              {code[i] ? '●' : ''}
-            </div>
-          ))}
-        </div>
-        <div className="mx-auto mt-6 grid max-w-xs grid-cols-3 gap-3" dir="ltr">
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((d) => (
-            <button key={d} onClick={() => press(d)} className="card-3d h-16 text-2xl font-black hover:bg-ink/5">{d}</button>
-          ))}
-          <button onClick={() => setCode((c) => c.slice(0, -1))} className="card-3d h-16 text-lg font-bold hover:bg-ink/5" aria-label="حذف">⌫</button>
-          <button onClick={() => press('0')} className="card-3d h-16 text-2xl font-black hover:bg-ink/5">0</button>
-          <button onClick={submit} disabled={code.length !== 6 || busy} className="btn-star h-16 rounded-3xl">دخول</button>
-        </div>
-        {msg && <p className="mt-4 rounded-xl bg-rose-500/15 p-3 text-rose-600" role="alert">{msg}</p>}
-      </div>
+      <form onSubmit={submit} className="card-3d mx-auto max-w-md space-y-4 p-8 text-center">
+        <div className="mx-auto w-fit"><Suha size={100} named /></div>
+        <h1 className="text-2xl font-black">دخول الطالب</h1>
+        <div className="text-start"><label className="label" htmlFor="cls">الفصل</label>
+          <select id="cls" required className="field" value={classId} onChange={(e) => setClassId(e.target.value)}>
+            <option value="">اختر الفصل</option>{classes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+        <div className="text-start"><label className="label" htmlFor="nm">الاسم الثلاثي</label>
+          <input id="nm" required autoComplete="off" className="field" placeholder="كما سجّله المعلم" value={name} onChange={(e) => setName(e.target.value)} /></div>
+        {msg && <p className="rounded-xl bg-rose-500/15 p-3 text-sm text-rose-600" role="alert">{msg}</p>}
+        <button disabled={busy} className="btn-star w-full">دخول</button>
+      </form>
     </Shell>
   );
 }

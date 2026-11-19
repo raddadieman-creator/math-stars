@@ -1,6 +1,7 @@
 import { requireStaff } from '@/lib/data';
 import { createClass } from '../actions';
 import { AddStudentForm, StudentRowActions } from '@/components/teacher/StudentForms';
+import { ImportStudents } from '@/components/teacher/ImportStudents';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,7 @@ export default async function Students() {
           <div className="flex items-end"><button className="btn-star w-full">إنشاء</button></div>
         </form>
       )}
+      {(classes ?? []).length > 0 && <ImportStudents classes={(classes ?? []).map((c) => ({ id: c.id, name: c.name }))} />}
       {(classes ?? []).length > 0 && <AddStudentForm classes={(classes ?? []).map((c) => ({ id: c.id, name: c.name }))} />}
       {(classes ?? []).map((c) => (
         <div key={c.id} className="panel overflow-x-auto">

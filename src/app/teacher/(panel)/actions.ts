@@ -100,3 +100,47 @@ export async function toggleStudent(studentId: string, active: boolean) {
   await sb.from('students').update({ is_active: active }).eq('id', studentId);
   revalidatePath('/teacher/students');
 }
+
+/** استيراد أسماء الطلاب من Excel: [الاسم الثلاثي، الفصل اختياري]. يُنشأ الفصل للمعلم إن لم يوجد. */
+export async function importStudents(rows: [string, string][], fallbackClassId: string): Promise<{ added: number; skipped: number; error?: string }> {
+  const { staff, sb } = await requireStaff();
+  const { normName } = await import('@/lib/names');
+  const { randomBytes } = await import('node:crypto');
+  const { data: links } = await sb.from('class_teachers').select('class_id, classes(id, name)').eq('teacher_id', staff.id);
+  const mine = (links ?? []).map((l) => l.classes as unknown as { id: string; name: string }).filter(Boolean);
+  const pool = staff.role === 'admin' ? ((await sb.from('classes').select('id, name')).data ?? []) : mine;
+  const findClass = async (label: string) => {
+    const w = normName(label); if (!w) return pool.find((c) => c.id === fallbackClassId) ?? null;
+    const hit = pool.find((c) => normName(c.name) === w || normName(c.name).replace(/\s/g, '').endsWith(w.replace(/\s/g, '')));
+    if (hit) return hit;
+    const { data: c, error } = await sb.from('classes').insert({ name: label.trim() }).select('id, name').single();
+    if (error || !c) return null;
+    await sb.from('class_teachers').insert({ class_id: c.id, teacher_id: staff.id });
+    pool.push(c); return c;
+  };
+  let added = 0, skipped = 0;
+  for (const [nm, cl] of rows.slice(0, 1000)) {
+    const name = String(nm ?? '').replace(/\s+/g, ' ').trim();
+    if (name.split(' ').length < 2) { if (name) skipped++; continue; }
+    const c = await findClass(String(cl ?? ''));
+    if (!c) { skipped++; continue; }
+    const { data: dup } = await sb.from('students').select('id, full_name').eq('class_id', c.id);
+    if ((dup ?? []).some((d) => normName(d.full_name) === normName(name))) { skipped++; continue; }
+    const { error } = await sb.from('students').insert({ full_name: name, nickname: name.split(' ').slice(0, 2).join(' '), class_id: c.id, login_code_hash: 'name:' + randomBytes(16).toString('hex') });
+    if (error) skipped++; else added++;
+  }
+  revalidatePath('/teacher/students');
+  return { added, skipped };
+}
+
+/** تغيير كلمة مرور المعلم بعد التحقق من الحالية */
+export async function changePassword(f: FormData): Promise<{ ok?: boolean; error?: string }> {
+  const { sb } = await requireStaff();
+  const cur = String(f.get('current') ?? ''), next = String(f.get('next') ?? '');
+  if (next.length < 6) return { error: 'كلمة المرور الجديدة ستة أحرف على الأقل' };
+  const { data: u } = await sb.auth.getUser();
+  const { error: e1 } = await sb.auth.signInWithPassword({ email: u.user?.email ?? '', password: cur });
+  if (e1) return { error: 'كلمة المرور الحالية غير صحيحة' };
+  const { error } = await sb.auth.updateUser({ password: next });
+  return error ? { error: error.message } : { ok: true };
+}
