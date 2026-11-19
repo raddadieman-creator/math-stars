@@ -20,7 +20,7 @@ export interface Settings {
 }
 
 export const FALLBACK_SETTINGS: Settings = {
-  platform_name: 'نجوم الرياضيات | Math Stars',
+  platform_name: 'معًا نحو القمة – TIMSS',
   slogan: 'أتعلم، أتحدى، أتقدم، وأتألق.',
   school_name: null, school_logo_url: null, principal_name: null, teacher_names: [],
   vision: null, mission: null, goals: [], timss_intro: null, timss_logo_url: null,

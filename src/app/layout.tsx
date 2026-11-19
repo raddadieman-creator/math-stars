@@ -4,10 +4,10 @@ import { Prefs } from '@/components/Prefs';
 import { AppShellPWA } from '@/components/AppShellPWA';
 
 export const metadata: Metadata = {
-  title: 'نجوم الرياضيات | Math Stars',
+  title: 'معًا نحو القمة – TIMSS',
   description: 'منصة تدريب تفاعلية في الرياضيات لطلاب الصف الثاني المتوسط',
   manifest: '/manifest.webmanifest',
-  appleWebApp: { capable: true, title: 'نجوم الرياضيات', statusBarStyle: 'default' },
+  appleWebApp: { capable: true, title: 'معًا نحو القمة', statusBarStyle: 'default' },
   icons: { icon: [{ url: '/icons/icon-32.png', sizes: '32x32' }, { url: '/icons/icon-192.png', sizes: '192x192' }], apple: '/icons/icon-180.png' },
 };
 export const viewport: Viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#0284c7' };

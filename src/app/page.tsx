@@ -29,7 +29,7 @@ export default async function Home() {
             </div>
           </div>
           <h1 className="text-4xl font-black leading-tight md:text-6xl">
-            نجوم الرياضيات
+            معًا نحو القمة <span dir="ltr" className="text-sky-600">– TIMSS</span>
             <span className="mt-2 block bg-gradient-to-l from-star-500 via-rose-500 to-aqua-500 bg-clip-text text-2xl text-transparent md:text-3xl">
               {s.slogan}
             </span>
@@ -51,7 +51,7 @@ export default async function Home() {
       {(s.principal_name || s.teacher_names.length > 0) && (
         <section className="card-3d mt-12 flex flex-wrap items-center justify-center gap-x-10 gap-y-2 px-6 py-4 text-center">
           {s.principal_name && <p><span className="muted">مديرة المدرسة:</span> <b>{s.principal_name}</b></p>}
-          {s.teacher_names.length > 0 && <p><span className="muted">إعداد:</span> <b>{s.teacher_names.join('، ')}</b></p>}
+          {s.teacher_names.length > 0 && <p><span className="muted">{s.teacher_names.length === 1 ? 'إعداد المعلمة:' : s.teacher_names.length === 2 ? 'إعداد المعلمتين:' : 'إعداد المعلمات:'}</span> <b>{s.teacher_names.length === 2 ? s.teacher_names.join(' و') : s.teacher_names.join('، ')}</b></p>}
         </section>
       )}
 

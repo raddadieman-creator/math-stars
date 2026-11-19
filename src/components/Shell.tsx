@@ -10,8 +10,8 @@ export function Logo({ small = false }: { small?: boolean }) {
         <path fill="url(#lg)" d="M20 2l5 11 12 1.5-9 8 2.6 12L20 28.6 9.4 34.5 12 22.5l-9-8L15 13z" />
         <text x="20" y="23" textAnchor="middle" fontSize="10" fontWeight="900" fill="#141244">∑</text>
       </svg>
-      <span className={small ? 'text-lg' : 'text-xl'}>نجوم الرياضيات</span>
-      <span className="hidden text-sm font-bold text-star-600 sm:inline">Math Stars</span>
+      <span className={small ? 'text-lg' : 'text-xl'}>معًا نحو القمة</span>
+      <span className="hidden text-sm font-bold text-star-600 sm:inline" dir="ltr">TIMSS</span>
     </Link>
   );
 }
