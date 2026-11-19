@@ -121,7 +121,7 @@ export function PracticeRunner({ skillId, skillName }: { skillId: string; skillN
 
       <AnimatePresence mode="wait">
         {q && (
-          <motion.div key={q.id} initial={{ opacity: 0, rotateX: -12, y: 20 }} animate={{ opacity: 1, rotateX: 0, y: 0 }} exit={{ opacity: 0, y: -10 }}
+          <motion.div key={q.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.35 }} className="card-3d p-6 md:p-8" style={{ transformPerspective: 900 }}>
             <div className="mb-2 flex items-center justify-between gap-2"><span className="chip">المستوى {q.difficulty}</span>{!fb && !hintOn && q.hint && <button onClick={() => setHintOn(true)} className="chip font-bold text-sky2-600">💡 همسة</button>}</div>
             <p className="text-2xl font-bold leading-[1.9]" dir="auto">{q.prompt}</p>

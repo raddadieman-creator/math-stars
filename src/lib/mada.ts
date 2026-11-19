@@ -1,22 +1,18 @@
 // =====================================================================
-// «مَدى»: كوكب صغير يدور ويتحرك، ومساعد يجيب عن أسئلة الطلاب حول TIMSS
+// «مَدى»: منقلة رياضية تدور ذراعها وتقيس الزوايا، ومساعد يجيب عن أسئلة الطلاب حول TIMSS
 // وقوانين رياضيات الصف الثاني المتوسط من قاعدة معلومات معدّة مسبقًا
 // (مطابقة كلمات مفتاحية، وليست نموذج ذكاء اصطناعي توليديًا).
 // يعمل دون إطار: في المنصة عبر مكوّنات React، وفي المعاينة مباشرة.
 // =====================================================================
 
-let seq = 0;
+
 const CSS = `
 .mp{position:relative;display:inline-flex;flex-direction:column;align-items:center;width:var(--s);user-select:none}
-.mp-body{width:var(--s);height:var(--s);will-change:transform}
+.mp-body{display:block;width:var(--s);height:var(--s);will-change:transform}
 .mp-body svg{width:100%;height:100%;overflow:visible}
-.mp-bands{animation:mpspin 9s linear infinite}
-.mp.fast .mp-bands{animation-duration:1.2s}
-@keyframes mpspin{from{transform:translateX(0)}to{transform:translateX(-68px)}}
 .mp-shadow{width:55%;height:8px;margin-top:-4px;border-radius:50%;background:rgba(38,42,74,.16);filter:blur(2px)}
 .mp-name{margin-top:6px;font-weight:900;font-size:15px;color:#262a4a}
 .mp-glow{transition:opacity .4s}
-@media (prefers-reduced-motion:reduce){.mp-bands{animation:none}}
 .mada-launch{position:fixed;left:18px;bottom:18px;z-index:60;display:flex;align-items:flex-end;gap:8px;direction:rtl}
 .mada-launch button.mada-btn{border:0;background:transparent;cursor:pointer;padding:0}
 .mada-hello{background:#fff;border-radius:16px 16px 4px 16px;padding:8px 12px;font-weight:800;font-size:13px;box-shadow:0 8px 20px -8px rgba(38,42,74,.35);max-width:210px;line-height:1.7}
@@ -44,58 +40,70 @@ function injectCss() {
 }
 
 export type Mood = 'idle' | 'correct' | 'hint' | 'reveal';
-const TONE: Record<Mood, [string, string, string]> = {
-  idle: ['#a9dcff', '#5b86f2', '#2c3b8f'], correct: ['#a8f0dc', '#21b39a', '#0d6b62'],
-  hint: ['#fff0b8', '#f5b82e', '#b3740f'], reveal: ['#ffd0dc', '#e8668a', '#93244a'],
-};
+const TONE: Record<Mood, [string, string]> = { idle: ['#eaf0ff', '#3f63d8'], correct: ['#e3f8f4', '#12a08f'], hint: ['#fff4d6', '#c98a08'], reveal: ['#fdebef', '#cf4167'] };
+const ANGLE: Record<Mood, number> = { idle: 45, correct: 90, hint: 120, reveal: 60 };
+const CX = 60, CY = 78;
+const pt = (r: number, d: number) => [CX + r * Math.cos((d * Math.PI) / 180), CY - r * Math.sin((d * Math.PI) / 180)].map((v) => +v.toFixed(2));
+const sector = (d: number) => { const [x, y] = pt(36, d); return `M${CX} ${CY} L${CX + 36} ${CY} A36 36 0 0 0 ${x} ${y} Z`; };
 
-/** كوكب «مَدى»: سطح يدور، وحلقة مائلة، وقمر صغير يدور حوله */
+/** «مَدى»: منقلة رياضية بوجه بسيط، ذراعها تدور وتقيس الزوايا (تصميم مسطّح) */
 export function planetHTML(size = 120, mood: Mood = 'idle', named = false): string {
   injectCss();
-  const n = ++seq, [c1, c2, c3] = TONE[mood] ?? TONE.idle;
-  const mouth = mood === 'correct' ? 'M50 72 Q60 82 70 72' : mood === 'reveal' ? 'M54 74 Q60 70 66 74' : 'M52 72 Q60 78 68 72';
-  const eyes = mood === 'hint' ? '<ellipse cx="50" cy="58" rx="3.6" ry="4.6" fill="#1d2140"/><ellipse cx="70" cy="58" rx="3.6" ry="4.6" fill="#1d2140"/><circle cx="51" cy="56" r="1.3" fill="#fff"/><circle cx="71" cy="56" r="1.3" fill="#fff"/>'
-    : '<ellipse cx="50" cy="61" rx="3.6" ry="4.6" fill="#1d2140"/><ellipse cx="70" cy="61" rx="3.6" ry="4.6" fill="#1d2140"/><circle cx="51.2" cy="59.4" r="1.3" fill="#fff"/><circle cx="71.2" cy="59.4" r="1.3" fill="#fff"/>';
-  const band = (x: number) => `<path d="M${x} 44 q17 -6 34 0 t34 0" stroke="rgba(255,255,255,.35)" stroke-width="5" fill="none"/><path d="M${x} 84 q17 6 34 0 t34 0" stroke="rgba(20,30,90,.18)" stroke-width="6" fill="none"/><circle cx="${x + 20}" cy="52" r="4" fill="rgba(20,30,90,.15)"/><circle cx="${x + 50}" cy="80" r="3" fill="rgba(255,255,255,.3)"/>`;
-  return `<span class="mp mp-${mood}" style="--s:${size}px" role="img" aria-label="مَدى"><span class="mp-body"><svg viewBox="0 0 120 120">
-    <defs><radialGradient id="mpg${n}" cx="36%" cy="30%" r="75%"><stop offset="0" stop-color="${c1}"/><stop offset=".55" stop-color="${c2}"/><stop offset="1" stop-color="${c3}"/></radialGradient>
-      <clipPath id="mpc${n}"><circle cx="60" cy="62" r="34"/></clipPath></defs>
-    <g transform="rotate(-16 60 62)"><path d="M8 62 a52 14 0 0 1 104 0" fill="none" stroke="#f5b82e" stroke-width="5" stroke-linecap="round" opacity=".9"/></g>
-    <circle class="mp-glow" cx="60" cy="62" r="39" fill="${c2}" opacity=".18"/>
-    <circle cx="60" cy="62" r="34" fill="url(#mpg${n})"/>
-    <g clip-path="url(#mpc${n})"><g class="mp-bands">${band(26)}${band(94)}</g></g>
-    ${eyes}<path d="${mouth}" stroke="#1d2140" stroke-width="3" fill="none" stroke-linecap="round"/>
-    <ellipse cx="46" cy="44" rx="10" ry="6" fill="#fff" opacity=".35" transform="rotate(-25 46 44)"/>
-    <g transform="rotate(-16 60 62)"><path d="M112 62 a52 14 0 0 1 -104 0" fill="none" stroke="#f5b82e" stroke-width="5" stroke-linecap="round"/>
-      <circle r="5.5" fill="#ffd04d" stroke="#fff" stroke-width="1.5"><animateMotion dur="7s" repeatCount="indefinite" path="M8 62 a52 14 0 1 0 104 0 a52 14 0 1 0 -104 0"/></circle></g>
-    ${mood === 'correct' ? '<path d="M92 26 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#ffd04d"/>' : mood === 'hint' ? '<text x="96" y="34" font-size="20" font-weight="900" fill="#b3740f">؟</text>' : ''}
+  const [bg, ink] = TONE[mood] ?? TONE.idle, d = ANGLE[mood] ?? 45;
+  let ticks = '';
+  for (let k = 0; k <= 180; k += 10) { const [x1, y1] = pt(52, k), [x2, y2] = pt(k % 30 ? 47 : 43, k); ticks += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${ink}" stroke-width="${k % 30 ? 1.4 : 2.2}" stroke-linecap="round"/>`; }
+  const [ax, ay] = pt(50, d);
+  const mouth = mood === 'correct' ? 'M53 63 Q60 70 67 63' : mood === 'reveal' ? 'M55 65 Q60 62 65 65' : 'M54 63 Q60 67 66 63';
+  const ey = mood === 'hint' ? 51 : 53;
+  return `<span class="mp mp-${mood}" style="--s:${size}px" role="img" aria-label="مَدى"><span class="mp-body" style="height:calc(var(--s) * .84)"><svg viewBox="0 0 120 100">
+    <path d="M8 ${CY} A52 52 0 0 1 112 ${CY} Z" fill="${bg}" stroke="${ink}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M24 ${CY} A36 36 0 0 1 96 ${CY}" fill="none" stroke="${ink}" stroke-opacity=".25" stroke-width="1.5"/>
+    ${ticks}
+    <path class="mp-sec" d="${sector(d)}" fill="#f5b82e" fill-opacity=".28"/>
+    <g class="mp-face"><circle cx="52" cy="${ey}" r="3.2" fill="#1d2140"/><circle cx="68" cy="${ey}" r="3.2" fill="#1d2140"/><path d="${mouth}" stroke="#1d2140" stroke-width="2.6" fill="none" stroke-linecap="round"/></g>
+    <line class="mp-arm" x1="${CX}" y1="${CY}" x2="${ax}" y2="${ay}" stroke="#f5b82e" stroke-width="4.5" stroke-linecap="round"/>
+    <circle class="mp-tip" cx="${ax}" cy="${ay}" r="3.6" fill="#f5b82e" stroke="#fff" stroke-width="1.5"/>
+    <circle cx="${CX}" cy="${CY}" r="4" fill="${ink}"/>
+    <text class="mp-deg" x="${CX}" y="95" text-anchor="middle" font-size="11" font-weight="800" fill="${ink}" font-family="Tajawal,system-ui,sans-serif">${d}°</text>
+    ${mood === 'hint' ? `<text x="100" y="22" font-size="18" font-weight="900" fill="${ink}">؟</text>` : mood === 'correct' ? `<path d="M96 14 l3 6 6 3 -6 3 -3 6 -3 -6 -6 -3 6 -3z" fill="#f5b82e"/>` : ''}
   </svg></span><span class="mp-shadow"></span>${named ? '<span class="mp-name">مَدى</span>' : ''}</span>`;
 }
 
-/** حركة الكوكب: تجوال حر في الاتجاهات، وميل نحو المؤشر، ونقرة تسرّع الدوران مع قفزة */
+/** حركة «مَدى»: الذراع تقيس زوايا مختلفة بالتتابع، والمنقلة تتنقل بهدوء وتميل نحو المؤشر، والنقر يجعلها تقيس زاوية قائمة مع قفزة */
 export function planetLive(root: HTMLElement | null, opt: { roam?: number } = {}): () => void {
   if (!root || root.dataset.live) return () => {};
   root.dataset.live = '1';
-  const body = root.querySelector('.mp-body') as HTMLElement | null, shadow = root.querySelector('.mp-shadow') as HTMLElement | null, mp = root.querySelector('.mp') as HTMLElement | null;
-  if (!body) return () => {};
-  const S = body.getBoundingClientRect().width || 100, roam = opt.roam ?? 0.35;
+  const body = root.querySelector('.mp-body') as HTMLElement | null, shadow = root.querySelector('.mp-shadow') as HTMLElement | null;
+  const arm = root.querySelector('.mp-arm'), tip = root.querySelector('.mp-tip'), sec = root.querySelector('.mp-sec'), deg = root.querySelector('.mp-deg');
+  if (!body || !arm) return () => {};
+  const S = body.getBoundingClientRect().width || 100, roam = opt.roam ?? 0.25;
   const calm = () => document.documentElement.classList.contains('calm') || matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let pointer: { x: number; y: number; at: number } | null = null, hop = 0, hopV = 0, raf = 0, tilt = 0;
+  const TARGETS = [30, 60, 90, 120, 150, 180, 135, 45, 90, 0];
+  let ang = 45, target = 60, ti = 0, nextAt = performance.now() + 1500, hop = 0, hopV = 0, tilt = 0, raf = 0;
+  let pointer: { x: number; y: number; at: number } | null = null;
   const t0 = performance.now();
   const onMove = (e: PointerEvent) => { pointer = { x: e.clientX, y: e.clientY, at: performance.now() }; };
-  const onClick = () => { hopV = S * 0.08; mp?.classList.add('fast'); setTimeout(() => mp?.classList.remove('fast'), 1400); };
+  const onClick = () => { target = 90; nextAt = performance.now() + 2600; hopV = S * 0.07; };
   window.addEventListener('pointermove', onMove); root.addEventListener('click', onClick);
+  const draw = () => {
+    const [x, y] = pt(50, ang);
+    arm.setAttribute('x2', String(x)); arm.setAttribute('y2', String(y));
+    tip?.setAttribute('cx', String(x)); tip?.setAttribute('cy', String(y));
+    sec?.setAttribute('d', sector(Math.max(0.5, ang)));
+    if (deg) deg.textContent = `${Math.round(ang)}°`;
+  };
   const frame = (now: number) => {
     const t = (now - t0) / 1000, still = calm();
-    let target = 0;
-    if (pointer && now - pointer.at < 2500) { const r = body.getBoundingClientRect(); target = Math.max(-18, Math.min(18, (pointer.x - (r.left + r.width / 2)) / 18)); }
-    tilt += (target - tilt) * 0.06;
-    hop += hopV; hopV -= S * 0.01; if (hop < 0) { hop = 0; hopV = 0; }
-    const wx = still ? 0 : (Math.sin(t * 0.37) + 0.35 * Math.sin(t * 1.13)) * S * roam;
-    const wy = still ? 0 : (Math.sin(t * 0.61) + 0.3 * Math.cos(t * 1.7)) * S * roam * 0.35 - hop;
-    const sc = still ? 1 : 1 + Math.sin(t * 0.29) * 0.05;
-    body.style.transform = `translate(${wx}px, ${wy}px) rotate(${tilt + (still ? 0 : Math.sin(t * 0.8) * 4)}deg) scale(${sc})`;
-    if (shadow) shadow.style.transform = `translateX(${wx}px) scale(${Math.max(0.55, 1 - (wy < 0 ? -wy : 0) / (S * 0.9))})`;
+    if (!still && now > nextAt) { ti = (ti + 1) % TARGETS.length; target = TARGETS[ti]; nextAt = now + 2300; }
+    ang += (target - ang) * 0.06; draw();
+    let lean = 0;
+    if (pointer && now - pointer.at < 2500) { const r = body.getBoundingClientRect(); lean = Math.max(-8, Math.min(8, (pointer.x - (r.left + r.width / 2)) / 30)); }
+    tilt += (lean - tilt) * 0.06;
+    hop += hopV; hopV -= S * 0.009; if (hop < 0) { hop = 0; hopV = 0; }
+    const wx = still ? 0 : (Math.sin(t * 0.33) + 0.3 * Math.sin(t * 1.1)) * S * roam;
+    const wy = still ? 0 : Math.sin(t * 0.55) * S * roam * 0.25 - hop;
+    body.style.transform = `translate(${wx}px, ${wy}px) rotate(${tilt}deg)`;
+    if (shadow) shadow.style.transform = `translateX(${wx}px) scale(${Math.max(0.6, 1 - hop / (S * 0.8))})`;
     raf = requestAnimationFrame(frame);
   };
   raf = requestAnimationFrame(frame);
@@ -188,7 +196,7 @@ export function mountMadaAssistant(host: HTMLElement = document.body): () => voi
   injectCss();
   const wrap = document.createElement('div'); wrap.className = 'mada-launch';
   const firstTime = (() => { try { const v = localStorage.getItem('mada_hello'); localStorage.setItem('mada_hello', '1'); return !v; } catch { return true; } })();
-  wrap.innerHTML = `<button class="mada-btn" aria-label="فتح مساعد مدى">${planetHTML(74)}</button>${firstTime ? '<div class="mada-hello">مرحبًا، أنا مدى، مساعدك في الرياضيات واختبار TIMSS.</div>' : ''}`;
+  wrap.innerHTML = `<button class="mada-btn" aria-label="فتح مساعد مدى">${planetHTML(82)}</button>${firstTime ? '<div class="mada-hello">مرحبًا، أنا مدى، مساعدك في الرياضيات واختبار TIMSS.</div>' : ''}`;
   host.appendChild(wrap);
   const stop = planetLive(wrap.querySelector('.mada-btn') as HTMLElement, { roam: 0.12 });
   setTimeout(() => wrap.querySelector('.mada-hello')?.remove(), 7000);

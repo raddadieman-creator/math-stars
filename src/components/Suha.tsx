@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { planetHTML, planetLive, mountMadaAssistant, type Mood as PMood } from '@/lib/mada';
 
-/** «مَدى» — كوكب صغير يدور سطحه ويدور حوله قمر، ويتجول ويميل نحو المؤشر (المنطق في src/lib/mada.ts) */
+/** «مَدى» — منقلة رياضية تدور ذراعها وتقيس الزوايا، وتتنقل بهدوء وتميل نحو المؤشر (المنطق في src/lib/mada.ts) */
 type Mood = 'idle' | 'correct' | 'hint' | 'reveal' | 'happy' | 'cheer' | 'think';
 const MAP: Record<string, PMood> = { happy: 'idle', cheer: 'correct', think: 'hint' };
 

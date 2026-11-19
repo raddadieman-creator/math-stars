@@ -98,3 +98,18 @@ html.calm .mh *, html.calm .mh { animation: none !important; }
 @media (prefers-reduced-motion: reduce) { .mh, .mh * { animation: none !important; } }
 .mh-live .mh-scene, .mh-live .mh-cube, .mh-live .mh-shadow { animation: none !important; }
 .mh-live { user-select: none; -webkit-user-select: none; }
+
+/* ===== تصميم مسطّح هادئ (دون مؤثرات ثلاثية الأبعاد) ===== */
+body{background:#f6f7fb!important;background-image:none!important}
+.card,.card-3d{border-radius:16px!important;border:1px solid rgba(43,36,87,.10)!important;box-shadow:0 1px 2px rgba(43,36,87,.05),0 6px 16px -10px rgba(43,36,87,.18)!important;transform:none!important;transition:border-color .2s,box-shadow .2s!important}
+.tilt:hover,.card-3d.tilt:hover{transform:none!important;border-color:rgba(43,36,87,.28)!important;box-shadow:0 2px 4px rgba(43,36,87,.06),0 10px 24px -12px rgba(43,36,87,.25)!important}
+.btn-star,.btn-aqua,.btn-rose,.btn-ghost{box-shadow:none!important;background-image:none!important;border-radius:12px!important;transition:background-color .15s,border-color .15s!important}
+.btn-star{background-color:#f5b82e!important;color:#262a4a!important}.btn-star:hover{background-color:#e9a91a!important}
+.btn-aqua{background-color:#14b8a6!important;color:#fff!important}.btn-aqua:hover{background-color:#0f9f90!important}
+.btn-rose{background-color:#e8466c!important;color:#fff!important}
+.btn-ghost{background-color:#fff!important;border:1px solid rgba(43,36,87,.18)!important}.btn-ghost:hover{background-color:#f3f4f9!important}
+.btn:active,.btn-star:active,.btn-aqua:active,.btn-ghost:active{transform:none!important}
+.panel{border-radius:14px!important;box-shadow:0 1px 2px rgba(43,36,87,.05)!important}
+.flipin{animation:flatin .25s ease both!important}@keyframes flatin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.dot,.floaty{animation:none!important}.dot{display:none!important}
+.starfield{display:none!important}
