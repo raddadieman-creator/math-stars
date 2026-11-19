@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 
 const TABS: [string, string, string][] = [
   ['/student', 'صفحتي', 'M4 11l8-7 8 7v9H4z'],
+  ['/student/review', 'المراجعة', 'M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11M9 8h6M9 11h4'],
   ['/student/challenges', 'التحديات', 'M7 4h10v4a5 5 0 01-10 0zM12 13v4M8 20h8M7 6H4a3 3 0 003 4M17 6h3a3 3 0 01-3 4'],
   ['/student/library', 'المكتبة', 'M5 4h5v16H5zM14 4l5 1-3 15-5-1z'],
   ['/student/honor', 'لوحة التميز', 'M4 20h16M6 20V11h4v9M10 20V7h4v13M14 20v-6h4v6'],
