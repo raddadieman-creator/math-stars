@@ -22,7 +22,7 @@ export async function studentHome() {
     db.from('student_badges').select('awarded_at, skill_id, badges(code, name_ar, icon, kind)').eq('student_id', student.id).order('awarded_at', { ascending: false }),
     db.from('skill_mastery').select('skill_id, level, status, items_seen').eq('student_id', student.id),
     db.from('skills').select('id, code, name_ar, sort_order, content_domains(name_ar, sort_order)').order('sort_order'),
-    db.from('questions').select('skill_id').eq('status', 'published').eq('bank', 'practice'),
+    db.from('questions').select('skill_id').eq('status', 'published'),
     db.from('lessons').select('id, title, skill_id').eq('status', 'published').order('created_at', { ascending: false }),
   ]);
   const withQuestions = new Set((pubQ.data ?? []).map((q) => q.skill_id));

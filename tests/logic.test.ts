@@ -205,3 +205,19 @@ describe('محتوى المكتبة', () => {
     }
   });
 });
+
+import practice from '../src/lib/practice-items.json';
+describe('تغطية المعايير', () => {
+  it('كل سؤال مرتبط بمعيار من 1 إلى 19 وإجابته ضمن خياراته، ولكل معيار 5 أسئلة على الأقل', () => {
+    const all = [...(models as { items: { std?: number; o?: string[]; a: unknown; t: string }[] }[]).flatMap((m) => m.items), ...(practice as { std: number; o: string[]; a: number; t: string }[])];
+    const count: Record<number, number> = {};
+    for (const it of all) {
+      expect(it.std).toBeGreaterThanOrEqual(1);
+      expect(it.std).toBeLessThanOrEqual(19);
+      if (it.t === 'mcq') expect((it.a as number) < it.o!.length).toBe(true);
+      count[it.std!] = (count[it.std!] ?? 0) + 1;
+    }
+    for (let n = 1; n <= 19; n++) expect(count[n] ?? 0).toBeGreaterThanOrEqual(5);
+    expect(all.length).toBe(115);
+  });
+});

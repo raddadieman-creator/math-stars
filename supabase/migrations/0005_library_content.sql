@@ -89,7 +89,7 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'LIB-GEO'), a as (select id from assessments where kind = 'model' and form_label = 'geo'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'mcq', 'مستطيل طوله 12 سم وعرضه 5 سم. ما طول قطره بالسنتيمترات؟', '[{"id": "a", "text": "7"}, {"id": "b", "text": "13"}, {"id": "c", "text": "17"}, {"id": "d", "text": "60"}]'::jsonb, '{"value": "b"}'::jsonb, '["القطر وتر في مثلث قائم ضلعاه 12 و 5", "القطر² = 12² + 5² = 144 + 25 = 169", "القطر = 13 سم"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'applying', 2, 'mcq', 'مستطيل طوله 12 سم وعرضه 5 سم. ما طول قطره بالسنتيمترات؟', '[{"id": "a", "text": "7"}, {"id": "b", "text": "13"}, {"id": "c", "text": "17"}, {"id": "d", "text": "60"}]'::jsonb, '{"value": "b"}'::jsonb, '["القطر وتر في مثلث قائم ضلعاه 12 و 5", "مربع القطر = 144 + 25 = 169", "القطر = 13 سم"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'LIB-GEO'), a as (select id from assessments where kind = 'model' and form_label = 'geo'),

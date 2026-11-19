@@ -32,7 +32,7 @@ on conflict (code) do nothing;
 """]
 order=0
 for m in models:
-    if m['key']=='iea': continue
+    if m['key']=='iea' or m['key'].startswith('t0') or m['key'].startswith('t99'): continue
     order+=1
     out.append(f"insert into assessments (kind, form_label, title, domain_code, is_open, sort_order) values ('model', {q(m['key'])}, {q(m['title'])}, {q(DOM[m['key']])}, true, {order});")
     for pos,it in enumerate(m['items']):
@@ -51,3 +51,31 @@ for pos,it in enumerate(iea['items']):
     tail.append(qrow(it,'LIB-IEA','iea',", source_label, source_url, international_pct", f", {q(iea['source'])}, {q(iea['source_url'])}, {it['pct']}").replace("'published', 'library', ","'published', 'library', ",1).replace('POS',str(pos+1)))
 open(p,'w',encoding='utf-8').write(head+'\n'.join(tail)+'\n')
 print('sql ok')
+
+# ---------- 0008: نماذج TIMSS 1999/2003 المقتبسة + أسئلة التدريب الأصيلة على المعايير ----------
+prac=json.load(open('src/lib/practice-items.json',encoding='utf-8'))
+out=["""-- =====================================================================
+-- (1) خمسة نماذج من أسئلة TIMSS 1999 و2003 المنشورة للصف الثامن، مترجمة ومقتبسة بتصرف،
+--     مع رقم السؤال الأصلي في حقل المصدر. الاستخدام: تعليمي غير تجاري مع ذكر المصدر (IEA).
+-- (2) أسئلة تدريب أصيلة من إعداد المنصة لاستكمال تغطية المعايير الفرعية الـ19.
+-- (مولَّد بالأمر: python3 scripts/gen-library-sql.py)
+-- ====================================================================="""]
+order=10
+for m in models:
+    if not (m['key'].startswith('t0') or m['key'].startswith('t99')): continue
+    order+=1
+    out.append(f"insert into assessments (kind, form_label, title, is_open, sort_order, source_label, source_url) values ('model', {q(m['key'])}, {q(m['title'])}, true, {order}, {q(m['source'])}, {q(m['source_url'])});")
+    for pos,it in enumerate(m['items']):
+        opts=[{"id":chr(97+i),"text":o} for i,o in enumerate(it['o'])]
+        out.append(f"""with s as (select id from skills where code = 'G8-S{it['std']:02d}'), a as (select id from assessments where kind = 'model' and form_label = {q(m['key'])}),
+qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label, source_url)
+  select s.id, '{COG[it['cog']]}', 2, 'mcq', {q(it['p'])}, {q(json.dumps(opts,ensure_ascii=False))}::jsonb, {q(json.dumps({'value':chr(97+it['a'])},ensure_ascii=False))}::jsonb, {q(json.dumps(it['steps'],ensure_ascii=False))}::jsonb, 'published', 'library', {q(it['src_id'])}, {q(m['source_url'])}
+  from s returning id)
+insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, {pos+1} from a, qi;""")
+out.append("\n-- أسئلة التدريب الأصيلة")
+for it in prac:
+    opts=[{"id":chr(97+i),"text":o} for i,o in enumerate(it['o'])]
+    out.append(f"""insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
+select id, '{COG[it['cog']]}', {it['d']}, 'mcq', {q(it['p'])}, {q(json.dumps(opts,ensure_ascii=False))}::jsonb, {q(json.dumps({'value':chr(97+it['a'])},ensure_ascii=False))}::jsonb, {q(json.dumps(it['steps'],ensure_ascii=False))}::jsonb, 'published', 'practice', 'إعداد المنصة' from skills where code = 'G8-S{it['std']:02d}';""")
+open('supabase/migrations/0008_timss_released_and_practice.sql','w',encoding='utf-8').write('\n'.join(out)+'\n')
+print('0008 ok')
