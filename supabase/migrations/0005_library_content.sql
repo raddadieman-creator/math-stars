@@ -1,8 +1,8 @@
 -- =====================================================================
 -- محتوى مكتبة النماذج: 4 نماذج × 6 أسئلة + نموذج شامل يختار 8 أسئلة عشوائيًا
 -- الأسئلة من إعداد المنصة على نمط TIMSS للصف الثامن، وليست أسئلة TIMSS رسمية.
+-- (مولَّد بالأمر: python3 scripts/gen-library-sql.py)
 -- =====================================================================
--- مهارة حاضنة لكل مجال (لأن كل سؤال يرتبط بمهارة)
 insert into skills (domain_id, topic_id, code, name_ar, sort_order)
 select t.domain_id, t.id, x.code, x.name_ar, 100
 from (values
@@ -22,7 +22,7 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'LIB-NUM'), a as (select id from assessments where kind = 'model' and form_label = 'num'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'numeric', 'اشترت ريم 3 دفاتر، سعر الدفتر الواحد 4.75 ريالات، ودفعت 20 ريالًا. كم ريالًا يتبقى لها؟', '[]'::jsonb, '{"value": 5.75}'::jsonb, '["ثمن الدفاتر: 3 × 4.75 = 14.25", "الباقي: 20 − 14.25 = 5.75 ريالات"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'applying', 2, 'mcq', 'اشترت ريم 3 دفاتر، سعر الدفتر الواحد 4.75 ريالات، ودفعت 20 ريالًا. كم ريالًا يتبقى لها؟', '[{"id": "a", "text": "4.25"}, {"id": "b", "text": "5.75"}, {"id": "c", "text": "6.25"}, {"id": "d", "text": "14.25"}]'::jsonb, '{"value": "b"}'::jsonb, '["ثمن الدفاتر: 3 × 4.75 = 14.25", "الباقي: 20 − 14.25 = 5.75 ريالات"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'LIB-NUM'), a as (select id from assessments where kind = 'model' and form_label = 'num'),
@@ -32,7 +32,7 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 3 from a, qi;
 with s as (select id from skills where code = 'LIB-NUM'), a as (select id from assessments where kind = 'model' and form_label = 'num'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'knowing', 2, 'numeric', 'ما 15% من 80 ؟', '[]'::jsonb, '{"value": 12}'::jsonb, '["15% = 0.15", "0.15 × 80 = 12"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'knowing', 2, 'mcq', 'ما 15% من 80 ؟', '[{"id": "a", "text": "8"}, {"id": "b", "text": "1.2"}, {"id": "c", "text": "12"}, {"id": "d", "text": "15"}]'::jsonb, '{"value": "c"}'::jsonb, '["15% = 0.15", "0.15 × 80 = 12"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 4 from a, qi;
 with s as (select id from skills where code = 'LIB-NUM'), a as (select id from assessments where kind = 'model' and form_label = 'num'),
@@ -53,7 +53,7 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'LIB-ALG'), a as (select id from assessments where kind = 'model' and form_label = 'alg'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'numeric', 'إذا كان 2س − 5 = 11، فما قيمة س؟', '[]'::jsonb, '{"value": 8}'::jsonb, '["نضيف 5 إلى الطرفين: 2س = 16", "نقسم على 2: س = 8"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'applying', 2, 'mcq', 'إذا كان 2س − 5 = 11، فما قيمة س؟', '[{"id": "a", "text": "3"}, {"id": "b", "text": "6"}, {"id": "c", "text": "8"}, {"id": "d", "text": "16"}]'::jsonb, '{"value": "c"}'::jsonb, '["نضيف 5 إلى الطرفين: 2س = 16", "نقسم على 2: س = 8"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'LIB-ALG'), a as (select id from assessments where kind = 'model' and form_label = 'alg'),
@@ -84,7 +84,7 @@ qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, op
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'LIB-GEO'), a as (select id from assessments where kind = 'model' and form_label = 'geo'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'numeric', 'مستطيل طوله 12 سم وعرضه 5 سم. ما طول قطره بالسنتيمترات؟', '[]'::jsonb, '{"value": 13}'::jsonb, '["القطر وتر في مثلث قائم ضلعاه 12 و 5", "القطر² = 12² + 5² = 144 + 25 = 169", "القطر = 13 سم"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'applying', 2, 'mcq', 'مستطيل طوله 12 سم وعرضه 5 سم. ما طول قطره بالسنتيمترات؟', '[{"id": "a", "text": "7"}, {"id": "b", "text": "13"}, {"id": "c", "text": "17"}, {"id": "d", "text": "60"}]'::jsonb, '{"value": "b"}'::jsonb, '["القطر وتر في مثلث قائم ضلعاه 12 و 5", "القطر² = 12² + 5² = 144 + 25 = 169", "القطر = 13 سم"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'LIB-GEO'), a as (select id from assessments where kind = 'model' and form_label = 'geo'),
@@ -110,12 +110,12 @@ insert into assessment_items (assessment_id, question_id, position) select a.id,
 insert into assessments (kind, form_label, title, domain_code, is_open, sort_order) values ('model', 'data', 'نموذج البيانات والاحتمالات', 'data_probability', true, 4);
 with s as (select id from skills where code = 'LIB-DATA'), a as (select id from assessments where kind = 'model' and form_label = 'data'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'knowing', 2, 'numeric', 'ما الوسيط للبيانات: 7، 3، 9، 4، 6 ؟', '[]'::jsonb, '{"value": 6}'::jsonb, '["نرتب البيانات: 3، 4، 6، 7، 9", "القيمة الوسطى هي 6"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'knowing', 2, 'mcq', 'ما الوسيط للبيانات: 7، 3، 9، 4، 6 ؟', '[{"id": "a", "text": "9"}, {"id": "b", "text": "5.8"}, {"id": "c", "text": "4"}, {"id": "d", "text": "6"}]'::jsonb, '{"value": "d"}'::jsonb, '["نرتب البيانات: 3، 4، 6، 7، 9", "القيمة الوسطى هي 6"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 1 from a, qi;
 with s as (select id from skills where code = 'LIB-DATA'), a as (select id from assessments where kind = 'model' and form_label = 'data'),
 qi as (insert into questions (skill_id, cognitive, difficulty, qtype, prompt, options, correct_answer, solution_steps, status, bank, source_label)
-  select s.id, 'applying', 2, 'numeric', 'درجات خمس طالبات في اختبار: 80، 90، 70، 85، 75. ما المتوسط الحسابي للدرجات؟', '[]'::jsonb, '{"value": 80}'::jsonb, '["المجموع = 80 + 90 + 70 + 85 + 75 = 400", "المتوسط = 400 ÷ 5 = 80"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
+  select s.id, 'applying', 2, 'mcq', 'درجات خمس طالبات في اختبار: 80، 90، 70، 85، 75. ما المتوسط الحسابي للدرجات؟', '[{"id": "a", "text": "75"}, {"id": "b", "text": "80"}, {"id": "c", "text": "85"}, {"id": "d", "text": "400"}]'::jsonb, '{"value": "b"}'::jsonb, '["المجموع = 80 + 90 + 70 + 85 + 75 = 400", "المتوسط = 400 ÷ 5 = 80"]'::jsonb, 'published', 'library', 'إعداد المنصة (على نمط TIMSS)'
   from s returning id)
 insert into assessment_items (assessment_id, question_id, position) select a.id, qi.id, 2 from a, qi;
 with s as (select id from skills where code = 'LIB-DATA'), a as (select id from assessments where kind = 'model' and form_label = 'data'),
