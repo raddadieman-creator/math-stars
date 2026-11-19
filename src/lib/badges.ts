@@ -5,7 +5,7 @@
 
 export type Tier = 'bronze' | 'silver' | 'gold' | 'special';
 export type BadgeIcon = 'star' | 'flame' | 'target' | 'crown' | 'number' | 'algebra' | 'geometry' | 'data' | 'book' | 'check' | 'trophy' | 'mountain' | 'trend' | 'calendar';
-export type BadgeGroup = 'tasks' | 'mastery' | 'library' | 'persistence' | 'monthly';
+export type BadgeGroup = 'tasks' | 'mastery' | 'library' | 'challenges' | 'persistence' | 'monthly';
 
 export interface StudentStats {
   sessions: number;                 // جلسات التدريب المكتملة
@@ -18,6 +18,7 @@ export interface StudentStats {
   solvedAfterHint: number;          // أسئلة حُلت بعد تلميح
   improvements: number;             // مرات التحسن الشخصي
   month: { sessions: number; models: number; independent: number }; // إنجاز الشهر الحالي
+  challenges?: { daily: number; speedBestPct: number; mistakesFixed: number; total: number }; // التحديات
 }
 
 export interface MonthlyGoals { sessions: number; models: number; independent: number }
@@ -52,12 +53,16 @@ export const BADGES: BadgeDef[] = [
 
   { code: 'persistence_3', name: 'المواظبة', desc: 'التدريب في 3 أيام مختلفة خلال أسبوع', tier: 'silver', icon: 'calendar', group: 'persistence', rule: { value: (s) => s.practiceDaysLast7, target: fixed(3) } },
   { code: 'comeback', name: 'المثابرة', desc: 'حل سؤال بعد التلميح', tier: 'bronze', icon: 'mountain', group: 'persistence', rule: { value: (s) => s.solvedAfterHint, target: fixed(1) } },
+  { code: 'ch_first', name: 'أول تحدٍّ', desc: 'إكمال أول تحدٍّ', tier: 'bronze', icon: 'star', group: 'challenges', rule: { value: (s) => s.challenges?.total ?? 0, target: fixed(1) } },
+  { code: 'ch_daily_7', name: 'تحدي الأسبوع', desc: 'إكمال 7 تحديات يومية', tier: 'silver', icon: 'flame', group: 'challenges', rule: { value: (s) => s.challenges?.daily ?? 0, target: fixed(7) } },
+  { code: 'ch_speed', name: 'سريع ودقيق', desc: '80٪ فأعلى في تحدي السرعة', tier: 'gold', icon: 'trophy', group: 'challenges', rule: { value: (s) => ((s.challenges?.speedBestPct ?? 0) >= 80 ? 1 : 0), target: fixed(1) } },
+  { code: 'ch_mistakes', name: 'أتعلم من أخطائي', desc: 'تصحيح 10 أسئلة سبق الخطأ فيها', tier: 'silver', icon: 'trend', group: 'challenges', rule: { value: (s) => s.challenges?.mistakesFixed ?? 0, target: fixed(10) } },
   { code: 'personal_best', name: 'التحسن الشخصي', desc: 'تجاوز نتيجتك السابقة في المهارة نفسها', tier: 'silver', icon: 'trend', group: 'persistence', rule: { value: (s) => s.improvements, target: fixed(1) } },
 ];
 
 export const MONTHLY_BADGE = { code: 'monthly_excellence', name: 'تميّز الشهر', tier: 'special' as Tier, icon: 'crown' as BadgeIcon };
 
-export const GROUP_AR: Record<BadgeGroup, string> = { tasks: 'المهام', mastery: 'إتقان المعايير', library: 'مكتبة النماذج', persistence: 'المواظبة', monthly: 'تميّز الشهر' };
+export const GROUP_AR: Record<BadgeGroup, string> = { tasks: 'المهام', mastery: 'إتقان المعايير', library: 'مكتبة النماذج', challenges: 'التحديات', persistence: 'المواظبة', monthly: 'تميّز الشهر' };
 
 /** تقدم الطالب نحو كل وسام (لعرض الأوسمة المقفلة مع شريط التقدم) */
 export function badgeProgress(s: StudentStats, g: MonthlyGoals = DEFAULT_MONTHLY_GOALS) {

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Shell } from '@/components/Shell';
+import { StudentNav } from '@/components/student/StudentNav';
 import { requireStudent } from '@/lib/student-data';
 import { listFiles, listModels } from '@/lib/library-service';
 import { qCount } from '@/lib/types';
@@ -25,6 +26,7 @@ export default async function Library() {
   const [models, files] = await Promise.all([listModels(student.id), listFiles()]);
   return (
     <Shell right={<Link href="/student" className="chip hover:bg-ink/5">صفحتي</Link>}>
+      <StudentNav />
       <h1 className="text-3xl font-black">مكتبة نماذج الاختبارات</h1>
       <p className="mt-1 text-sm muted">نماذج تدريبية على نمط اختبارات TIMSS للصف الثاني المتوسط.</p>
       <h2 className="h-section mt-8">نماذج TIMSS</h2>

@@ -7,7 +7,7 @@ export function BadgeCase({ stats, goals, owned, monthName, monthlyWins }: {
   const progress = new Map(badgeProgress(stats, goals).map((p) => [p.code, p]));
   const monthly = monthlyProgress(stats, goals);
   const earnedCount = BADGES.filter((b) => owned.has(b.code)).length;
-  const groups = (['tasks', 'mastery', 'library', 'persistence'] as BadgeGroup[]);
+  const groups = (['tasks', 'mastery', 'library', 'challenges', 'persistence'] as BadgeGroup[]);
   return (
     <section className="mt-10 space-y-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2">

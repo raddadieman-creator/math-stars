@@ -24,7 +24,9 @@ export async function studentStats(db: DB, studentId: string, now = new Date()):
   ]);
   const inMonth = (d: string | null) => !!d && hijriMonth(new Date(d)).key === month;
   const ended = sessions.data ?? [];
-  const models = (atts.data ?? []).filter((a) => (a.assessments as unknown as { kind: string } | null)?.kind === 'model');
+  const models = (atts.data ?? []).filter((a) => { const x = a.assessments as unknown as { kind: string; form_label: string } | null; return x?.kind === 'model' && !x.form_label?.startsWith('ch-'); });
+  const chal = (atts.data ?? []).filter((a) => (a.assessments as unknown as { form_label: string; kind: string }).form_label?.startsWith('ch-'));
+  const chPct = (a: { score: number | null; max_score: number | null }) => (a.max_score ? Math.round(((a.score ?? 0) / a.max_score) * 100) : 0);
   const weekAgo = now.getTime() - 7 * 864e5;
   return {
     sessions: ended.length,
@@ -36,6 +38,12 @@ export async function studentStats(db: DB, studentId: string, now = new Date()):
     practiceDaysLast7: new Set(ended.filter((s) => new Date(s.started_at).getTime() >= weekAgo).map((s) => s.started_at.slice(0, 10))).size,
     solvedAfterHint: hints.count ?? 0,
     improvements: (bests.data ?? []).length,
+    challenges: {
+      total: chal.length,
+      daily: new Set(chal.filter((a) => (a.assessments as unknown as { form_label: string; kind: string }).form_label === 'ch-daily').map((a) => String(a.submitted_at).slice(0, 10))).size,
+      speedBestPct: chal.filter((a) => (a.assessments as unknown as { form_label: string; kind: string }).form_label === 'ch-speed').reduce((mx, a) => Math.max(mx, chPct(a)), 0),
+      mistakesFixed: chal.filter((a) => (a.assessments as unknown as { form_label: string; kind: string }).form_label === 'ch-mistakes').reduce((t, a) => t + (a.score ?? 0), 0),
+    },
     month: {
       sessions: ended.filter((s) => inMonth(s.ended_at)).length,
       models: models.filter((a) => inMonth(a.submitted_at)).length,

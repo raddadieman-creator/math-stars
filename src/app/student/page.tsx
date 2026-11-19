@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Shell } from '@/components/Shell';
+import { StudentNav } from '@/components/student/StudentNav';
 import { Suha } from '@/components/Suha';
 import { studentHome } from '@/lib/student-data';
 import { STATUS_AR } from '@/lib/types';
@@ -25,6 +26,7 @@ export default async function StudentHome() {
   const first = h.student.full_name.split(' ')[0];
   return (
     <Shell right={<LogoutStudent />}>
+      <StudentNav />
       <section className="grid items-center gap-6 md:grid-cols-[auto_1fr_auto]">
         <Suha size={80} mood="idle" />
         <div>

@@ -245,7 +245,7 @@ describe('الأوسمة', () => {
     const p = badgeProgress({ ...base, sessions: 3 }).find((x) => x.code === 'sessions_5')!;
     expect(p).toEqual({ code: 'sessions_5', value: 3, target: 5, done: false });
     expect(monthlyProgress({ ...base, month: { sessions: 8, models: 1, independent: 40 } }).done).toBe(false);
-    expect(BADGES.length).toBe(17);
+    expect(BADGES.length).toBe(21);
   });
   it('الشهر الهجري', () => {
     const m = hijriMonth(new Date('2026-11-19T10:00:00Z'));

@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { PublicQuestion } from '@/lib/types';
 import { QuestionView } from './QuestionView';
@@ -13,7 +13,7 @@ const has = (v: unknown) => v !== undefined && v !== null && v !== '';
 
 /** نموذج تدريبي: سؤال في كل شاشة، تغذية راجعة فورية بعد الاختيار (صحيح/خطأ، همسة، شرح الحل)، ثم ملخص عند التسليم. */
 type Check = { ok: boolean; correctText: string; steps: string[]; hint: string | null };
-export function ModelRunner({ model, exam = false }: { model: { id: string; title: string; source: string | null; sourceUrl: string | null; items: Item[] }; exam?: boolean }) {
+export function ModelRunner({ model, exam = false, timeLimitSec }: { model: { id: string; title: string; source: string | null; sourceUrl: string | null; items: Item[] }; exam?: boolean; timeLimitSec?: number }) {
   const { play } = usePrefs();
   const [i, setI] = useState(0);
   const [ans, setAns] = useState<Record<string, unknown>>({});
@@ -33,8 +33,18 @@ export function ModelRunner({ model, exam = false }: { model: { id: string; titl
     setChecks((c) => ({ ...c, [id]: j })); play(j.ok ? 'correct' : 'retry');
   }
 
-  async function submit() {
-    if (left && !confirm) { setConfirm(true); return; }
+  const [secs, setSecs] = useState(timeLimitSec ?? 0);
+  useEffect(() => {
+    if (!timeLimitSec || res) return;
+    if (secs <= 0) { void submit(true); return; }
+    const t = setTimeout(() => setSecs((x) => x - 1), 1000);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [secs, res]);
+
+  async function submit(force = false) {
+    if (busy) return;
+    if (!force && left && !confirm) { setConfirm(true); return; }
     setBusy(true);
     const r = await fetch('/api/library/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ assessmentId: model.id, answers: Object.fromEntries(model.items.map((x) => [x.id, ans[x.id] ?? null])) }) });
     const j = await r.json();
@@ -81,7 +91,7 @@ export function ModelRunner({ model, exam = false }: { model: { id: string; titl
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div><p className="text-sm muted">{exam ? 'قياس لتحديد المستوى' : 'مكتبة النماذج'}</p><h1 className="text-2xl font-black">{model.title}</h1>{exam && <p className="mt-2 rounded-xl bg-sky2-400/10 p-3 text-sm">لا تظهر الإجابة الصحيحة أثناء القياس. تظهر النتيجة وشرح كل سؤال بعد التسليم، ولا يُعاد القياس.</p>}</div>
+        {timeLimitSec ? <span className={`chip px-4 py-2 text-lg font-black ${secs < 60 ? 'text-rose-600' : ''}`}>⏱ {Math.floor(secs / 60)}:{String(secs % 60).padStart(2, '0')}</span> : null}<div><p className="text-sm muted">{exam ? 'قياس لتحديد المستوى' : 'مكتبة النماذج'}</p><h1 className="text-2xl font-black">{model.title}</h1>{exam && <p className="mt-2 rounded-xl bg-sky2-400/10 p-3 text-sm">لا تظهر الإجابة الصحيحة أثناء القياس. تظهر النتيجة وشرح كل سؤال بعد التسليم، ولا يُعاد القياس.</p>}</div>
         <span className="chip">أُجيب عن {model.items.length - left} من {model.items.length}</span>
       </div>
       {model.source && <p className="mb-4 text-xs muted">{model.sourceUrl ? <a className="underline" href={model.sourceUrl} target="_blank" rel="noreferrer">{model.source}</a> : model.source}</p>}
@@ -111,7 +121,7 @@ export function ModelRunner({ model, exam = false }: { model: { id: string; titl
           <button disabled={i === 0} onClick={() => setI(i - 1)} className="btn-ghost">السابق</button>
           <button disabled={i === model.items.length - 1} onClick={() => setI(i + 1)} className="btn-ghost">التالي</button>
         </div>
-        <button disabled={busy} onClick={submit} className="btn-star">{confirm && left ? `بقي ${left} دون إجابة · تأكيد التسليم` : 'تسليم النموذج'}</button>
+        <button disabled={busy} onClick={() => submit()} className="btn-star">{confirm && left ? `بقي ${left} دون إجابة · تأكيد التسليم` : 'تسليم النموذج'}</button>
       </div>
       {err && <p className="mt-3 text-rose-600">{err}</p>}
     </div>
