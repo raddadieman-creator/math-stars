@@ -29,7 +29,7 @@ export default async function Home() {
             </div>
           </div>
           <h1 className="text-4xl font-black leading-tight md:text-6xl">
-            معًا نحو القمة <span dir="ltr" className="text-sky-600">– TIMSS</span>
+            معًا نحو القمة – <span className="text-sky-600">TIMSS</span>
             <span className="mt-2 block bg-gradient-to-l from-star-500 via-rose-500 to-aqua-500 bg-clip-text text-2xl text-transparent md:text-3xl">
               {s.slogan}
             </span>
