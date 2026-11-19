@@ -83,6 +83,7 @@ export function ModelRunner({ model }: { model: { id: string; title: string; sou
       <div key={it.id} className="card-3d p-6 md:p-8">
         <div className="flex flex-wrap gap-2"><span className="chip">السؤال {i + 1}</span><span className="chip">{it.cognitive}</span></div>
         <p className="mt-3 text-xl font-bold leading-[1.9]" dir="auto">{it.prompt}</p>
+        {it.media_url && <img src={it.media_url} alt="الشكل المرافق للسؤال" className="mt-4 max-h-72 max-w-full rounded-xl border border-ink/10 bg-white p-2" />}
         <div className="mt-5"><QuestionView q={it} disabled={false} onChange={(v) => setAns((a) => (a[it.id] === v ? a : { ...a, [it.id]: v }))} /></div>
       </div>
       <div className="mt-5 flex flex-wrap justify-between gap-3">

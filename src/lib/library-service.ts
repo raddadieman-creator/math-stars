@@ -10,14 +10,14 @@ export const MIX_SIZE = 8;
 export async function listModels(studentId: string) {
   const db = supabaseAdmin();
   const [{ data: models }, { data: attempts }] = await Promise.all([
-    db.from('assessments').select('id, title, form_label, description, sort_order, assessment_items(count)').eq('kind', 'model').eq('is_open', true).order('sort_order'),
+    db.from('assessments').select('id, title, form_label, description, domain_code, sort_order, assessment_items(count)').eq('kind', 'model').eq('is_open', true).order('sort_order'),
     db.from('assessment_attempts').select('assessment_id, score, max_score').eq('student_id', studentId).not('submitted_at', 'is', null),
   ]);
   return (models ?? []).map((m) => {
     const mine = (attempts ?? []).filter((a) => a.assessment_id === m.id && a.max_score);
     const best = mine.length ? Math.max(...mine.map((a) => Math.round(((a.score ?? 0) / a.max_score!) * 100))) : null;
     const count = m.form_label === 'mix' ? MIX_SIZE : ((m.assessment_items as unknown as { count: number }[])[0]?.count ?? 0);
-    return { id: m.id as string, title: m.title as string, key: m.form_label as string, count, best, tries: mine.length };
+    return { id: m.id as string, title: m.title as string, key: m.form_label as string, group: (m.form_label as string).startsWith('bk-') ? 'booklet' : 'timss', domain: (m.domain_code as string | null) ?? null, count, best, tries: mine.length };
   });
 }
 
