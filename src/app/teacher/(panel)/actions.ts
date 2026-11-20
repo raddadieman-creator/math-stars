@@ -69,10 +69,10 @@ export async function createClass(f: FormData) {
   revalidatePath('/teacher/students');
 }
 
-/** إضافة طالبة: تدخل باسمها الثلاثي وفصلها، فلا يُصدر لها رمز */
-export async function addStudent(f: FormData): Promise<{ ok?: boolean; error?: string }> {
+/** إضافة طالبة مع رمز دخول شخصي من أربعة أرقام */
+export async function addStudent(f: FormData): Promise<{ ok?: boolean; code?: string; error?: string }> {
   const { sb } = await requireStaff();
-  const { normName } = await import('@/lib/names');
+  const { normName, newStudentCode } = await import('@/lib/names');
   const { randomBytes } = await import('node:crypto');
   const full = (str(f, 'full_name') ?? '').replace(/\s+/g, ' ');
   const classId = str(f, 'class_id');
@@ -80,13 +80,14 @@ export async function addStudent(f: FormData): Promise<{ ok?: boolean; error?: s
   if (full.split(' ').length < 3) return { error: 'يُكتب الاسم ثلاثيًا على الأقل' };
   const { data: dup } = await sb.from('students').select('full_name').eq('class_id', classId);
   if ((dup ?? []).some((d) => normName(d.full_name) === normName(full))) return { error: 'الاسم مسجل في هذا الفصل' };
+  const code = newStudentCode();
   const { error } = await sb.from('students').insert({
     full_name: full, nickname: str(f, 'nickname') ?? full.split(' ').slice(0, 2).join(' '),
-    class_id: classId, login_code_hash: 'name:' + randomBytes(16).toString('hex'),
+    class_id: classId, login_code_hash: 'name:' + randomBytes(16).toString('hex'), login_code: code,
   });
   if (error) return { error: error.message };
   revalidatePath('/teacher/students');
-  return { ok: true };
+  return { ok: true, code };
 }
 
 /** حذف طالبة مع سجلاتها (للمعلم صاحب الفصل أو الإدارة) */
@@ -107,7 +108,7 @@ export async function toggleStudent(studentId: string, active: boolean) {
 /** استيراد أسماء الطلاب من Excel: [الاسم الثلاثي، الفصل اختياري]. يُنشأ الفصل للمعلم إن لم يوجد. */
 export async function importStudents(rows: [string, string][], fallbackClassId: string): Promise<{ added: number; skipped: number; error?: string }> {
   const { staff, sb } = await requireStaff();
-  const { normName } = await import('@/lib/names');
+  const { normName, newStudentCode } = await import('@/lib/names');
   const { randomBytes } = await import('node:crypto');
   const { data: links } = await sb.from('class_teachers').select('class_id, classes(id, name)').eq('teacher_id', staff.id);
   const mine = (links ?? []).map((l) => l.classes as unknown as { id: string; name: string }).filter(Boolean);
@@ -129,7 +130,7 @@ export async function importStudents(rows: [string, string][], fallbackClassId: 
     if (!c) { skipped++; continue; }
     const { data: dup } = await sb.from('students').select('id, full_name').eq('class_id', c.id);
     if ((dup ?? []).some((d) => normName(d.full_name) === normName(name))) { skipped++; continue; }
-    const { error } = await sb.from('students').insert({ full_name: name, nickname: name.split(' ').slice(0, 2).join(' '), class_id: c.id, login_code_hash: 'name:' + randomBytes(16).toString('hex') });
+    const { error } = await sb.from('students').insert({ full_name: name, nickname: name.split(' ').slice(0, 2).join(' '), class_id: c.id, login_code_hash: 'name:' + randomBytes(16).toString('hex'), login_code: newStudentCode() });
     if (error) skipped++; else added++;
   }
   revalidatePath('/teacher/students');
@@ -146,4 +147,15 @@ export async function changePassword(f: FormData): Promise<{ ok?: boolean; error
   if (e1) return { error: 'كلمة المرور الحالية غير صحيحة' };
   const { error } = await sb.auth.updateUser({ password: next });
   return error ? { error: error.message } : { ok: true };
+}
+
+/** إصدار رمز دخول جديد لطالبة (يتوقف الرمز السابق) */
+export async function resetStudentCode(studentId: string): Promise<{ code?: string; error?: string }> {
+  const { sb } = await requireStaff();
+  const { newStudentCode } = await import('@/lib/names');
+  const code = newStudentCode();
+  const { error } = await sb.from('students').update({ login_code: code }).eq('id', studentId);
+  if (error) return { error: error.message };
+  revalidatePath('/teacher/students');
+  return { code };
 }

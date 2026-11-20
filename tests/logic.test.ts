@@ -253,3 +253,17 @@ describe('الأوسمة', () => {
     expect(m.name.length).toBeGreaterThan(3);
   });
 });
+
+import { classLabels, newStudentCode } from '../src/lib/names';
+describe('قائمة أسماء الفصل ورموز الدخول', () => {
+  it('يعرض الاسم الثلاثي دون بن/بنت ويميز المتشابه', () => {
+    const l = classLabels([
+      { id: '1', full_name: 'رند بنت ابراهيم بن علي تركي' },
+      { id: '2', full_name: 'غلا يحي عيسى حقوي' },
+      { id: '3', full_name: 'غلا يحي عيسى الحربي' },
+    ]);
+    expect(l.find((x) => x.id === '1')!.label).toBe('رند ابراهيم علي');
+    expect(l.find((x) => x.id === '2')!.label).toBe('غلا يحي عيسى حقوي');
+  });
+  it('الرمز أربعة أرقام', () => { for (let i = 0; i < 50; i++) expect(newStudentCode()).toMatch(/^[0-9]{4}$/); });
+});

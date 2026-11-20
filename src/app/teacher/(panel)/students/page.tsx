@@ -1,6 +1,6 @@
 import { requireStaff } from '@/lib/data';
 import { createClass } from '../actions';
-import { AddStudentForm, StudentRowActions } from '@/components/teacher/StudentForms';
+import { AddStudentForm, StudentCode, StudentRowActions } from '@/components/teacher/StudentForms';
 import { ImportStudents } from '@/components/teacher/ImportStudents';
 
 export const dynamic = 'force-dynamic';
@@ -9,7 +9,7 @@ export default async function Students() {
   const { sb, staff } = await requireStaff();
   const [{ data: classes }, { data: students }, { data: teachers }] = await Promise.all([
     sb.from('classes').select('id, name, academic_year, class_teachers(teacher_id)').order('name'),
-    sb.from('students').select('id, full_name, nickname, class_id, is_active, is_demo').order('full_name'),
+    sb.from('students').select('id, full_name, nickname, class_id, is_active, is_demo, login_code').order('full_name'),
     sb.from('staff').select('id, full_name, role'),
   ]);
   const tName = new Map((teachers ?? []).map((t) => [t.id, t.full_name]));
@@ -32,15 +32,19 @@ export default async function Students() {
         <div key={c.id} className="panel overflow-x-auto">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
             <h2 className="text-xl font-extrabold">{c.name}</h2>
-            <p className="text-sm muted">المعلمون: {(c.class_teachers as { teacher_id: string }[]).map((t) => tName.get(t.teacher_id)).join('، ') || '—'}</p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-sm muted">المعلمون: {(c.class_teachers as { teacher_id: string }[]).map((t) => tName.get(t.teacher_id)).join('، ') || '—'}</p>
+              <a href={`/teacher/students/codes/${c.id}`} target="_blank" className="chip">طباعة بطاقات الرموز</a>
+            </div>
           </div>
           <table className="mt-3 w-full min-w-[560px] text-sm">
-            <thead className="text-ink/60"><tr><th className="text-start">الاسم</th><th className="text-start">الاسم المستعار</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <thead className="text-ink/60"><tr><th className="text-start">الاسم</th><th className="text-start">الاسم المستعار</th><th>رمز الدخول</th><th>الحالة</th><th>إجراءات</th></tr></thead>
             <tbody>
               {(students ?? []).filter((s) => s.class_id === c.id).map((s) => (
                 <tr key={s.id} className="border-t border-ink/5">
                   <td className="py-2">{s.full_name}{s.is_demo && <span className="chip mr-2 text-[10px]">تجريبية</span>}</td>
                   <td>{s.nickname}</td>
+                  <td className="text-center"><StudentCode id={s.id} code={s.login_code} /></td>
                   <td className="text-center">{s.is_active ? 'نشطة' : 'موقوفة'}</td>
                   <td className="text-center"><StudentRowActions id={s.id} active={s.is_active} name={s.full_name} /></td>
                 </tr>

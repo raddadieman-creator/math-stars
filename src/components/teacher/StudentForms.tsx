@@ -1,9 +1,9 @@
 'use client';
 import { useState, useTransition } from 'react';
-import { addStudent, deleteStudent, toggleStudent } from '@/app/teacher/(panel)/actions';
+import { addStudent, deleteStudent, resetStudentCode, toggleStudent } from '@/app/teacher/(panel)/actions';
 
 export function AddStudentForm({ classes }: { classes: { id: string; name: string }[] }) {
-  const [res, setRes] = useState<{ ok?: boolean; error?: string; name?: string } | null>(null);
+  const [res, setRes] = useState<{ ok?: boolean; code?: string; error?: string; name?: string } | null>(null);
   const [pending, start] = useTransition();
   return (
     <form className="panel grid gap-3 md:grid-cols-4" action={(f) => start(async () => { const r = await addStudent(f); setRes({ ...r, name: String(f.get('full_name')) }); })}>
@@ -12,7 +12,7 @@ export function AddStudentForm({ classes }: { classes: { id: string; name: strin
       <div><label className="label">اسم مختصر للوحة التميز</label><input name="nickname" className="field" placeholder="اختياري: الاسم الأول واسم الأب" /></div>
       <div><label className="label">الفصل</label><select name="class_id" required className="field">{classes.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
       <div className="flex items-end"><button disabled={pending} className="btn-aqua w-full">إضافة</button></div>
-      {res?.ok && <p className="rounded-xl bg-teal-50 p-3 md:col-span-4">أُضيفت {res.name}. تدخل باسمها الثلاثي واختيار فصلها.</p>}
+      {res?.ok && <p className="rounded-xl bg-teal-50 p-3 md:col-span-4">أُضيفت {res.name}. رمز دخولها: <b dir="ltr" className="text-xl tracking-widest">{res.code}</b>، ويظهر أيضًا في جدول الفصل.</p>}
       {res?.error && <p className="text-rose-600 md:col-span-4">{res.error}</p>}
     </form>
   );
@@ -27,6 +27,17 @@ export function StudentRowActions({ id, active, name }: { id: string; active: bo
       <button disabled={pending} className="chip" onClick={() => start(() => toggleStudent(id, !active))}>{active ? 'إيقاف' : 'تفعيل'}</button>
       <button disabled={pending} className="chip text-rose-600" onClick={() => { if (confirm(`حذف ${name ?? 'الطالبة'} وجميع سجلاتها نهائيًا؟`)) start(async () => { const r = await deleteStudent(id); if (r.error) setErr(r.error); }); }}>حذف</button>
       {err && <span className="text-rose-600">{err}</span>}
+    </span>
+  );
+}
+
+export function StudentCode({ id, code }: { id: string; code: string | null }) {
+  const [c, setC] = useState(code);
+  const [pending, start] = useTransition();
+  return (
+    <span className="inline-flex items-center gap-2">
+      <b dir="ltr" className="font-mono text-base tracking-widest">{c ?? '----'}</b>
+      <button disabled={pending} className="chip text-xs" onClick={() => { if (confirm('إصدار رمز جديد؟ يتوقف الرمز الحالي.')) start(async () => { const r = await resetStudentCode(id); if (r.code) setC(r.code); }); }}>رمز جديد</button>
     </span>
   );
 }
