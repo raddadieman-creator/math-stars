@@ -239,7 +239,8 @@ header{padding-top:env(safe-area-inset-top)}
     <div class="mx-auto w-fit" data-suha="100" data-mood="idle" data-named="1"></div>
     <h1 class="text-2xl font-black">دخول الطالب</h1>
     <div class="text-start"><label class="mb-1 block text-sm font-bold" for="sClass">الفصل</label><select id="sClass" class="field" required></select></div>
-    <div class="text-start"><label class="mb-1 block text-sm font-bold" for="sName">الاسم الثلاثي</label><input id="sName" class="field" autocomplete="off" required placeholder="كما سجّله المعلم"></div>
+    <div class="text-start"><label class="mb-1 block text-sm font-bold" for="sStu">الاسم</label><select id="sStu" class="field" required disabled><option value="">يُختار الفصل أولًا</option></select></div>
+    <div class="text-start"><label class="mb-1 block text-sm font-bold" for="sCode">رمز الدخول</label><input id="sCode" class="field text-center text-2xl" style="letter-spacing:.5em" dir="ltr" inputmode="numeric" maxlength="4" autocomplete="off" required placeholder="••••"><p class="mt-1 text-xs muted">رمز من أربعة أرقام تسلّمه معلمة الفصل.</p></div>
     <p id="loginMsg" class="hidden rounded-xl bg-rose-400/20 p-3 text-sm text-rose-600"></p>
     <button class="btn btn-star w-full">دخول</button>
   </form>
@@ -340,8 +341,8 @@ header{padding-top:env(safe-area-inset-top)}
   <div id="tnav" class="mb-6 flex flex-wrap gap-2"></div>
   <div class="flex flex-wrap items-center justify-between gap-3"><h1 class="text-3xl font-black">لوحة المتابعة</h1><select id="clsPick" class="field max-w-xs"></select></div>
   <div class="panel mt-4"><div class="flex flex-wrap items-center justify-between gap-3"><h2 class="text-lg font-extrabold">طلاب الفصل</h2>
-    <div class="flex flex-wrap gap-2"><label class="btn btn-ghost cursor-pointer">رفع ملف Excel<input id="rosterFile" type="file" accept=".xlsx,.csv" class="hidden"></label><button id="rosterAddBtn" class="btn btn-ghost">إضافة طالب</button></div></div>
-    <p class="mt-1 text-xs muted">ملف Excel أو CSV فيه عمود «الاسم الثلاثي»، ويمكن إضافة عمود «الفصل». إذا لم يوجد عمود الفصل يُضاف الطلاب إلى الفصل المختار.</p>
+    <div class="flex flex-wrap gap-2"><label class="btn btn-ghost cursor-pointer">رفع ملف Excel<input id="rosterFile" type="file" accept=".xlsx,.csv" class="hidden"></label><button id="rosterAddBtn" class="btn btn-ghost">إضافة طالب</button><button id="codesBtn" class="btn btn-ghost">طباعة بطاقات الرموز</button></div></div>
+    <p class="mt-1 text-xs muted">ملف Excel أو CSV فيه عمود «الاسم الثلاثي»، ويمكن إضافة عمود «الفصل». إذا لم يوجد عمود الفصل يُضاف الطلاب إلى الفصل المختار. يُنشأ لكل طالبة رمز دخول من أربعة أرقام يظهر في الجدول، ويمكن طباعة بطاقات الرموز للفصل.</p>
     <div id="rosterMsg" class="mt-2 text-sm"></div><div id="roster" class="mt-3"></div></div>
   <details class="panel mt-4"><summary class="cursor-pointer font-extrabold">الحساب والفصول</summary>
     <form id="passForm" class="mt-3 grid gap-3 sm:grid-cols-3"><input id="passOld" type="password" class="field" placeholder="كلمة المرور الحالية" dir="ltr" required><input id="passNew" type="password" class="field" placeholder="كلمة المرور الجديدة" dir="ltr" required minlength="4"><button class="btn btn-star">تغيير كلمة المرور</button></form>
@@ -2215,10 +2216,12 @@ const blank = () => ({ attempts: [], outcomes: [], mastery: {}, stars: 0, badges
 const seedDB = () => ({
   teachers: [{ id: 't1', name: 'صالحة الأسمري', pass: '1234' }, { id: 't2', name: 'أمل القرني', pass: '1234' }],
   classes: [{ id: 'c1', name: 'ثاني متوسط / 1', t: 't1' }, { id: 'c2', name: 'ثاني متوسط / 2', t: 't1' }, { id: 'c3', name: 'ثاني متوسط / 3', t: 't2' }, { id: 'c4', name: 'ثاني متوسط / 4', t: 't2' }],
-  students: [{ id: 'st1', name: 'طالب تجريبي أول', c: 'c1' }, { id: 'st2', name: 'طالب تجريبي ثان', c: 'c1' }, { id: 'st3', name: 'طالب تجريبي ثالث', c: 'c3' }],
+  students: [{ id: 'st1', name: 'طالب تجريبي أول', c: 'c1', code: '1111' }, { id: 'st2', name: 'طالب تجريبي ثان', c: 'c1', code: '2222' }, { id: 'st3', name: 'طالب تجريبي ثالث', c: 'c3', code: '3333' }],
   data: {}, session: {}, prefs: {}, shared: { customModels: [], files: [] } });
 let DB = seedDB();
 try { const raw = localStorage.getItem(DB_KEY); if (raw) DB = Object.assign(seedDB(), JSON.parse(raw)); } catch (e) {}
+const newCode = () => String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+DB.students.forEach(x => { if (!x.code) x.code = { st1: '1111', st2: '2222', st3: '3333' }[x.id] || newCode(); });
 let S = blank();
 const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 function loadSession() {
@@ -2421,14 +2424,20 @@ function renderHome() {
 // ===================================================================
 // دخول الطالب
 // ===================================================================
-function fillClassSelect() { sClass.innerHTML = '<option value="">اختر الفصل</option>' + DB.classes.map(c => `<option value="${c.id}">${c.name}</option>`).join(''); }
+const stuLabel = n => n.replace(/\s+/g, ' ').trim().split(' ').filter(w => !['بن', 'بنت', 'ابن'].includes(w)).slice(0, 3).join(' ');
+function fillClassSelect() { sClass.innerHTML = '<option value="">اختيار الفصل</option>' + DB.classes.map(c => `<option value="${c.id}">${c.name}</option>`).join(''); fillStuSelect(); }
+function fillStuSelect() {
+  const list = DB.students.filter(x => x.c === sClass.value).map(x => ({ id: x.id, label: stuLabel(x.name) })).sort((a, b) => a.label.localeCompare(b.label, 'ar'));
+  sStu.disabled = !sClass.value;
+  sStu.innerHTML = `<option value="">${sClass.value ? 'اختيار الاسم' : 'يُختار الفصل أولًا'}</option>` + list.map(x => `<option value="${x.id}">${x.label}</option>`).join('');
+}
+sClass.onchange = fillStuSelect;
+sCode.oninput = () => { sCode.value = sCode.value.replace(/\D/g, '').slice(0, 4); };
 sForm.onsubmit = e => {
   e.preventDefault();
-  const n = normName(sName.value), parts = n.split(' ');
-  const list = DB.students.filter(x => x.c === sClass.value);
-  const hit = list.find(x => normName(x.name) === n) || (parts.length >= 3 ? list.filter(x => normName(x.name).split(' ').slice(0, 3).join(' ') === parts.slice(0, 3).join(' ')) : []).find((x, _, arr) => arr.length === 1);
-  if (!sClass.value || !hit) { loginMsg.textContent = 'لم نجد هذا الاسم في الفصل المختار. اكتب الاسم الثلاثي كما سجّله المعلم.'; loginMsg.classList.remove('hidden'); play('no'); return; }
-  DB.session.sid = hit.id; loadSession(); save(); sName.value = ''; loginMsg.classList.add('hidden'); location.hash = 'student';
+  const hit = DB.students.find(x => x.id === sStu.value && x.c === sClass.value);
+  if (!hit || hit.code !== sCode.value) { loginMsg.textContent = 'الرمز غير صحيح. الرمز لدى معلمة الفصل.'; loginMsg.classList.remove('hidden'); play('no'); return; }
+  DB.session.sid = hit.id; loadSession(); save(); sCode.value = ''; loginMsg.classList.add('hidden'); location.hash = 'student';
 };
 
 // ===================================================================
@@ -2629,8 +2638,8 @@ function bars(el, rows, color, unit = '') {
 }
 function renderRoster() {
   const c = curClass(), list = classStudents(c.id);
-  roster.innerHTML = list.length ? `<div class="overflow-x-auto"><table class="w-full min-w-[480px] text-sm"><thead class="muted"><tr><th class="py-2 text-start">#</th><th class="text-start">الاسم الثلاثي</th><th>النجوم</th><th>الأسئلة</th><th>آخر نشاط</th><th></th></tr></thead><tbody>${list.map((st, k) => { const d = stateOf(st.id), last = Math.max(0, ...d.outcomes.map(o => o.at || 0), ...d.modelAttempts.map(o => o.at || 0));
-      return `<tr class="border-t border-ink/5"><td class="py-2">${k + 1}</td><td class="font-bold">${st.name}</td><td class="text-center">★ ${d.stars}</td><td class="text-center">${d.outcomes.length}</td><td class="text-center">${last ? new Date(last).toLocaleDateString('ar-SA-u-ca-islamic-umalqura', { day: 'numeric', month: 'short' }) : '—'}</td><td class="text-center"><button data-del="${st.id}" class="chip text-rose-600">حذف</button></td></tr>`; }).join('')}</tbody></table></div>`
+  roster.innerHTML = list.length ? `<div class="overflow-x-auto"><table class="w-full min-w-[480px] text-sm"><thead class="muted"><tr><th class="py-2 text-start">#</th><th class="text-start">الاسم الثلاثي</th><th>رمز الدخول</th><th>النجوم</th><th>الأسئلة</th><th>آخر نشاط</th><th></th></tr></thead><tbody>${list.map((st, k) => { const d = stateOf(st.id), last = Math.max(0, ...d.outcomes.map(o => o.at || 0), ...d.modelAttempts.map(o => o.at || 0));
+      return `<tr class="border-t border-ink/5"><td class="py-2">${k + 1}</td><td class="font-bold">${st.name}</td><td class="text-center"><b dir="ltr" style="letter-spacing:.2em" class="font-mono">${st.code}</b> <button data-code="${st.id}" class="chip text-xs">رمز جديد</button></td><td class="text-center">★ ${d.stars}</td><td class="text-center">${d.outcomes.length}</td><td class="text-center">${last ? new Date(last).toLocaleDateString('ar-SA-u-ca-islamic-umalqura', { day: 'numeric', month: 'short' }) : '—'}</td><td class="text-center"><button data-del="${st.id}" class="chip text-rose-600">حذف</button></td></tr>`; }).join('')}</tbody></table></div>`
     : '<p class="muted">لا يوجد طلاب في هذا الفصل بعد. ارفع ملف Excel بأسماء الطلاب أو أضفهم واحدًا واحدًا.</p>';
 }
 function addStudents(rows) { // rows: [[name, className?]]
@@ -2641,7 +2650,7 @@ function addStudents(rows) { // rows: [[name, className?]]
     if (cn && String(cn).trim()) { const want = normName(cn); cls = myClasses().find(c => normName(c.name) === want || normName(c.name).endsWith(' ' + want) || normName(c.name).replace(/\s/g, '').endsWith(want.replace(/\s/g, '')));
       if (!cls) { cls = { id: uid('c'), name: String(cn).trim(), t: DB.session.tid }; DB.classes.push(cls); } }
     if (DB.students.some(x => x.c === cls.id && normName(x.name) === normName(name))) { skipped++; continue; }
-    DB.students.push({ id: uid('st'), name, c: cls.id }); added++;
+    DB.students.push({ id: uid('st'), name, c: cls.id, code: newCode() }); added++;
   }
   save(); return { added, skipped };
 }
@@ -2659,9 +2668,12 @@ rosterFile.onchange = async () => {
   rosterFile.value = ''; renderTeacher();
 };
 rosterAddBtn.onclick = () => { const n = prompt('الاسم الثلاثي للطالب'); if (n) { const r = addStudents([[n, '']]); rosterMsg.textContent = r.added ? 'أُضيف الطالب.' : 'الاسم موجود أو غير مكتمل.'; renderTeacher(); } };
-roster.onclick = e => { const b = e.target.closest('[data-del]'); if (!b) return; const st = DB.students.find(x => x.id === b.dataset.del);
+roster.onclick = e => { const g = e.target.closest('[data-code]'); if (g) { const st = DB.students.find(x => x.id === g.dataset.code); st.code = newCode(); save(); renderRoster(); return; }
+  const b = e.target.closest('[data-del]'); if (!b) return; const st = DB.students.find(x => x.id === b.dataset.del);
   if (!b.dataset.ok) { b.dataset.ok = '1'; b.textContent = 'تأكيد الحذف'; return; }
   DB.students = DB.students.filter(x => x.id !== st.id); delete DB.data[st.id]; save(); renderTeacher(); };
+codesBtn.onclick = () => { const c = curClass(), list = classStudents(c.id); const w = window.open('', '_blank'); if (!w) return;
+  w.document.write(`<html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>بطاقات رموز الدخول: ${c.name}</title><style>body{font-family:Tahoma,sans-serif;margin:20px}.g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.c{border:2px dashed #999;border-radius:10px;padding:10px;text-align:center;break-inside:avoid}.k{font:900 30px monospace;letter-spacing:.3em;color:#0369a1;direction:ltr}small{color:#666}</style></head><body><h2>بطاقات رموز الدخول: ${c.name}</h2><div class="g">${list.map(x => `<div class="c"><small>معًا نحو القمة – TIMSS</small><p><b>${x.name}</b><br><small>${c.name}</small></p><div class="k">${x.code}</div><small>رمز شخصي لا يُشارك مع أحد</small></div>`).join('')}</div><script>print()<\/script></body></html>`); w.document.close(); };
 clsPick.onchange = () => { DB.session.cls = clsPick.value; save(); renderTeacher(); };
 passForm.onsubmit = e => { e.preventDefault(); const t = meTeacher(); if (passOld.value !== t.pass) { acctMsg.innerHTML = '<span class="text-rose-600">كلمة المرور الحالية غير صحيحة.</span>'; return; }
   t.pass = passNew.value; save(); passOld.value = passNew.value = ''; acctMsg.innerHTML = '<span class="text-aqua-600">تم تغيير كلمة المرور.</span>'; };
