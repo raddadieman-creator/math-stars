@@ -5,14 +5,10 @@ import { classIndicators, hardestSkills, studentIndicators, weeklySeries } from 
 import { STATUS_AR } from '@/lib/types';
 import { WeeklyChart, SimpleBars } from '@/components/teacher/Charts';
 import { MeasurePanel } from '@/components/teacher/MeasurePanel';
+import { classReport } from '@/lib/report-data';
+import { Donut, HBars, KpiTiles, PALETTE } from '@/components/teacher/ReportVisuals';
 
 export const dynamic = 'force-dynamic';
-
-function Kpi({ label, value, hint }: { label: string; value: string | number | null; hint?: string }) {
-  return (
-    <div className="panel"><p className="text-xs muted">{label}</p><p className="mt-1 text-3xl font-black">{value ?? '—'}</p>{hint && <p className="text-xs text-ink/45">{hint}</p>}</div>
-  );
-}
 
 export default async function Overview({ searchParams }: { searchParams: Promise<{ class?: string }> }) {
   const { sb } = await requireStaff();
@@ -35,6 +31,8 @@ export default async function Overview({ searchParams }: { searchParams: Promise
   const weekly = weeklySeries(outcomes, start, settings.program_weeks);
   const hard = hardestSkills(outcomes, 5).slice(0, 6);
   const supportSet = new Set(mastery.filter((m) => m.status === 'needs_support').map((m) => m.student_id));
+  const rep = await classReport(sb, classId);
+  const topStars = [...rep.rows].sort((a, b) => b.stars - a.stars).filter((x) => x.stars > 0).slice(0, 8);
 
   return (
     <div className="space-y-6">
@@ -47,11 +45,42 @@ export default async function Overview({ searchParams }: { searchParams: Promise
 
       <MeasurePanel rows={measureRows} postOpen={!!postA?.is_open} postId={postA?.id ?? null} />
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Kpi label="الطلاب المشاركون" value={`${ci.participants} من ${ci.enrolled}`} hint={ci.participationPct !== null ? `نسبة المشاركة ${ci.participationPct}%` : undefined} />
-        <Kpi label="متوسط الصحيحة من المحاولة الأولى" value={ci.avgFirstTryPct !== null ? `${ci.avgFirstTryPct}%` : null} hint="متوسط نسب الطلاب" />
-        <Kpi label="طلاب يحتاجون إلى دعم" value={ci.needsSupportStudents} hint="في مهارة واحدة على الأقل" />
-        <Kpi label="طلاب متقدمون" value={ci.advancedStudents} hint="أتقنوا مهارتين فأكثر دون حاجة إلى دعم" />
+      <div className="flex flex-wrap gap-2">
+        <Link href={`/teacher/report?class=${classId}`} className="btn-star">تقرير الفصل (PDF / Word)</Link>
+        <Link href={`/teacher/students/list/${classId}`} className="chip px-4 py-2 font-bold">قائمة الأسماء (PDF / Word)</Link>
+        <Link href={`/teacher/awards?class=${classId}`} className="chip px-4 py-2 font-bold">المنجزات والشهادات</Link>
+      </div>
+
+      <KpiTiles items={[
+        { label: 'الطالبات المشاركات', value: `${ci.participants} من ${ci.enrolled}`, hint: ci.participationPct !== null ? `نسبة المشاركة ${ci.participationPct}%` : undefined, color: '#0284c7' },
+        { label: 'الصحيحة من المحاولة الأولى', value: ci.avgFirstTryPct !== null ? `${ci.avgFirstTryPct}%` : null, hint: 'متوسط نسب الطالبات', color: '#14b8a6' },
+        { label: 'النجوم والشارات', value: `★ ${rep.totals.stars}`, hint: `${rep.totals.badges} شارة في الفصل`, color: '#f59e0b' },
+        { label: 'تحتاج إلى دعم', value: ci.needsSupportStudents, hint: `متقدمات: ${ci.advancedStudents}`, color: '#e8466c' },
+      ]} />
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="panel">
+          <h2 className="mb-3 text-lg font-extrabold">مستويات الإتقان</h2>
+          <Donut data={[
+            { name: 'متقنة', value: ci.masteryDistribution.mastered, color: '#22c55e' },
+            { name: 'قيد التطور', value: ci.masteryDistribution.developing, color: '#0284c7' },
+            { name: 'تحتاج إلى دعم', value: ci.masteryDistribution.needs_support, color: '#e8466c' },
+          ]} />
+        </div>
+        <div className="panel">
+          <h2 className="mb-3 text-lg font-extrabold">الإتقان حسب المجال</h2>
+          <HBars unit="%" max={100} data={rep.domains.map((d, i) => ({ name: d.name, value: d.pct, color: PALETTE[i] }))} />
+        </div>
+        <div className="panel">
+          <h2 className="mb-3 text-lg font-extrabold">القياس القبلي والبعدي</h2>
+          <HBars unit="%" max={100} data={[{ name: `القبلي (${rep.prePost.preN})`, value: rep.prePost.pre, color: '#94a3b8' }, { name: `البعدي (${rep.prePost.postN})`, value: rep.prePost.post, color: '#22c55e' }]} />
+          <p className="mt-2 text-xs muted">متوسط الفصل، ومقارنة وصفية فقط.</p>
+        </div>
+      </div>
+
+      <div className="panel">
+        <h2 className="mb-3 text-lg font-extrabold">الأكثر جمعًا للنجوم</h2>
+        {topStars.length ? <HBars data={topStars.map((x, i) => ({ name: x.name, value: x.stars, color: ['#f59e0b', '#94a3b8', '#f97316'][i] ?? '#0284c7' }))} /> : <p className="muted">لا توجد نجوم بعد.</p>}
       </div>
 
       <div className="panel">

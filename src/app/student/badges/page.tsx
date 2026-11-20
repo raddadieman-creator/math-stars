@@ -10,7 +10,10 @@ export default async function Badges() {
   return (
     <Shell>
       <StudentNav />
-      <h1 className="text-3xl font-black">أوسمتي وشاراتي</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-3xl font-black">أوسمتي وشاراتي</h1>
+        <a href="/student/certificate" className="btn-star">شهادة منجزاتي: طباعة ومشاركة واتساب</a>
+      </div>
       <BadgeCase stats={h.stats} goals={h.goals} owned={h.owned} monthName={h.monthName} monthlyWins={h.monthlyWins} />
     </Shell>
   );

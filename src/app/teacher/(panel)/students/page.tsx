@@ -35,6 +35,7 @@ export default async function Students() {
             <div className="flex flex-wrap items-center gap-3">
               <p className="text-sm muted">المعلمون: {(c.class_teachers as { teacher_id: string }[]).map((t) => tName.get(t.teacher_id)).join('، ') || '—'}</p>
               <a href={`/teacher/students/codes/${c.id}`} target="_blank" className="chip">طباعة بطاقات الرموز</a>
+              <a href={`/teacher/students/list/${c.id}`} className="chip">قائمة الأسماء (PDF / Word)</a>
             </div>
           </div>
           <table className="mt-3 w-full min-w-[560px] text-sm">

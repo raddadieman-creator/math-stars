@@ -58,7 +58,13 @@ html.calm .card-3d.tilt:hover { transform: none; }
 @media print {
   body { background: #fff !important; color: #000 !important; }
   .no-print { display: none !important; }
+  .doc-sheet { box-shadow: none !important; border: 0 !important; padding: 0 !important; }
+  .doc-sheet * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .doc-break { break-inside: avoid; }
+  @page { size: A4; margin: 14mm; }
 }
+.only-print { display: none; }
+@media print { .only-print { display: block; } }
 
 /* «مَدى» — مكعب ثلاثي الأبعاد أوجهه مجالات المحتوى الأربعة */
 .mh { --s: 160px; display: inline-flex; flex-direction: column; align-items: center; }

@@ -46,7 +46,7 @@ export default async function Awards({ searchParams }: { searchParams: Promise<{
 
       <section className="panel overflow-x-auto">
         <table className="w-full min-w-[720px] text-sm">
-          <thead className="text-ink/60"><tr><th className="py-2 text-start">الطالب</th><th>الأوسمة</th><th>تميّز الشهر</th><th>النجوم</th><th className="text-start">ما حصده</th></tr></thead>
+          <thead className="text-ink/60"><tr><th className="py-2 text-start">الطالب</th><th>الأوسمة</th><th>تميّز الشهر</th><th>النجوم</th><th className="text-start">ما حصده</th><th>الشهادة</th></tr></thead>
           <tbody>
             {rows.map((r) => (
               <tr key={r.id} className="border-t border-ink/5 align-middle">
@@ -55,6 +55,7 @@ export default async function Awards({ searchParams }: { searchParams: Promise<{
                 <td className="text-center">{r.monthWins ? `×${r.monthWins}` : '—'}</td>
                 <td className="text-center">★ {r.stars}</td>
                 <td><div className="flex flex-wrap gap-1">{r.regular.map((b) => <span key={b.code} title={b.name_ar} dangerouslySetInnerHTML={{ __html: badgeSVG(b.icon, b.tier, true, 30) }} />)}</div></td>
+                <td className="text-center"><Link href={`/teacher/students/${r.id}/certificate`} className="chip text-xs">شهادة · طباعة · واتساب</Link></td>
               </tr>
             ))}
           </tbody>
