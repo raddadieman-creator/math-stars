@@ -56,14 +56,15 @@ const CSS = `
 .rv-tabs button,.rv-chip{border:1px solid #e6e9f2;background:#fff;border-radius:12px;padding:8px 14px;font:inherit;font-weight:800;cursor:pointer}
 .rv-tabs button.on,.rv-chip.on{background:#0284c7;border-color:#0284c7;color:#fff}
 .rv-card{background:#fff;border:1px solid #e6e9f2;border-radius:18px;padding:18px;box-shadow:0 1px 2px rgba(43,36,87,.05)}
-.rv-grid{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;direction:ltr;user-select:none}
-.rv-grid button{aspect-ratio:1;border:0;border-radius:6px;background:#f4f6fb;font:inherit;font-weight:700;font-size:clamp(10px,1.6vw,15px);cursor:pointer;color:#1e2340}
-.rv-grid .h{background:#e0f2fe;color:#0369a1;font-weight:900}
-.rv-grid .row,.rv-grid .col{background:#fff4d6}.rv-grid .hit{background:#0284c7;color:#fff;transform:scale(1.15)}
+.rv-grid{display:grid;grid-template-columns:repeat(13,minmax(0,1fr));gap:3px;direction:rtl;user-select:none}
+.rv-grid button{aspect-ratio:1;border:0;border-radius:7px;background:hsl(var(--h,210) 90% 95%);font:inherit;font-weight:700;font-size:clamp(10px,1.6vw,15px);cursor:pointer;color:#1e2340;transition:transform .15s}
+.rv-grid button:hover{transform:scale(1.18);z-index:1;box-shadow:0 4px 12px rgba(0,0,0,.12)}.rv-grid .sq{background:#fde68a;color:#92400e}
+.rv-grid .h{background:linear-gradient(135deg,#0284c7,#7c3aed);color:#fff;font-weight:900}
+.rv-grid .row,.rv-grid .col{background:#fbcfe8}.rv-grid .hit{background:#e11d48;color:#fff;transform:scale(1.25);box-shadow:0 6px 18px rgba(225,29,72,.45)}
 .rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:inherit;direction:ltr;unicode-bidi:isolate}
 .rv-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
-.rv-opts button{border:2px solid #e6e9f2;background:#fff;border-radius:14px;padding:14px;font:inherit;font-size:1.5rem;font-weight:900;cursor:pointer}
-.rv-opts button.ok{border-color:#14b8a6;background:#e6fbf7}.rv-opts button.no{border-color:#e8466c;background:#fdecef;animation:rvshake .4s}
+.rv-opts button{border:0;background:linear-gradient(135deg,hsl(var(--h,210) 85% 55%),hsl(calc(var(--h,210) + 30) 85% 62%));color:#fff;border-radius:18px;padding:16px;font:inherit;font-size:1.7rem;font-weight:900;cursor:pointer;box-shadow:0 5px 0 rgba(0,0,0,.15);transition:transform .12s}.rv-opts button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.rv-opts button.ok{background:#10b981;transform:scale(1.06)}.rv-opts button.no{background:#e11d48;animation:rvshake .4s}
 @keyframes rvshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(5px)}}
 .rv-bar{height:10px;border-radius:9px;background:#e6e9f2;overflow:hidden}.rv-bar i{display:block;height:100%;background:#0284c7;transition:width .3s linear}
 .rv-stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px}.rv-stats span{background:#f4f6fb;border-radius:10px;padding:6px 12px;font-weight:800}
@@ -84,6 +85,42 @@ const CSS = `
 .rv-vid{display:inline-block;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;text-decoration:none;color:#fff;background:#ef4444}
 .rv-vid-asmari{background:#8b5cf6}.rv-vid-ien-yt{background:#0d9488}.rv-vid-ien{background:#0284c7}.rv-vid:hover{filter:brightness(1.1)}
 .rv-search{flex:1;min-width:180px;border:1px solid #e6e9f2;border-radius:12px;padding:9px 12px;font:inherit}
+
+.mx-hero{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;border-radius:24px;padding:22px;color:#fff;background:linear-gradient(135deg,#7c3aed,#0284c7 55%,#06b6d4);box-shadow:0 10px 30px rgba(2,132,199,.25)}
+.mx-hero h2{margin:2px 0;font-size:1.7rem;font-weight:900}.mx-hero p{margin:0;opacity:.92}.mx-kicker{font-weight:800;opacity:.85}
+.mx-stats{display:flex;gap:10px;flex-wrap:wrap}.mx-stats span{background:rgba(255,255,255,.18);border-radius:16px;padding:8px 14px;text-align:center;font-size:12px;font-weight:700}.mx-stats b{display:block;font-size:1.6rem;font-weight:900}
+.mx-h{margin:20px 0 10px;font-size:1.3rem;font-weight:900}
+.mx-tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.mx-tile{border:0;border-radius:20px;padding:12px 6px;color:#fff;cursor:pointer;background:linear-gradient(160deg,var(--c),color-mix(in srgb,var(--c) 70%,#000));box-shadow:0 6px 0 color-mix(in srgb,var(--c) 60%,#000);display:flex;flex-direction:column;align-items:center;gap:2px;font:inherit;transition:transform .15s}
+.mx-tile:hover{transform:translateY(-4px) rotate(-2deg)}.mx-n{font-size:2.2rem;font-weight:900;line-height:1}.mx-x{font-size:11px;opacity:.9}.mx-s{color:#fde047;letter-spacing:2px}.mx-s em{font-style:normal;color:rgba(255,255,255,.35)}
+.mx-row{display:grid;gap:14px;margin-top:16px}@media(min-width:900px){.mx-row{grid-template-columns:1fr 1.2fr}}
+.mx-row h3{margin:0 0 4px;font-size:1.2rem;font-weight:900}.mx-row p{margin:0 0 10px;color:#64748b}
+.mx-chips{display:flex;flex-wrap:wrap;gap:6px}.mx-chip{border:2px solid var(--c);color:var(--c);background:#fff;border-radius:12px;min-width:40px;padding:6px 8px;font:inherit;font-weight:900;cursor:pointer}.mx-chip.on{background:var(--c);color:#fff}
+.mx-go,.mx-hard{display:block;width:100%;margin-top:12px;border:0;border-radius:16px;padding:14px;font:inherit;font-size:1.1rem;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(135deg,#f97316,#e11d48);box-shadow:0 5px 0 #9f1239}
+.mx-hard{background:linear-gradient(135deg,#7c3aed,#c026d3);box-shadow:0 5px 0 #6b21a8}
+.mx-show{min-height:34px;font-size:1.1rem}.mx-show b{font-size:1.6rem;color:#e11d48}.mx-show span{background:#fde68a;border-radius:8px;padding:2px 8px;font-size:12px;font-weight:800}.mx-show.pop{animation:mxpop .35s}
+.mx-tv{text-align:center}.mx-tvh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}.mx-tvh h2{margin:0;font-size:2rem;font-weight:900;color:var(--c)}.mx-tvh .mx-go{width:auto;margin:0;padding:10px 18px}
+.mx-back{border:1px solid #e6e9f2;background:#fff;border-radius:12px;padding:8px 12px;font:inherit;font-weight:800;cursor:pointer}.mx-tip{color:#64748b}
+.mx-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;perspective:800px}
+.mx-card{position:relative;height:74px;border:0;background:none;cursor:pointer;transform-style:preserve-3d;transition:transform .5s;font:inherit}
+.mx-card span{position:absolute;inset:0;display:grid;place-items:center;border-radius:16px;backface-visibility:hidden;font-size:1.4rem;font-weight:900}
+.mx-card .f{background:#fff;border:3px solid var(--c);color:var(--c)}.mx-card .b{background:var(--c);color:#fff;transform:rotateY(180deg);font-size:1.9rem}.mx-card.flip{transform:rotateY(180deg)}
+.mx-all{margin-top:14px;border:2px dashed var(--c);color:var(--c);background:#fff;border-radius:14px;padding:10px 18px;font:inherit;font-weight:900;cursor:pointer}
+.mx-game{position:relative;max-width:560px;margin:0 auto;border-radius:28px;padding:18px;background:linear-gradient(180deg,#eef2ff,#fff);overflow:hidden}
+.mx-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mx-ring{width:96px;height:96px}.mx-ring circle{fill:none;stroke-width:10}.mx-ring .bg{stroke:#e0e7ff}.mx-ring .fg{stroke:#6366f1;stroke-linecap:round;transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dashoffset .2s linear}.mx-ring .fg.late{stroke:#e11d48}.mx-ring .t{font-size:30px;font-weight:900;fill:#1e1b4b}
+.mx-score,.mx-combo{text-align:center;border-radius:18px;padding:8px 14px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06)}.mx-score b,.mx-combo b{display:block;font-size:1.9rem;font-weight:900}.mx-score span,.mx-combo span{font-size:12px;font-weight:800;color:#64748b}
+.mx-combo.hot{background:#ffedd5}.mx-combo.fire{background:linear-gradient(135deg,#f97316,#e11d48);color:#fff;animation:mxpulse .8s infinite}.mx-combo.fire span{color:#fff}
+.mx-label{text-align:center;font-weight:900;color:#6366f1;margin:10px 0 0}.mx-q{margin:14px 0 6px}.mx-q.in{animation:mxin .3s ease-out}
+.mx-fx{text-align:center;min-height:28px;font-size:1.3rem;font-weight:900;color:#f97316;margin:10px 0 0}.mx-fx.pop{animation:mxpop .4s}
+.mx-conf{position:absolute;width:10px;height:10px;border-radius:3px;pointer-events:none;animation:mxconf .9s ease-out forwards}
+.mx-end{position:relative;text-align:center;max-width:560px;margin:0 auto;border-radius:28px;padding:26px;background:linear-gradient(180deg,#fef3c7,#fff);overflow:hidden}
+.mx-medal{font-size:4.5rem;margin:0;animation:mxpop .6s}.mx-end h2{margin:4px 0;font-size:2rem;font-weight:900}.mx-rec{font-weight:900;color:#b45309}.mx-goals{font-size:12px;color:#64748b}
+@keyframes mxpop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes mxin{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+@keyframes mxpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes mxconf{to{transform:translate(var(--dx),var(--dy)) rotate(540deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.mx-conf,.mx-combo.fire,.mx-medal,.mx-q.in,.mx-fx.pop,.mx-show.pop{animation:none}.mx-card{transition:none}}
 @media print{.rv-tabs,.rv-law .act,.rv-q,.rv-tools,.rv-vids{display:none!important}.rv-law{break-inside:avoid}}
 `;
 /** اتجاه السطر: العبارات العددية الخالصة من اليسار إلى اليمين، وما فيه حروف عربية من اليمين */
@@ -91,8 +128,8 @@ const dirOf = (t: string) => (/[\u0621-\u064A]/.test(t) ? 'rtl' : 'ltr');
 function injectCss() { if (typeof document === 'undefined' || document.getElementById('rv-css')) return; const s = document.createElement('style'); s.id = 'rv-css'; s.textContent = CSS; document.head.appendChild(s); }
 
 export interface ReviewStore { get(): ReviewData; set(d: ReviewData): void; onStars?(n: number): void; play?(k: 'ok' | 'no'): void }
-export interface ReviewData { multBest: Record<string, number>; multWrong: Record<string, number>; multTotal: number; lawsDone: string[] }
-export const emptyReview = (): ReviewData => ({ multBest: {}, multWrong: {}, multTotal: 0, lawsDone: [] });
+export interface ReviewData { multBest: Record<string, number>; multWrong: Record<string, number>; multTotal: number; lawsDone: string[]; tableStats: Record<string, { ok: number; total: number }> }
+export const emptyReview = (): ReviewData => ({ multBest: {}, multWrong: {}, multTotal: 0, lawsDone: [], tableStats: {} });
 const shuffle = <T,>(a: T[]) => a.map((x) => [Math.random(), x] as const).sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 
 /** يرسم قسم المراجعة داخل العنصر المعطى */
@@ -113,79 +150,126 @@ export function mountReview(root: HTMLElement, store: ReviewStore, start: 'mult'
 
   // ---------------- جدول الضرب ----------------
   let tables: number[] = [];
+  const TCOL = (n: number) => `hsl(${(n * 29) % 360} 80% 52%)`;
+  const starsOf = (s?: { ok: number; total: number }) => (!s || s.total < 5 ? 0 : s.ok / s.total >= 0.95 ? 3 : s.ok / s.total >= 0.8 ? 2 : s.ok / s.total >= 0.6 ? 1 : 0);
+  const burst = (host: HTMLElement, n = 14) => {
+    const r = host.getBoundingClientRect();
+    for (let i = 0; i < n; i++) {
+      const p = document.createElement('i'); p.className = 'mx-conf';
+      p.style.left = `${r.width / 2}px`; p.style.top = `${r.height / 2}px`;
+      p.style.background = `hsl(${Math.random() * 360} 90% 60%)`;
+      p.style.setProperty('--dx', `${(Math.random() - 0.5) * 320}px`); p.style.setProperty('--dy', `${-60 - Math.random() * 180}px`);
+      host.appendChild(p); setTimeout(() => p.remove(), 900);
+    }
+  };
+
   function multHome(body: HTMLElement) {
     const d = D(), hard = Object.entries(d.multWrong).filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]);
-    body.innerHTML = `<div class="rv-card"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline"><h2 style="margin:0;font-weight:900">جدول الضرب التفاعلي</h2><span style="color:#64748b;font-size:14px">الضغط على أي خانة يُظهر حاصل الضرب</span></div>
-      <p class="rv-big rv-show" style="margin:10px 0;font-size:1.8rem">&nbsp;</p><div class="rv-grid"></div></div>
-      <div class="rv-card" style="margin-top:14px"><h2 style="margin:0;font-weight:900">تحدي الدقيقة</h2><p style="color:#64748b;margin:6px 0 10px">أكبر عدد من الإجابات الصحيحة في 60 ثانية. يمكن اختيار جداول محددة، أو ترك الاختيار للتحدي المختلط.</p>
-        <div class="rv-tools" style="display:flex;flex-wrap:wrap;gap:6px">${Array.from({ length: 11 }, (_, k) => k + 2).map((n) => `<button class="rv-chip ${tables.includes(n) ? 'on' : ''}" data-t="${n}">${n}</button>`).join('')}</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><button class="rv-chip on rv-go">بدء التحدي ${tables.length ? `(${tables.join('، ')})` : '(مختلط)'}</button>${hard.length ? `<button class="rv-chip rv-hard">مراجعة الحقائق الصعبة (${hard.length})</button>` : ''}</div>
-        <p style="margin-top:10px;font-size:14px;color:#475069">أفضل نتيجة: <b>${d.multBest[key()] ?? 0}</b> · مجموع الإجابات الصحيحة: <b>${d.multTotal}</b></p>
-        ${hard.length ? `<p style="font-size:14px;color:#475069">حقائق تحتاج مراجعة: ${hard.slice(0, 8).map(([f]) => `<b style="display:inline-block;background:#fdecef;border-radius:8px;padding:2px 8px;margin:2px">${f}</b>`).join('')}</p>` : ''}</div>`;
-    const grid = body.querySelector('.rv-grid') as HTMLElement, show = body.querySelector('.rv-show') as HTMLElement;
+    const best = Math.max(0, ...Object.values(d.multBest));
+    body.innerHTML = `
+      <div class="mx-hero"><div><p class="mx-kicker">جدول الضرب</p><h2>كم جدولًا تتقنين؟</h2><p>جداول ملونة، وتحدي الدقيقة، وسلسلة إجابات تشعل النجوم.</p></div>
+        <div class="mx-stats"><span><b>${best}</b>أفضل نتيجة</span><span><b>${d.multTotal}</b>إجابة صحيحة</span><span><b>${Object.values(d.tableStats).filter((s) => starsOf(s) === 3).length}</b>جداول بثلاث نجوم</span></div></div>
+      <h3 class="mx-h">الجداول</h3>
+      <div class="mx-tables">${Array.from({ length: 11 }, (_, k) => k + 2).map((n) => { const st = starsOf(d.tableStats[n]); return `<button class="mx-tile" data-open="${n}" style="--c:${TCOL(n)}"><span class="mx-n">${n}</span><span class="mx-x" dir="ltr">× 1 … 12</span><span class="mx-s">${'★'.repeat(st)}<em>${'★'.repeat(3 - st)}</em></span></button>`; }).join('')}</div>
+      <div class="mx-row">
+        <div class="rv-card mx-chal"><h3>⚡ تحدي الدقيقة</h3><p>اختيار جدول أو أكثر، أو تحدٍّ مختلط من كل الجداول.</p>
+          <div class="mx-chips">${Array.from({ length: 11 }, (_, k) => k + 2).map((n) => `<button class="mx-chip ${tables.includes(n) ? 'on' : ''}" data-t="${n}" style="--c:${TCOL(n)}">${n}</button>`).join('')}</div>
+          <button class="mx-go">بدء التحدي ${tables.length ? `(${tables.join('، ')})` : '(مختلط)'}</button>
+          ${hard.length ? `<button class="mx-hard">🎯 مراجعة الحقائق الصعبة (${hard.length})</button>` : ''}</div>
+        <div class="rv-card"><h3>🧮 الجدول التفاعلي</h3><p class="mx-show" aria-live="polite">الضغط على أي خانة يُظهر حاصل الضرب</p><div class="rv-grid"></div></div>
+      </div>`;
+    const grid = body.querySelector('.rv-grid') as HTMLElement, show = body.querySelector('.mx-show') as HTMLElement;
     let html = '<button class="h">×</button>';
     for (let c = 1; c <= 12; c++) html += `<button class="h" data-c="${c}">${c}</button>`;
-    for (let r = 1; r <= 12; r++) { html += `<button class="h" data-r="${r}">${r}</button>`; for (let c = 1; c <= 12; c++) html += `<button data-r="${r}" data-c="${c}">${r * c}</button>`; }
+    for (let r = 1; r <= 12; r++) { html += `<button class="h" data-r="${r}">${r}</button>`; for (let c = 1; c <= 12; c++) html += `<button data-r="${r}" data-c="${c}" class="${r === c ? 'sq' : ''}" style="--h:${(r * c * 2.4) % 360}">${r * c}</button>`; }
     grid.innerHTML = html;
     grid.onclick = (e) => {
       const b = (e.target as HTMLElement).closest('button'); if (!b) return;
       const r = +(b.dataset.r ?? 0), c = +(b.dataset.c ?? 0);
       grid.querySelectorAll('button').forEach((x) => { x.classList.remove('row', 'col', 'hit'); const xr = +(x.dataset.r ?? 0), xc = +(x.dataset.c ?? 0);
         if (r && c && !x.classList.contains('h')) { if (xr === r && xc <= c) x.classList.add('row'); if (xc === c && xr <= r) x.classList.add('col'); if (xr === r && xc === c) x.classList.add('hit'); } });
-      if (r && c) show.textContent = `${r} × ${c} = ${r * c}`;
+      if (r && c) { show.innerHTML = `<b dir="ltr">${r} × ${c} = ${r * c}</b>${r === c ? ' <span>مربع كامل</span>' : ''}`; show.classList.remove('pop'); void show.offsetWidth; show.classList.add('pop'); store.play?.('ok'); }
     };
+    body.querySelectorAll<HTMLButtonElement>('[data-open]').forEach((b) => (b.onclick = () => tableView(body, +b.dataset.open!)));
     body.querySelectorAll<HTMLButtonElement>('[data-t]').forEach((b) => (b.onclick = () => { const n = +b.dataset.t!; tables = tables.includes(n) ? tables.filter((x) => x !== n) : [...tables, n].sort((a, b2) => a - b2); multHome(body); }));
-    (body.querySelector('.rv-go') as HTMLButtonElement).onclick = () => game(body, false);
-    const hb = body.querySelector('.rv-hard') as HTMLButtonElement | null; if (hb) hb.onclick = () => game(body, true);
+    (body.querySelector('.mx-go') as HTMLButtonElement).onclick = () => game(body, false);
+    const hb = body.querySelector('.mx-hard') as HTMLButtonElement | null; if (hb) hb.onclick = () => game(body, true);
   }
   const key = () => (tables.length ? tables.join('-') : 'mix');
+
+  /** جدول واحد: بطاقات تنقلب لكشف الناتج، ثم تحدي هذا الجدول */
+  function tableView(body: HTMLElement, n: number) {
+    const c = TCOL(n);
+    body.innerHTML = `<div class="mx-tv" style="--c:${c}"><div class="mx-tvh"><button class="mx-back">→ الجداول</button><h2>جدول ${n}</h2><button class="mx-go mx-tgo">⚡ تحدي جدول ${n}</button></div>
+      <p class="mx-tip">الضغط على البطاقة يقلبها ويكشف الناتج.</p>
+      <div class="mx-cards">${Array.from({ length: 12 }, (_, k) => k + 1).map((k) => `<button class="mx-card" data-k="${k}"><span class="f" dir="ltr">${n} × ${k}</span><span class="b" dir="ltr">${n * k}</span></button>`).join('')}</div>
+      <button class="mx-all">كشف الكل</button></div>`;
+    body.querySelectorAll<HTMLButtonElement>('.mx-card').forEach((b) => (b.onclick = () => { b.classList.toggle('flip'); store.play?.('ok'); }));
+    (body.querySelector('.mx-all') as HTMLButtonElement).onclick = () => body.querySelectorAll('.mx-card').forEach((b, i) => setTimeout(() => b.classList.add('flip'), i * 70));
+    (body.querySelector('.mx-back') as HTMLButtonElement).onclick = () => multHome(body);
+    (body.querySelector('.mx-tgo') as HTMLButtonElement).onclick = () => { tables = [n]; game(body, false); };
+  }
 
   function game(body: HTMLElement, hardMode: boolean) {
     const d0 = D(), hardFacts = Object.entries(d0.multWrong).filter(([, n]) => n > 0).map(([f]) => f.split(' × ').map(Number));
     let score = 0, streak = 0, best = 0, wrong = 0, left = 60, answered = false;
-    const end = Date.now() + 60000;
+    const end = Date.now() + 60000, C = 2 * Math.PI * 52;
+    body.innerHTML = `<div class="mx-game"><div class="mx-top">
+        <svg class="mx-ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="bg"/><circle cx="60" cy="60" r="52" class="fg" style="stroke-dasharray:${C};stroke-dashoffset:0"/><text x="60" y="68" text-anchor="middle" class="t">60</text></svg>
+        <div class="mx-score"><b>0</b><span>صحيحة</span></div>
+        <div class="mx-combo"><b>0</b><span>🔥 سلسلة</span></div></div>
+      <p class="mx-label">${hardMode ? '🎯 الحقائق الصعبة' : tables.length ? `جدول ${tables.join('، ')}` : 'تحدٍّ مختلط'}</p>
+      <p class="rv-big mx-q"></p><div class="rv-opts"></div><p class="mx-fx"></p>
+      <div style="text-align:center;margin-top:10px"><button class="rv-chip rv-quit">إنهاء</button></div></div>`;
+    const G = body.querySelector('.mx-game') as HTMLElement;
+    const upd = () => { (G.querySelector('.mx-score b') as HTMLElement).textContent = String(score); const cb = G.querySelector('.mx-combo') as HTMLElement; (cb.querySelector('b') as HTMLElement).textContent = String(streak); cb.classList.toggle('hot', streak >= 3); cb.classList.toggle('fire', streak >= 6); };
     const next = () => {
       let a: number, b: number;
       if (hardMode && hardFacts.length) [a, b] = hardFacts[Math.floor(Math.random() * hardFacts.length)];
       else { a = tables.length ? tables[Math.floor(Math.random() * tables.length)] : 2 + Math.floor(Math.random() * 11); b = 1 + Math.floor(Math.random() * 12); }
-      if (Math.random() < 0.5) [a, b] = [b, a];
+      const table = a; if (Math.random() < 0.5) [a, b] = [b, a];
       const missing = !hardMode && Math.random() < 0.25, ans = missing ? b : a * b;
       const pool = new Set<number>([ans]);
       const near = missing ? [ans + 1, ans - 1, ans + 2, ans - 2, a, ans + 3] : [ans + a, ans - a, ans + b, ans - b, (a + 1) * b, a * (b + 1), ans + 10, ans - 1];
       for (const x of shuffle(near)) { if (pool.size >= 4) break; if (x > 0) pool.add(x); }
       while (pool.size < 4) pool.add(ans + pool.size * 3);
-      const opts = shuffle([...pool]);
       answered = false;
-      (body.querySelector('.rv-big') as HTMLElement).textContent = missing ? `${a} × ؟ = ${a * b}` : `${a} × ${b} = ؟`;
-      const box = body.querySelector('.rv-opts') as HTMLElement;
-      box.innerHTML = opts.map((o) => `<button data-v="${o}">${o}</button>`).join('');
+      const q = G.querySelector('.mx-q') as HTMLElement; q.textContent = missing ? `${a} × ? = ${a * b}` : `${a} × ${b} = ?`; q.classList.remove('in'); void q.offsetWidth; q.classList.add('in');
+      const box = G.querySelector('.rv-opts') as HTMLElement;
+      box.innerHTML = shuffle([...pool]).map((o, i) => `<button data-v="${o}" style="--h:${i * 90 + 200}">${o}</button>`).join('');
       box.onclick = (e) => {
         const btn = (e.target as HTMLElement).closest('button'); if (!btn || answered || left <= 0) return; answered = true;
-        const ok = +btn.dataset.v! === ans, fact = `${Math.min(a, b)} × ${Math.max(a, b)}`, d = D();
-        if (ok) { score++; streak++; best = Math.max(best, streak); d.multTotal++; if (d.multWrong[fact]) d.multWrong[fact]--; btn.classList.add('ok'); store.play?.('ok'); }
-        else { wrong++; streak = 0; d.multWrong[fact] = (d.multWrong[fact] ?? 0) + 2; btn.classList.add('no'); box.querySelector(`[data-v="${ans}"]`)?.classList.add('ok'); store.play?.('no'); }
-        save(d); stats();
-        setTimeout(() => { if (left > 0) next(); }, ok ? 250 : 900);
+        const ok = +btn.dataset.v! === ans, fact = `${Math.min(a, b)} × ${Math.max(a, b)}`, d = D(), ts = (d.tableStats[table] ??= { ok: 0, total: 0 });
+        ts.total++; const fx = G.querySelector('.mx-fx') as HTMLElement;
+        if (ok) { score++; streak++; best = Math.max(best, streak); d.multTotal++; ts.ok++; if (d.multWrong[fact]) d.multWrong[fact]--; btn.classList.add('ok'); store.play?.('ok');
+          fx.textContent = streak >= 10 ? '🌟 أسطوري!' : streak >= 6 ? '🔥 مشتعلة!' : streak >= 3 ? '⚡ سلسلة رائعة' : '+1'; if (streak % 5 === 0) burst(G, 22); }
+        else { wrong++; streak = 0; d.multWrong[fact] = (d.multWrong[fact] ?? 0) + 2; btn.classList.add('no'); box.querySelector(`[data-v="${ans}"]`)?.classList.add('ok'); store.play?.('no'); fx.textContent = `${a} × ${b} = ${a * b}`; }
+        fx.classList.remove('pop'); void fx.offsetWidth; fx.classList.add('pop');
+        save(d); upd();
+        setTimeout(() => { if (left > 0) next(); }, ok ? 280 : 1000);
       };
     };
-    const stats = () => { (body.querySelector('.rv-stats') as HTMLElement).innerHTML = `<span>✓ ${score}</span><span>✗ ${wrong}</span><span>🔥 ${streak}</span>`; };
-    body.innerHTML = `<div class="rv-card" style="max-width:560px;margin:0 auto"><div style="display:flex;justify-content:space-between;align-items:center"><b>${hardMode ? 'مراجعة الحقائق الصعبة' : 'تحدي الدقيقة'}</b><b class="rv-left">60</b></div>
-      <div class="rv-bar" style="margin-top:8px"><i style="width:100%"></i></div><p class="rv-big" style="margin:22px 0 6px"></p><div class="rv-opts"></div><div class="rv-stats"></div>
-      <div style="text-align:center;margin-top:12px"><button class="rv-chip rv-quit">إنهاء</button></div></div>`;
-    stats(); next();
+    upd(); next();
     const finish = () => {
       stop(); const d = D(), k = hardMode ? 'hard' : key(), prev = d.multBest[k] ?? 0, rec = score > prev;
       if (rec) d.multBest[k] = score; save(d); if (score >= 5) store.onStars?.(Math.floor(score / 5));
-      body.innerHTML = `<div class="rv-card" style="max-width:560px;margin:0 auto;text-align:center"><p style="color:#64748b">انتهى الوقت</p><p class="rv-big">${score} إجابة صحيحة</p>
+      const medal = score >= 30 ? ['🥇', 'ذهبية'] : score >= 20 ? ['🥈', 'فضية'] : score >= 10 ? ['🥉', 'برونزية'] : ['🌱', 'بداية جيدة'];
+      body.innerHTML = `<div class="mx-end"><p class="mx-medal">${medal[0]}</p><h2>${score} إجابة صحيحة</h2><p>ميدالية ${medal[1]}</p>
         <div class="rv-stats"><span>✗ ${wrong}</span><span>أطول سلسلة 🔥 ${best}</span>${score >= 5 ? `<span>+${Math.floor(score / 5)} ★</span>` : ''}</div>
-        <p style="margin-top:10px;font-weight:800;color:${rec ? '#0b6b62' : '#475069'}">${rec ? 'رقم قياسي جديد!' : `أفضل نتيجة: ${prev}`}</p>
-        <div style="display:flex;gap:10px;justify-content:center;margin-top:14px"><button class="rv-chip on rv-again">تحدٍّ جديد</button><button class="rv-chip rv-back">جدول الضرب</button></div></div>`;
+        <p class="mx-rec">${rec ? '🏆 رقم قياسي جديد!' : `أفضل نتيجة: ${prev}`}</p>
+        <p class="mx-goals">البرونزية من 10 · الفضية من 20 · الذهبية من 30</p>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap"><button class="mx-go rv-again">⚡ تحدٍّ جديد</button><button class="rv-chip rv-back">جدول الضرب</button></div></div>`;
+      if (rec || score >= 10) burst(body.querySelector('.mx-end') as HTMLElement, 30);
       (body.querySelector('.rv-again') as HTMLButtonElement).onclick = () => game(body, hardMode);
       (body.querySelector('.rv-back') as HTMLButtonElement).onclick = () => multHome(body);
     };
-    (body.querySelector('.rv-quit') as HTMLButtonElement).onclick = finish;
-    timer = setInterval(() => { left = Math.max(0, Math.ceil((end - Date.now()) / 1000)); const l = body.querySelector('.rv-left'); if (l) l.textContent = String(left);
-      const bar = body.querySelector('.rv-bar i') as HTMLElement | null; if (bar) bar.style.width = `${(left / 60) * 100}%`; if (left <= 0) finish(); }, 200);
+    (G.querySelector('.rv-quit') as HTMLButtonElement).onclick = finish;
+    timer = setInterval(() => {
+      left = Math.max(0, Math.ceil((end - Date.now()) / 1000));
+      const t = G.querySelector('.mx-ring .t'); if (t) t.textContent = String(left);
+      const fg = G.querySelector('.mx-ring .fg') as SVGCircleElement | null; if (fg) { fg.style.strokeDashoffset = String(C * (1 - left / 60)); fg.classList.toggle('late', left <= 10); }
+      if (left <= 0) finish();
+    }, 200);
   }
 
   // ---------------- القوانين والنظريات ----------------
