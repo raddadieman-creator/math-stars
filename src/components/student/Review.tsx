@@ -4,7 +4,7 @@ import { mountReview, emptyReview, type ReviewData } from '@/lib/review';
 import { usePrefs } from '@/components/Prefs';
 
 /** قسم المراجعة (جدول الضرب والقوانين). يُحفظ التقدم في هذا الجهاز. */
-export function Review() {
+export function Review({ start = 'mult' }: { start?: 'mult' | 'laws' }) {
   const ref = useRef<HTMLDivElement>(null);
   const { play } = usePrefs();
   useEffect(() => {
@@ -14,7 +14,7 @@ export function Review() {
       get: () => { try { return Object.assign(emptyReview(), JSON.parse(localStorage.getItem(KEY) ?? '{}')) as ReviewData; } catch { return emptyReview(); } },
       set: (d) => { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch { /* التخزين غير متاح */ } },
       play: (k) => play(k === 'ok' ? 'correct' : 'retry'),
-    });
-  }, [play]);
+    }, start);
+  }, [play, start]);
   return <div ref={ref} />;
 }

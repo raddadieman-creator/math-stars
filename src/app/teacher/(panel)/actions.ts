@@ -21,6 +21,7 @@ export async function saveSettings(f: FormData) {
     teacher_names: lines(f, 'teacher_names'), vision: str(f, 'vision'), mission: str(f, 'mission'),
     goals: lines(f, 'goals'), timss_intro: str(f, 'timss_intro'),
     program_weeks: num(f, 'program_weeks') || 20, program_start_date: str(f, 'program_start_date'),
+    show_public_achievements: f.get('show_public_achievements') === 'on',
     updated_at: new Date().toISOString(), updated_by: staff.id,
   }).eq('id', 1);
   if (error) throw new Error(error.message);

@@ -29,6 +29,10 @@ export default async function Settings() {
         <div><label className="label">الرسالة</label><textarea name="mission" rows={3} defaultValue={s.mission ?? ''} className="field" /></div>
         <div><label className="label">الأهداف (هدف في كل سطر)</label><textarea name="goals" rows={4} defaultValue={s.goals.join('\n')} className="field" /></div>
         <div><label className="label">تعريف TIMSS (يترك فارغًا لاستخدام النص الافتراضي)</label><textarea name="timss_intro" rows={4} defaultValue={s.timss_intro ?? ''} className="field" /></div>
+        <label className="flex items-start gap-3 rounded-xl bg-ink/5 p-3 md:col-span-2">
+          <input type="checkbox" name="show_public_achievements" defaultChecked={s.show_public_achievements} className="mt-1 h-5 w-5" />
+          <span><b>إظهار «المنجزات والنجوم» في الصفحة الرئيسية</b><br /><span className="text-sm muted">يظهر الاسم الأول واسم الأب والفصل وعدد النجوم والشارات فقط، دون درجات أو إجابات.</span></span>
+        </label>
         <div className="md:col-span-2"><button className="btn-star">حفظ البيانات</button></div>
       </form>
 

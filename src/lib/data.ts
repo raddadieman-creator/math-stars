@@ -17,6 +17,7 @@ export interface Settings {
   timss_logo_url: string | null;
   program_weeks: number;
   program_start_date: string | null;
+  show_public_achievements: boolean;
 }
 
 export const FALLBACK_SETTINGS: Settings = {
@@ -24,7 +25,7 @@ export const FALLBACK_SETTINGS: Settings = {
   slogan: 'أتعلم، أتحدى، أتقدم، وأتألق.',
   school_name: null, school_logo_url: null, principal_name: null, teacher_names: [],
   vision: null, mission: null, goals: [], timss_intro: null, timss_logo_url: null,
-  program_weeks: 20, program_start_date: null,
+  program_weeks: 20, program_start_date: null, show_public_achievements: true,
 };
 
 export async function getSettings(): Promise<Settings> {
@@ -71,4 +72,18 @@ export async function requireStaff(): Promise<{ staff: StaffUser; sb: Awaited<Re
   const { data: staff } = await sb.from('staff').select('id, full_name, role').eq('id', auth.user.id).single();
   if (!staff) redirect('/teacher/login?e=nostaff');
   return { staff: staff as StaffUser, sb };
+}
+
+/** المنجزات والنجوم للصفحة الرئيسية (الاسم المختصر والفصل والنجوم والشارات فقط) */
+export async function getPublicAchievements() {
+  if (!isConfigured()) return { top: [], recent: [] };
+  const sb = await supabaseServer();
+  const [{ data: top }, { data: recent }] = await Promise.all([
+    sb.rpc('public_achievements', { lim: 12 }),
+    sb.rpc('public_recent_badges', { lim: 8 }),
+  ]);
+  return {
+    top: (top ?? []) as { name: string; class_name: string; stars: number; badges: string[] }[],
+    recent: (recent ?? []) as { name: string; class_name: string; badge: string; awarded_at: string }[],
+  };
 }

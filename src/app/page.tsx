@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import { Shell } from '@/components/Shell';
 import { Suha } from '@/components/Suha';
-import { getPublicStats, getSettings } from '@/lib/data';
+import { getPublicAchievements, getPublicStats, getSettings } from '@/lib/data';
+import { Achievements } from '@/components/Achievements';
 import { isConfigured } from '@/lib/env';
 import { GAMES } from '@/lib/games';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  const [s, stats] = await Promise.all([getSettings(), getPublicStats()]);
+  const [s, stats, ach] = await Promise.all([getSettings(), getPublicStats(), getPublicAchievements()]);
   return (
     <Shell school={s.school_name}>
       {!isConfigured() && (
@@ -98,12 +99,29 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* لوحة التميز والمؤشرات */}
-      <section className="mt-14 grid gap-6 md:grid-cols-2">
-        <div className="card-3d p-6">
-          <h2 className="text-xl font-extrabold">لوحة التميز</h2>
-          <p className="mt-4 muted">تظهر لوحة التميز للطالبات بعد الدخول، وتعرض زميلات الفصل نفسه فقط. لا تُعرض نتائج فردية في الصفحة العامة.</p>
+      {/* المنجزات والنجوم */}
+      {s.show_public_achievements && <Achievements top={ach.top} recent={ach.recent} />}
+
+      {/* المراجعة */}
+      <section className="mt-14">
+        <h2 className="text-2xl font-black">المراجعة</h2>
+        <p className="mt-1 muted">متاحة للجميع دون تسجيل دخول.</p>
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <Link href="/review?tab=mult" className="card-3d block p-6 transition hover:-translate-y-1">
+            <p className="text-4xl font-black text-sky-600" dir="ltr">7 × 8</p>
+            <h3 className="mt-2 text-xl font-extrabold">جدول الضرب</h3>
+            <p className="mt-1 muted">جدول تفاعلي من 1 إلى 12، وتحدي الدقيقة، ومراجعة الحقائق الصعبة.</p>
+          </Link>
+          <Link href="/review?tab=laws" className="card-3d block p-6 transition hover:-translate-y-1">
+            <p className="text-4xl font-black text-sky-600" dir="ltr">a² + b² = c²</p>
+            <h3 className="mt-2 text-xl font-extrabold">القوانين والنظريات</h3>
+            <p className="mt-1 muted">34 قانونًا في الأعداد والجبر والهندسة والبيانات، مع مثال وسؤال تحقق لكل قانون.</p>
+          </Link>
         </div>
+      </section>
+
+      {/* المؤشرات */}
+      <section className="mt-14 grid gap-6 md:grid-cols-2">
         <div className="card-3d p-6">
           <h2 className="text-xl font-extrabold">مؤشرات عامة</h2>
           {stats ? (
