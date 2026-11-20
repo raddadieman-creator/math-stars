@@ -16,7 +16,7 @@ export async function classReport(sb: SB, classId: string) {
   const [{ data: mAs }, { data: stars }, { data: badges }] = await Promise.all([
     sb.from('assessments').select('id, kind').in('kind', ['pre', 'post']),
     ids.length ? sb.from('star_ledger').select('student_id, amount').in('student_id', ids) : Promise.resolve({ data: [] as { student_id: string; amount: number }[] }),
-    ids.length ? sb.from('student_badges').select('student_id').in('student_id', ids) : Promise.resolve({ data: [] as { student_id: string }[] }),
+    ids.length ? sb.from('student_badges').select('student_id, badges(code)').in('student_id', ids) : Promise.resolve({ data: [] as { student_id: string; badges: unknown }[] }),
   ]);
   const { data: mAtt } = ids.length && mAs?.length
     ? await sb.from('assessment_attempts').select('assessment_id, student_id, score, max_score').in('student_id', ids).in('assessment_id', mAs.map((x) => x.id)).not('submitted_at', 'is', null)
@@ -56,6 +56,7 @@ export async function classReport(sb: SB, classId: string) {
     rows, ci, domains,
     hard: hardestSkills(outcomes, 5).slice(0, 6).map((h) => ({ name: names.get(h.skill_id) ?? '—', pct: h.firstTryPct })),
     prePost: { pre: avg(rows.map((r) => r.pre)), post: avg(rows.map((r) => r.post)), preN: rows.filter((r) => r.pre !== null).length, postN: rows.filter((r) => r.post !== null).length },
+    badgeCounts: (badges ?? []).reduce<Record<string, number>>((acc, b) => { const c = (b.badges as { code?: string } | null)?.code; if (c) acc[c] = (acc[c] ?? 0) + 1; return acc; }, {}),
     totals: { stars: rows.reduce((a, r) => a + r.stars, 0), badges: rows.reduce((a, r) => a + r.badges, 0), items: rows.reduce((a, r) => a + r.items, 0) },
   };
 }

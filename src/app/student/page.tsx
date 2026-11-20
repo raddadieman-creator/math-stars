@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { Shell } from '@/components/Shell';
 import { StudentNav } from '@/components/student/StudentNav';
-import { Suha } from '@/components/Suha';
-import { studentHome } from '@/lib/student-data';
+import { studentHome, studentStreak } from '@/lib/student-data';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { StreakCard } from '@/components/student/StreakCard';
+import { MadaGreeting } from '@/components/student/MadaGreeting';
 import { STATUS_AR } from '@/lib/types';
 import { LogoutStudent } from '@/components/student/LogoutStudent';
 import { BadgeCase } from '@/components/student/BadgeCase';
@@ -21,19 +23,18 @@ const STATUS_STYLE = {
 
 export default async function StudentHome() {
   const h = await studentHome();
-  const ms = await measureStatus(h.student.id);
+  const [ms, streak] = await Promise.all([measureStatus(h.student.id), studentStreak(supabaseAdmin(), h.student.id)]);
   const mastered = h.skills.filter((s) => s.status === 'mastered').length;
   const first = h.student.full_name.split(' ')[0];
   return (
     <Shell right={<LogoutStudent />}>
       <StudentNav />
       <section className="grid items-center gap-6 md:grid-cols-[auto_1fr_auto]">
-        <Suha size={80} mood="idle" />
-        <div>
-          <h1 className="text-3xl font-black">أهلًا {first}</h1>
-        </div>
+        <div className="md:col-span-2"><MadaGreeting first={first} current={streak.current} today={streak.today} /></div>
         <div className="card-3d flex items-center gap-3 px-5 py-3"><span className="text-3xl">⭐</span><div><p className="text-xs muted">نجومي</p><p className="text-2xl font-black text-star-600">{h.totalStars}</p></div></div>
       </section>
+
+      <StreakCard s={streak} />
 
       <MeasureCard pre={ms.pre} post={ms.post} />
 

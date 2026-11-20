@@ -48,3 +48,26 @@ export async function studentHome() {
     lessons: lessons.data ?? [],
   };
 }
+
+const dayKey = (d: Date | string) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Riyadh' }).format(new Date(d));
+
+/** سلسلة الأيام المتتالية التي تدربت فيها الطالبة (بتوقيت الرياض) وآخر سبعة أيام */
+export async function studentStreak(db: ReturnType<typeof supabaseAdmin>, studentId: string) {
+  const since = new Date(Date.now() - 120 * 86400000).toISOString();
+  const [{ data: o }, { data: a }] = await Promise.all([
+    db.from('item_outcomes').select('created_at').eq('student_id', studentId).gte('created_at', since),
+    db.from('assessment_attempts').select('submitted_at').eq('student_id', studentId).gte('submitted_at', since),
+  ]);
+  const days = new Set<string>([...(o ?? []).map((x) => dayKey(x.created_at)), ...(a ?? []).filter((x) => x.submitted_at).map((x) => dayKey(x.submitted_at as string))]);
+  const back = (n: number) => dayKey(new Date(Date.now() - n * 86400000));
+  const today = days.has(back(0));
+  let current = 0;
+  for (let i = today ? 0 : 1; days.has(back(i)); i++) current++;
+  let best = 0, run = 0;
+  for (let i = 120; i >= 0; i--) { if (days.has(back(i))) { run++; best = Math.max(best, run); } else run = 0; }
+  const week = Array.from({ length: 7 }, (_, k) => {
+    const i = 6 - k, d = new Date(Date.now() - i * 86400000);
+    return { key: back(i), active: days.has(back(i)), label: new Intl.DateTimeFormat('ar-SA', { weekday: 'short', timeZone: 'Asia/Riyadh' }).format(d), today: i === 0 };
+  });
+  return { current, best, today, week, totalDays: days.size };
+}

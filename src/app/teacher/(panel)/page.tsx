@@ -7,6 +7,7 @@ import { WeeklyChart, SimpleBars } from '@/components/teacher/Charts';
 import { MeasurePanel } from '@/components/teacher/MeasurePanel';
 import { classReport } from '@/lib/report-data';
 import { Donut, HBars, KpiTiles, PALETTE } from '@/components/teacher/ReportVisuals';
+import { BADGES, badgeSVG } from '@/lib/badges';
 
 export const dynamic = 'force-dynamic';
 
@@ -76,6 +77,27 @@ export default async function Overview({ searchParams }: { searchParams: Promise
           <HBars unit="%" max={100} data={[{ name: `القبلي (${rep.prePost.preN})`, value: rep.prePost.pre, color: '#94a3b8' }, { name: `البعدي (${rep.prePost.postN})`, value: rep.prePost.post, color: '#22c55e' }]} />
           <p className="mt-2 text-xs muted">متوسط الفصل، ومقارنة وصفية فقط.</p>
         </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="panel">
+          <div className="flex items-baseline justify-between"><h2 className="mb-3 text-lg font-extrabold">الأوسمة في الفصل</h2><Link href={`/teacher/awards?class=${classId}`} className="text-sm font-bold text-sky-700">التفاصيل والشهادات ←</Link></div>
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {BADGES.map((b) => (
+              <div key={b.code} className={`text-center ${rep.badgeCounts[b.code] ? '' : 'opacity-35 grayscale'}`} title={b.desc}>
+                <span dangerouslySetInnerHTML={{ __html: badgeSVG(b.icon, b.tier, true, 46) }} />
+                <p className="text-[11px] font-bold leading-tight">{b.name}</p>
+                <p className="text-xs font-black text-amber-600">{rep.badgeCounts[b.code] ?? 0}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <Link href="/teacher/review" className="group relative block overflow-hidden rounded-3xl p-6 text-white shadow-md transition hover:-translate-y-1" style={{ background: 'linear-gradient(135deg,#7c3aed,#0284c7)' }}>
+          <p className="text-4xl font-black" dir="ltr">7 × 8 · a² + b² = c²</p>
+          <h2 className="mt-3 text-2xl font-black">لوحة المراجعة</h2>
+          <p className="mt-1 opacity-90">جدول الضرب التفاعلي، والقوانين والنظريات، وشروحات الفيديو. تُعرض على شاشة الفصل.</p>
+          <span className="mt-4 inline-block rounded-full bg-white/20 px-4 py-1.5 font-bold">فتح اللوحة ←</span>
+        </Link>
       </div>
 
       <div className="panel">

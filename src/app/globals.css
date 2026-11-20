@@ -145,8 +145,9 @@ body{background:#f6f7fb!important;background-image:none!important}
 @font-face{font-family:'Readex Pro';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/readex-pro-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 :root{--sky:#0284c7;--sky-d:#0369a1;--sky-l:#e0f2fe;--sun:#f59e0b;--line:#e6e9f2}
-body{font-family:'Readex Pro',system-ui,sans-serif!important;background:#fff!important;background-image:radial-gradient(1100px 380px at 50% -140px,rgba(251,191,36,.20),transparent 70%),radial-gradient(900px 360px at 88% -120px,rgba(56,189,248,.18),transparent 70%)!important;background-repeat:no-repeat!important;color:#1e2340}
-h1,h2,h3,.h-sec,.font-black,.font-extrabold,header a span{font-family:'Alexandria','Readex Pro',sans-serif!important}
+body{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif!important;background:#fff!important;background-image:radial-gradient(1100px 380px at 50% -140px,rgba(251,191,36,.20),transparent 70%),radial-gradient(900px 360px at 88% -120px,rgba(56,189,248,.18),transparent 70%)!important;background-repeat:no-repeat!important;color:#1e2340}
+h1,h2,h3,.h-sec,.font-black,.font-extrabold,header a span{font-family:'IBM Plex Sans Arabic',sans-serif!important}
+.font-black{font-weight:700!important}.font-extrabold{font-weight:700!important}
 header{background:rgba(255,255,255,.92)!important}
 .card,.card-3d{border-color:var(--line)!important;border-radius:18px!important}
 .panel{border-color:var(--line)!important}
@@ -163,3 +164,22 @@ header{background:rgba(255,255,255,.92)!important}
 .confetti{position:fixed;top:-12px;width:9px;height:14px;border-radius:2px;z-index:80;pointer-events:none;animation:fall 2.4s cubic-bezier(.25,.6,.4,1) forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.9}}
 header{padding-top:env(safe-area-inset-top)}
+
+/* ===== الخط: IBM Plex Sans Arabic (رخصة SIL OFL 1.1) ===== */
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/plex-ar-400.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/plex-la-400.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/plex-ar-500.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:500;font-display:swap;src:url(/fonts/plex-la-500.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/plex-ar-600.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:600;font-display:swap;src:url(/fonts/plex-la-600.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/plex-ar-700.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200E,U+2010-2011,U+204F,U+2E41}
+@font-face{font-family:'IBM Plex Sans Arabic';font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/plex-la-700.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* سلسلة التدريب وتحية مَدى */
+@keyframes streak-flame { 0%,100% { transform: scale(1) rotate(-3deg); } 50% { transform: scale(1.12) rotate(3deg); } }
+.streak-flame { display: inline-block; animation: streak-flame 1.6s ease-in-out infinite; transform-origin: 50% 90%; }
+@keyframes mada-hop { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.mada-hop { animation: mada-hop 2.4s ease-in-out infinite; }
+@keyframes mada-say { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.mada-say { animation: mada-say .45s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .streak-flame, .mada-hop, .mada-say { animation: none; } }

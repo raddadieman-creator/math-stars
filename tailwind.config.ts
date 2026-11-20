@@ -3,7 +3,7 @@ export default {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      fontFamily: { sans: ['Tajawal', 'IBM Plex Sans Arabic', 'system-ui', 'sans-serif'] },
+      fontFamily: { sans: ['IBM Plex Sans Arabic', 'system-ui', 'sans-serif'] },
       colors: {
         ink: '#2b2457',
         night: { 950: '#0b0a2a', 900: '#141244', 800: '#1f1b5e', 700: '#2d2880' },

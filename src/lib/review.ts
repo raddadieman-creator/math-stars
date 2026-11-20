@@ -1,3 +1,5 @@
+import { videoLinksHTML } from './videos';
+
 // =====================================================================
 // قسم المراجعة: (1) جدول الضرب: جدول تفاعلي وتحدي الدقيقة ومراجعة الحقائق الصعبة،
 // (2) القوانين والنظريات المهمة للصف الثاني المتوسط مع مثال وسؤال تحقق لكل قانون.
@@ -58,7 +60,7 @@ const CSS = `
 .rv-grid button{aspect-ratio:1;border:0;border-radius:6px;background:#f4f6fb;font:inherit;font-weight:700;font-size:clamp(10px,1.6vw,15px);cursor:pointer;color:#1e2340}
 .rv-grid .h{background:#e0f2fe;color:#0369a1;font-weight:900}
 .rv-grid .row,.rv-grid .col{background:#fff4d6}.rv-grid .hit{background:#0284c7;color:#fff;transform:scale(1.15)}
-.rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:Alexandria,inherit;direction:ltr;unicode-bidi:isolate}
+.rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:inherit;direction:ltr;unicode-bidi:isolate}
 .rv-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .rv-opts button{border:2px solid #e6e9f2;background:#fff;border-radius:14px;padding:14px;font:inherit;font-size:1.5rem;font-weight:900;cursor:pointer}
 .rv-opts button.ok{border-color:#14b8a6;background:#e6fbf7}.rv-opts button.no{border-color:#e8466c;background:#fdecef;animation:rvshake .4s}
@@ -66,7 +68,7 @@ const CSS = `
 .rv-bar{height:10px;border-radius:9px;background:#e6e9f2;overflow:hidden}.rv-bar i{display:block;height:100%;background:#0284c7;transition:width .3s linear}
 .rv-stats{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:10px}.rv-stats span{background:#f4f6fb;border-radius:10px;padding:6px 12px;font-weight:800}
 .rv-laws{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
-.rv-law h3{font-family:Alexandria,inherit;font-weight:800;font-size:1.1rem;margin:0}
+.rv-law h3{font-family:inherit;font-weight:800;font-size:1.1rem;margin:0}
 .rv-law .dom{font-size:12px;color:#0369a1;font-weight:800}
 .rv-law ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:6px}
 .rv-law li{background:#f6f9ff;border-radius:10px;padding:7px 10px;font-weight:700;line-height:1.8;text-align:start}
@@ -78,8 +80,11 @@ const CSS = `
 .rv-q{margin-top:10px;border-top:1px dashed #e6e9f2;padding-top:10px}
 .rv-q .o{display:grid;gap:6px;margin-top:8px}.rv-q .o button{border:1px solid #e6e9f2;background:#fff;border-radius:10px;padding:8px;font:inherit;font-weight:700;text-align:start;cursor:pointer}
 .rv-q .o button.ok{border-color:#14b8a6;background:#e6fbf7}.rv-q .o button.no{border-color:#e8466c;background:#fdecef}
+.rv-vids{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:12px;font-weight:800;color:#64748b}
+.rv-vid{display:inline-block;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;text-decoration:none;color:#fff;background:#ef4444}
+.rv-vid-asmari{background:#8b5cf6}.rv-vid-ien-yt{background:#0d9488}.rv-vid-ien{background:#0284c7}.rv-vid:hover{filter:brightness(1.1)}
 .rv-search{flex:1;min-width:180px;border:1px solid #e6e9f2;border-radius:12px;padding:9px 12px;font:inherit}
-@media print{.rv-tabs,.rv-law .act,.rv-q,.rv-tools{display:none!important}.rv-law{break-inside:avoid}}
+@media print{.rv-tabs,.rv-law .act,.rv-q,.rv-tools,.rv-vids{display:none!important}.rv-law{break-inside:avoid}}
 `;
 /** اتجاه السطر: العبارات العددية الخالصة من اليسار إلى اليمين، وما فيه حروف عربية من اليمين */
 const dirOf = (t: string) => (/[\u0621-\u064A]/.test(t) ? 'rtl' : 'ltr');
@@ -193,7 +198,7 @@ export function mountReview(root: HTMLElement, store: ReviewStore, start: 'mult'
       <p style="margin:0 0 12px;color:#475069;font-weight:700">راجعت ${d.lawsDone.length} من ${LAWS.length} قانونًا</p>
       <div class="rv-bar" style="margin-bottom:16px"><i style="width:${(d.lawsDone.length / LAWS.length) * 100}%"></i></div>
       <div class="rv-laws">${list.map((l) => `<article class="rv-card rv-law" data-id="${l.id}"><span class="dom">${l.domain}</span><h3>${l.title}</h3><ul>${l.f.map((x) => `<li dir="${dirOf(x)}">${x}</li>`).join('')}</ul>
-        <p class="ex"><b>مثال:</b> <bdi dir="${dirOf(l.ex)}" style="display:inline-block">${l.ex}</bdi></p><div class="act">${l.check ? '<button class="try">سؤال تحقق</button>' : ''}<button class="mark ${d.lawsDone.includes(l.id) ? 'done' : ''}">${d.lawsDone.includes(l.id) ? '✓ راجعته' : 'تمت المراجعة'}</button></div><div class="rv-q" hidden></div></article>`).join('') || '<p>لا توجد نتائج.</p>'}</div>`;
+        <p class="ex"><b>مثال:</b> <bdi dir="${dirOf(l.ex)}" style="display:inline-block">${l.ex}</bdi></p><div class="rv-vids"><span>شروحات:</span>${videoLinksHTML(l.title)}</div><div class="act">${l.check ? '<button class="try">سؤال تحقق</button>' : ''}<button class="mark ${d.lawsDone.includes(l.id) ? 'done' : ''}">${d.lawsDone.includes(l.id) ? '✓ راجعته' : 'تمت المراجعة'}</button></div><div class="rv-q" hidden></div></article>`).join('') || '<p>لا توجد نتائج.</p>'}</div>`;
     body.querySelectorAll<HTMLButtonElement>('[data-d]').forEach((b) => (b.onclick = () => { dom = b.dataset.d!; laws(body); }));
     const inp = body.querySelector('.rv-search') as HTMLInputElement;
     inp.oninput = () => { q = inp.value.trim(); const pos = inp.selectionStart; laws(body); const n = body.querySelector('.rv-search') as HTMLInputElement; n.focus(); n.setSelectionRange(pos, pos); };
