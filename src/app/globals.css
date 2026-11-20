@@ -195,3 +195,9 @@ header{padding-top:env(safe-area-inset-top)}
 @keyframes game-drop { from { transform: translateY(-40px); opacity: 0; } to { transform: none; opacity: 1; } }
 .game-drop { animation: game-drop .45s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .game-shake, .game-pop, .game-pulse, .game-drop { animation: none; } }
+
+/* الرؤية والرسالة */
+.vm-gold { background: linear-gradient(90deg, #f6d68b, #d4a64a 45%, #f3e3b3); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@keyframes vm-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+.vm-panel { animation: vm-rise .8s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .vm-panel { animation: none; } }

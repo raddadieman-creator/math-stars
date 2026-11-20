@@ -23,13 +23,7 @@ export function ReviewHero() {
   useEffect(next, []);
   return (
     <section className="mt-12">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h2 className="text-3xl font-black">المراجعة</h2>
-          <p className="mt-1 muted">متاحة للجميع دون تسجيل دخول.</p>
-        </div>
-      </div>
-      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_1.1fr]">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_1.1fr]">
         {CARDS.map((c) => (
           <Link key={c.href} href={c.href} className="group relative overflow-hidden rounded-3xl p-6 text-white shadow-md transition hover:-translate-y-1 hover:shadow-xl" style={{ background: `linear-gradient(135deg, ${c.from}, ${c.to})` }}>
             <span className="absolute -left-6 -top-6 h-24 w-24 rounded-full bg-white/15 transition group-hover:scale-125" />

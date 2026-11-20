@@ -4,6 +4,7 @@ import { Suha } from '@/components/Suha';
 import { getPublicAchievements, getPublicStats, getSettings } from '@/lib/data';
 import { Achievements } from '@/components/Achievements';
 import { ReviewHero } from '@/components/ReviewHero';
+import { VisionMission } from '@/components/VisionMission';
 import { isConfigured } from '@/lib/env';
 import { GAMES } from '@/lib/games';
 
@@ -60,13 +61,7 @@ export default async function Home() {
       )}
 
       {/* الرؤية والرسالة والأهداف: تظهر عند إضافتها فقط */}
-      {(s.vision || s.mission || s.goals.length > 0) && (
-        <section className="mt-12 grid gap-4 md:grid-cols-3">
-          {s.vision && <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-star-600">الرؤية</h2><p className="mt-2 leading-8">{s.vision}</p></div>}
-          {s.mission && <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-aqua-600">الرسالة</h2><p className="mt-2 leading-8">{s.mission}</p></div>}
-          {s.goals.length > 0 && <div className="card-3d p-6"><h2 className="text-xl font-extrabold text-rose-600">الأهداف</h2><ul className="mt-2 list-disc space-y-1 pr-5 leading-7">{s.goals.map((g) => <li key={g}>{g}</li>)}</ul></div>}
-        </section>
-      )}
+      <VisionMission vision={s.vision} mission={s.mission} goals={s.goals} />
 
       {/* رحلة التعلم */}
       <section className="mt-14">

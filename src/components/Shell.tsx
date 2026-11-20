@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NavButtons } from '@/components/NavButtons';
 import { StarField } from './StarField';
 import { PrefsToggles } from './Prefs';
 
@@ -31,7 +32,7 @@ export function Shell({ children, right, school }: { children: React.ReactNode; 
       <StarField />
       <header className="no-print sticky top-0 z-30 border-b border-ink/10 bg-white/85 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          <Logo />
+          <div className="flex flex-wrap items-center gap-3"><Logo /><NavButtons /></div>
           <div className="flex flex-wrap items-center gap-3">{right}<PrefsToggles /></div>
         </div>
       </header>
