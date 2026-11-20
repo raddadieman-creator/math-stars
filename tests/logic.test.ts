@@ -267,3 +267,11 @@ describe('قائمة أسماء الفصل ورموز الدخول', () => {
   });
   it('الرمز أربعة أرقام', () => { for (let i = 0; i < 50; i++) expect(newStudentCode()).toMatch(/^[0-9]{4}$/); });
 });
+
+import { genOp, genPairs } from '../src/lib/games';
+describe('مولدات الألعاب', () => {
+  it('سؤال العمليات له أربعة خيارات وإجابة صحيحة واحدة ضمنها', () => {
+    for (let i = 0; i < 200; i++) { const q = genOp(3); expect(q.o.length).toBe(4); expect(new Set(q.o).size).toBe(4); expect(q.o.join()).not.toContain('NaN'); expect(q.a).toBeGreaterThanOrEqual(0); expect(q.a).toBeLessThan(4); }
+  });
+  it('أزواج المطابقة مختلفة', () => { const p = genPairs(6); expect(p.length).toBe(6); expect(new Set(p.map((x) => x.left)).size).toBe(6); });
+});

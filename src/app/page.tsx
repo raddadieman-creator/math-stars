@@ -92,12 +92,13 @@ export default async function Home() {
         <h2 className="h-section">الألعاب التعليمية</h2>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {GAMES.map((g) => (
-            <div key={g.key} className="card-3d p-4">
-              <p className="text-3xl">{g.icon}</p>
-              <p className="mt-2 font-extrabold">{g.name}</p>
-              <p className="mt-1 text-sm muted">{g.desc}</p>
-              <span className="chip mt-3 text-ink/60">{g.ready ? 'متاحة' : 'قريبًا'}</span>
-            </div>
+            <Link key={g.key} href={`/games/${g.key}`} className="group relative overflow-hidden rounded-3xl p-4 text-white shadow-md transition hover:-translate-y-1 hover:shadow-xl" style={{ background: `linear-gradient(135deg, ${g.color}, ${g.color}bb)` }}>
+              <span className="absolute -left-5 -top-5 h-16 w-16 rounded-full bg-white/15 transition group-hover:scale-150" />
+              <p className="relative text-3xl">{g.icon}</p>
+              <p className="relative mt-2 font-extrabold">{g.name}</p>
+              <p className="relative mt-1 text-sm opacity-90">{g.desc}</p>
+              <span className="relative mt-3 inline-block rounded-full bg-white/25 px-3 py-1 text-sm font-bold">بدء اللعب ←</span>
+            </Link>
           ))}
         </div>
       </section>

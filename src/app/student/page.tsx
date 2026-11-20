@@ -46,6 +46,11 @@ export default async function StudentHome() {
         </div>
       </section>
 
+      <Link href="/games" className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-3xl p-6 text-white shadow-md transition hover:-translate-y-1" style={{ background: 'linear-gradient(135deg,#7c3aed,#e11d48)' }}>
+        <div><b className="text-2xl">🎮 الألعاب التعليمية</b><p className="mt-1 opacity-90">ثماني ألعاب على أسئلة الكراسة، ونجوم إضافية لكل جولة.</p></div>
+        <span className="rounded-full bg-white/25 px-4 py-2 font-bold">اللعب ←</span>
+      </Link>
+
       <Link href="/student/library" className="card-3d tilt mt-8 flex flex-wrap items-center justify-between gap-4 p-6">
         <div><b className="text-2xl">مكتبة نماذج الاختبارات</b><p className="mt-1 muted">نماذج على نمط TIMSS وأسئلة رسمية مقتبسة، مع مراجعة الحل بعد التسليم</p></div>
         <span className="btn-star">فتح المكتبة</span>

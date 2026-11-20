@@ -183,3 +183,15 @@ header{padding-top:env(safe-area-inset-top)}
 @keyframes mada-say { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 .mada-say { animation: mada-say .45s ease-out both; }
 @media (prefers-reduced-motion: reduce) { .streak-flame, .mada-hop, .mada-say { animation: none; } }
+
+/* الألعاب */
+@keyframes game-shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.game-shake { animation: game-shake .35s; }
+@keyframes game-pop { 0% { transform: scale(.85); opacity: 0; } 70% { transform: scale(1.04); } 100% { transform: scale(1); opacity: 1; } }
+.game-pop { animation: game-pop .5s ease-out both; }
+@keyframes game-pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.12); } }
+.game-pulse { animation: game-pulse 1.2s ease-in-out infinite; }
+@keyframes game-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes game-drop { from { transform: translateY(-40px); opacity: 0; } to { transform: none; opacity: 1; } }
+.game-drop { animation: game-drop .45s ease-out both; }
+@media (prefers-reduced-motion: reduce) { .game-shake, .game-pop, .game-pulse, .game-drop { animation: none; } }
