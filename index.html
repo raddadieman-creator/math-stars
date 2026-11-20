@@ -227,8 +227,20 @@ header{padding-top:env(safe-area-inset-top)}
   <h2 class="h-sec mt-14">الألعاب التعليمية</h2>
   <div id="games" class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4"></div>
 
+  <h2 class="h-sec mt-14">المنجزات والنجوم</h2>
+  <p class="muted">الأكثر جمعًا للنجوم والشارات في البرنامج.</p>
+  <div id="board" class="mt-4"></div>
+  <div class="card mt-5 p-6"><h3 class="text-xl font-extrabold">الشارات</h3><div id="recentBadges" class="mt-4"></div>
+    <div id="allBadges" class="mt-5 flex flex-wrap gap-2 border-t border-ink/10 pt-4"></div><p class="mt-2 text-xs muted">مجموعة الشارات المتاحة في البرنامج.</p></div>
+
+  <h2 class="h-sec mt-14">المراجعة</h2>
+  <p class="muted">متاحة للجميع دون تسجيل دخول.</p>
+  <div class="mt-4 grid gap-4 md:grid-cols-2">
+    <a href="#review" onclick="window.RV_START='mult'" data-rv="mult" class="card block p-6 transition hover:-translate-y-1"><p class="text-4xl font-black text-sky-600" dir="ltr">7 × 8</p><h3 class="mt-2 text-xl font-extrabold">جدول الضرب</h3><p class="mt-1 muted">جدول تفاعلي من 1 إلى 12، وتحدي الدقيقة، ومراجعة الحقائق الصعبة.</p></a>
+    <a href="#review" onclick="window.RV_START='laws'" data-rv="laws" class="card block p-6 transition hover:-translate-y-1"><p class="text-4xl font-black text-sky-600" dir="ltr">a² + b² = c²</p><h3 class="mt-2 text-xl font-extrabold">القوانين والنظريات</h3><p class="mt-1 muted">34 قانونًا في الأعداد والجبر والهندسة والبيانات، مع مثال وسؤال تحقق لكل قانون.</p></a>
+  </div>
+
   <div class="mt-14 grid gap-6 md:grid-cols-2">
-    <div class="card p-6"><h2 class="text-xl font-extrabold">لوحة نجوم التميز</h2><div id="board" class="mt-4"></div></div>
     <div class="card p-6"><h2 class="text-xl font-extrabold">مؤشرات عامة</h2><div id="pubstats" class="mt-4 grid grid-cols-2 gap-3"></div></div>
   </div>
 </section>
@@ -518,7 +530,7 @@ var REVIEWLIB = (() => {
 .rv-grid button{aspect-ratio:1;border:0;border-radius:6px;background:#f4f6fb;font:inherit;font-weight:700;font-size:clamp(10px,1.6vw,15px);cursor:pointer;color:#1e2340}
 .rv-grid .h{background:#e0f2fe;color:#0369a1;font-weight:900}
 .rv-grid .row,.rv-grid .col{background:#fff4d6}.rv-grid .hit{background:#0284c7;color:#fff;transform:scale(1.15)}
-.rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:Alexandria,inherit;direction:rtl}
+.rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:Alexandria,inherit;direction:ltr;unicode-bidi:isolate}
 .rv-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .rv-opts button{border:2px solid #e6e9f2;background:#fff;border-radius:14px;padding:14px;font:inherit;font-size:1.5rem;font-weight:900;cursor:pointer}
 .rv-opts button.ok{border-color:#14b8a6;background:#e6fbf7}.rv-opts button.no{border-color:#e8466c;background:#fdecef;animation:rvshake .4s}
@@ -529,7 +541,7 @@ var REVIEWLIB = (() => {
 .rv-law h3{font-family:Alexandria,inherit;font-weight:800;font-size:1.1rem;margin:0}
 .rv-law .dom{font-size:12px;color:#0369a1;font-weight:800}
 .rv-law ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:6px}
-.rv-law li{background:#f6f9ff;border-radius:10px;padding:7px 10px;font-weight:700;line-height:1.8}
+.rv-law li{background:#f6f9ff;border-radius:10px;padding:7px 10px;font-weight:700;line-height:1.8;text-align:start}
 .rv-law .ex{margin-top:10px;font-size:14px;color:#475069;line-height:1.8}
 .rv-law .ex b{color:#d97706}
 .rv-law .act{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
@@ -541,6 +553,7 @@ var REVIEWLIB = (() => {
 .rv-search{flex:1;min-width:180px;border:1px solid #e6e9f2;border-radius:12px;padding:9px 12px;font:inherit}
 @media print{.rv-tabs,.rv-law .act,.rv-q,.rv-tools{display:none!important}.rv-law{break-inside:avoid}}
 `;
+  const dirOf = (t) => /[\u0621-\u064A]/.test(t) ? "rtl" : "ltr";
   function injectCss() {
     if (typeof document === "undefined" || document.getElementById("rv-css")) return;
     const s = document.createElement("style");
@@ -710,8 +723,8 @@ var REVIEWLIB = (() => {
       <input class="rv-search" placeholder="\u0628\u062D\u062B: \u0641\u064A\u062B\u0627\u063A\u0648\u0631\u0633\u060C \u0627\u0644\u062F\u0627\u0626\u0631\u0629\u060C \u0627\u0644\u0645\u064A\u0644\u2026" value="${q}"><button class="rv-chip rv-print">\u0637\u0628\u0627\u0639\u0629 \u0627\u0644\u0645\u0644\u062E\u0635</button></div>
       <p style="margin:0 0 12px;color:#475069;font-weight:700">\u0631\u0627\u062C\u0639\u062A ${d.lawsDone.length} \u0645\u0646 ${LAWS.length} \u0642\u0627\u0646\u0648\u0646\u064B\u0627</p>
       <div class="rv-bar" style="margin-bottom:16px"><i style="width:${d.lawsDone.length / LAWS.length * 100}%"></i></div>
-      <div class="rv-laws">${list.map((l) => `<article class="rv-card rv-law" data-id="${l.id}"><span class="dom">${l.domain}</span><h3>${l.title}</h3><ul>${l.f.map((x) => `<li>${x}</li>`).join("")}</ul>
-        <p class="ex"><b>\u0645\u062B\u0627\u0644:</b> ${l.ex}</p><div class="act">${l.check ? '<button class="try">\u0633\u0624\u0627\u0644 \u062A\u062D\u0642\u0642</button>' : ""}<button class="mark ${d.lawsDone.includes(l.id) ? "done" : ""}">${d.lawsDone.includes(l.id) ? "\u2713 \u0631\u0627\u062C\u0639\u062A\u0647" : "\u062A\u0645\u062A \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629"}</button></div><div class="rv-q" hidden></div></article>`).join("") || "<p>\u0644\u0627 \u062A\u0648\u062C\u062F \u0646\u062A\u0627\u0626\u062C.</p>"}</div>`;
+      <div class="rv-laws">${list.map((l) => `<article class="rv-card rv-law" data-id="${l.id}"><span class="dom">${l.domain}</span><h3>${l.title}</h3><ul>${l.f.map((x) => `<li dir="${dirOf(x)}">${x}</li>`).join("")}</ul>
+        <p class="ex"><b>\u0645\u062B\u0627\u0644:</b> <bdi dir="${dirOf(l.ex)}" style="display:inline-block">${l.ex}</bdi></p><div class="act">${l.check ? '<button class="try">\u0633\u0624\u0627\u0644 \u062A\u062D\u0642\u0642</button>' : ""}<button class="mark ${d.lawsDone.includes(l.id) ? "done" : ""}">${d.lawsDone.includes(l.id) ? "\u2713 \u0631\u0627\u062C\u0639\u062A\u0647" : "\u062A\u0645\u062A \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629"}</button></div><div class="rv-q" hidden></div></article>`).join("") || "<p>\u0644\u0627 \u062A\u0648\u062C\u062F \u0646\u062A\u0627\u0626\u062C.</p>"}</div>`;
       body.querySelectorAll("[data-d]").forEach((b) => b.onclick = () => {
         dom = b.dataset.d;
         laws(body);
@@ -2415,7 +2428,18 @@ games.innerHTML = [['🏁', 'سباق النجوم', 'تقدّم في المسا
   ['🎡', 'عجلة التحديات', 'تحدد العجلة المجال والمستوى عشوائيًا.'], ['🏗️', 'بناء برج الأعداد', 'كل إجابة مستقلة تضيف طابقًا.'], ['🔷', 'مطابقة الأشكال والأنماط', 'مطابقة التمثيلات المتكافئة.'], ['⏱️', 'تحدي الوقت (اختياري)', 'للمتعة فقط؛ السرعة لا تدخل في حساب الإتقان.']]
   .map(g => `<div class="card p-4"><p class="text-3xl">${g[0]}</p><b class="mt-2 block">${g[1]}</b><p class="mt-1 text-sm muted">${g[2]}</p><span class="chip mt-3 muted">قريبًا</span></div>`).join('');
 function renderHome() {
-  board.innerHTML = S.stars ? `<ol class="space-y-2"><li class="flex justify-between rounded-xl bg-star-300/40 px-4 py-2"><b>1. مجرة (أنت في المعاينة)</b><span class="font-bold text-star-600">★ ${S.stars}</span></li></ol>` : '<p class="muted">لا توجد نتائج بعد.</p>';
+  const shortN = n => n.replace(/\s+/g, ' ').trim().split(' ').filter(w => !['بن', 'بنت', 'ابن'].includes(w)).slice(0, 2).join(' ');
+  const clsName = id => (DB.classes.find(c => c.id === id) || {}).name || '';
+  const BD = new Map([...BADGELIB.BADGES, BADGELIB.MONTHLY_BADGE].map(b => [b.code, b]));
+  const bsvg = (code, size) => { const b = BD.get(code); return b ? `<span title="${b.name}" class="inline-block">${BADGELIB.badgeSVG(b.icon, b.tier, true, size)}</span>` : ''; };
+  const top = DB.students.map(st => { const d = st.id === (meStudent() || {}).id ? S : stateOf(st.id); return { name: shortN(st.name), cls: clsName(st.c), stars: d.stars || 0, badges: [...Object.keys(d.awards || {}), ...((d.monthWins || []).length ? ['monthly_excellence'] : [])], awards: d.awards || {} }; })
+    .filter(x => x.stars > 0 || x.badges.length).sort((a, b) => b.stars - a.stars || b.badges.length - a.badges.length).slice(0, 12);
+  const rank = ['linear-gradient(135deg,#fcd34d,#f59e0b)', 'linear-gradient(135deg,#e2e8f0,#94a3b8)', 'linear-gradient(135deg,#fdba74,#f97316)'];
+  board.innerHTML = top.length ? `<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">${top.map((t, i) => `<div class="card flex items-start gap-4 p-5"><span class="grid h-11 w-11 shrink-0 place-items-center rounded-full text-lg font-black text-white" style="background:${rank[i] || 'linear-gradient(135deg,#38bdf8,#0284c7)'}">${i + 1}</span><div class="min-w-0 flex-1"><p class="text-lg font-extrabold">${t.name}</p><p class="text-sm muted">${t.cls}</p><p class="mt-1 font-bold text-star-600">★ ${t.stars} نجمة</p><div class="mt-2 flex flex-wrap gap-1">${t.badges.length ? t.badges.slice(0, 8).map(b => bsvg(b, 34)).join('') : '<span class="text-xs muted">لا شارات بعد</span>'}</div></div></div>`).join('')}</div>`
+    : '<p class="card p-6 muted">تظهر هنا أسماء الطالبات مع نجومهن وشاراتهن بعد بدء التدريب.</p>';
+  const recent = top.flatMap(t => Object.entries(t.awards).map(([code, at]) => ({ ...t, code, at }))).sort((a, b) => b.at - a.at).slice(0, 8);
+  recentBadges.innerHTML = recent.length ? `<ul class="grid gap-3 sm:grid-cols-2">${recent.map(r => `<li class="flex items-center gap-3 rounded-xl bg-ink/5 p-3">${bsvg(r.code, 44)}<span><b>${r.name}</b> <span class="text-sm muted">(${r.cls})</span><br><span class="text-sm">حصلت على شارة «${(BD.get(r.code) || {}).name || ''}»</span></span></li>`).join('')}</ul>` : '<p class="muted">تظهر هنا أحدث الشارات التي تحصل عليها الطالبات.</p>';
+  allBadges.innerHTML = BADGELIB.BADGES.map(b => `<span title="${b.name}: ${b.desc}">${BADGELIB.badgeSVG(b.icon, b.tier, true, 30)}</span>`).join('');
   const mastered = Object.values(S.mastery).filter(m => m.status === 'mastered').length;
   pubstats.innerHTML = [['طلاب شاركوا', S.outcomes.length ? 1 : 0], ['أسئلة أُجيب عنها', S.outcomes.length], ['مهارات أُتقنت', mastered], ['أسئلة منشورة', Q.length]]
     .map(x => `<div class="rounded-xl bg-ink/5 p-3"><p class="text-xs muted">${x[0]}</p><p class="text-2xl font-black">${x[1]}</p></div>`).join('');
@@ -3180,7 +3204,7 @@ function route() {
   if (h.startsWith('practice-') && !S.logged) h = 'student-login';
   if (h === 'student' && !S.logged) h = 'student-login';
   if (h.startsWith('teacher') && h !== 'teacher-login' && !S.teacher) h = 'teacher-login';
-  if ((h.startsWith('explain-') || h.startsWith('measure-') || h.startsWith('ch-') || ['challenges', 'honor', 'badges', 'library', 'review'].includes(h)) && !S.logged) h = 'student-login';
+  if ((h.startsWith('explain-') || h.startsWith('measure-') || h.startsWith('ch-') || ['challenges', 'honor', 'badges', 'library'].includes(h)) && !S.logged) h = 'student-login';
   syncMada(h);
   const view = h.startsWith('practice-') ? 'practice' : h.startsWith('model-') ? 'model' : h.startsWith('explain-') ? 'explain' : h.startsWith('measure-') ? 'measure' : h.startsWith('ch-') ? 'model' : h;
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'v-' + view));
@@ -3202,7 +3226,10 @@ function route() {
   fillStuNav(view);
   if (h === 'challenges') renderChallenges();
   if (h === 'honor') renderHonor();
-  if (h === 'review') { if (window.REVIEW_OFF) REVIEW_OFF(); window.REVIEW_OFF = REVIEWLIB.mountReview(reviewBox, { get: () => S.reviewData || REVIEWLIB.emptyReview(), set: d => { S.reviewData = d; save(); }, onStars: n => { S.stars += n; save(); }, play: k => play(k) }); }
+  if (h === 'review') { if (window.REVIEW_OFF) REVIEW_OFF();
+    document.querySelectorAll('#v-review .stunav').forEach(n => n.style.display = S.logged ? '' : 'none');
+    const pub = { get: () => { try { return JSON.parse(localStorage.getItem('ms_review_pub') || 'null') || REVIEWLIB.emptyReview(); } catch (e) { return REVIEWLIB.emptyReview(); } }, set: d => { try { localStorage.setItem('ms_review_pub', JSON.stringify(d)); } catch (e) {} } };
+    window.REVIEW_OFF = REVIEWLIB.mountReview(reviewBox, S.logged ? { get: () => S.reviewData || REVIEWLIB.emptyReview(), set: d => { S.reviewData = d; save(); }, onStars: n => { S.stars += n; save(); }, play: k => play(k) } : { ...pub, play: k => play(k) }, window.RV_START || 'mult'); window.RV_START = null; }
   if (h === 'badges') renderBadges();
   if (h.startsWith('ch-')) startChallenge(h);
   if (h.startsWith('measure-')) startMeasure(h.slice(8));
