@@ -58,7 +58,7 @@ const CSS = `
 .rv-grid button{aspect-ratio:1;border:0;border-radius:6px;background:#f4f6fb;font:inherit;font-weight:700;font-size:clamp(10px,1.6vw,15px);cursor:pointer;color:#1e2340}
 .rv-grid .h{background:#e0f2fe;color:#0369a1;font-weight:900}
 .rv-grid .row,.rv-grid .col{background:#fff4d6}.rv-grid .hit{background:#0284c7;color:#fff;transform:scale(1.15)}
-.rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:Alexandria,inherit;direction:rtl}
+.rv-big{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;text-align:center;font-family:Alexandria,inherit;direction:ltr;unicode-bidi:isolate}
 .rv-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .rv-opts button{border:2px solid #e6e9f2;background:#fff;border-radius:14px;padding:14px;font:inherit;font-size:1.5rem;font-weight:900;cursor:pointer}
 .rv-opts button.ok{border-color:#14b8a6;background:#e6fbf7}.rv-opts button.no{border-color:#e8466c;background:#fdecef;animation:rvshake .4s}
@@ -69,7 +69,7 @@ const CSS = `
 .rv-law h3{font-family:Alexandria,inherit;font-weight:800;font-size:1.1rem;margin:0}
 .rv-law .dom{font-size:12px;color:#0369a1;font-weight:800}
 .rv-law ul{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:6px}
-.rv-law li{background:#f6f9ff;border-radius:10px;padding:7px 10px;font-weight:700;line-height:1.8}
+.rv-law li{background:#f6f9ff;border-radius:10px;padding:7px 10px;font-weight:700;line-height:1.8;text-align:start}
 .rv-law .ex{margin-top:10px;font-size:14px;color:#475069;line-height:1.8}
 .rv-law .ex b{color:#d97706}
 .rv-law .act{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
@@ -81,6 +81,8 @@ const CSS = `
 .rv-search{flex:1;min-width:180px;border:1px solid #e6e9f2;border-radius:12px;padding:9px 12px;font:inherit}
 @media print{.rv-tabs,.rv-law .act,.rv-q,.rv-tools{display:none!important}.rv-law{break-inside:avoid}}
 `;
+/** اتجاه السطر: العبارات العددية الخالصة من اليسار إلى اليمين، وما فيه حروف عربية من اليمين */
+const dirOf = (t: string) => (/[\u0621-\u064A]/.test(t) ? 'rtl' : 'ltr');
 function injectCss() { if (typeof document === 'undefined' || document.getElementById('rv-css')) return; const s = document.createElement('style'); s.id = 'rv-css'; s.textContent = CSS; document.head.appendChild(s); }
 
 export interface ReviewStore { get(): ReviewData; set(d: ReviewData): void; onStars?(n: number): void; play?(k: 'ok' | 'no'): void }
@@ -190,8 +192,8 @@ export function mountReview(root: HTMLElement, store: ReviewStore, start: 'mult'
       <input class="rv-search" placeholder="بحث: فيثاغورس، الدائرة، الميل…" value="${q}"><button class="rv-chip rv-print">طباعة الملخص</button></div>
       <p style="margin:0 0 12px;color:#475069;font-weight:700">راجعت ${d.lawsDone.length} من ${LAWS.length} قانونًا</p>
       <div class="rv-bar" style="margin-bottom:16px"><i style="width:${(d.lawsDone.length / LAWS.length) * 100}%"></i></div>
-      <div class="rv-laws">${list.map((l) => `<article class="rv-card rv-law" data-id="${l.id}"><span class="dom">${l.domain}</span><h3>${l.title}</h3><ul>${l.f.map((x) => `<li>${x}</li>`).join('')}</ul>
-        <p class="ex"><b>مثال:</b> ${l.ex}</p><div class="act">${l.check ? '<button class="try">سؤال تحقق</button>' : ''}<button class="mark ${d.lawsDone.includes(l.id) ? 'done' : ''}">${d.lawsDone.includes(l.id) ? '✓ راجعته' : 'تمت المراجعة'}</button></div><div class="rv-q" hidden></div></article>`).join('') || '<p>لا توجد نتائج.</p>'}</div>`;
+      <div class="rv-laws">${list.map((l) => `<article class="rv-card rv-law" data-id="${l.id}"><span class="dom">${l.domain}</span><h3>${l.title}</h3><ul>${l.f.map((x) => `<li dir="${dirOf(x)}">${x}</li>`).join('')}</ul>
+        <p class="ex"><b>مثال:</b> <bdi dir="${dirOf(l.ex)}" style="display:inline-block">${l.ex}</bdi></p><div class="act">${l.check ? '<button class="try">سؤال تحقق</button>' : ''}<button class="mark ${d.lawsDone.includes(l.id) ? 'done' : ''}">${d.lawsDone.includes(l.id) ? '✓ راجعته' : 'تمت المراجعة'}</button></div><div class="rv-q" hidden></div></article>`).join('') || '<p>لا توجد نتائج.</p>'}</div>`;
     body.querySelectorAll<HTMLButtonElement>('[data-d]').forEach((b) => (b.onclick = () => { dom = b.dataset.d!; laws(body); }));
     const inp = body.querySelector('.rv-search') as HTMLInputElement;
     inp.oninput = () => { q = inp.value.trim(); const pos = inp.selectionStart; laws(body); const n = body.querySelector('.rv-search') as HTMLInputElement; n.focus(); n.setSelectionRange(pos, pos); };
