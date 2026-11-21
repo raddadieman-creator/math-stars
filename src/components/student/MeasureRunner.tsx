@@ -92,7 +92,7 @@ export function MeasureRunner({ model }: { model: { id: string; title: string; i
           {i < n - 1 ? <button disabled={!answered} onClick={() => go(i + 1)} className="btn-star disabled:opacity-50">التالي</button>
             : <button disabled={!answered} onClick={() => setReview(true)} className="btn-star disabled:opacity-50">مراجعة الإجابات</button>}
         </div>
-        {!answered && <p className="mt-2 text-sm muted">اختر إجابة للانتقال إلى السؤال التالي.</p>}
+        {!answered && <p className="mt-2 text-sm muted">يُتاح الانتقال إلى السؤال التالي بعد الإجابة.</p>}
       </div>
       <aside className="panel h-fit">
         <p className="font-extrabold">قائمة الأسئلة</p><p className="mt-1 text-sm muted">أُجيب عن {done} من {n}</p>
